@@ -1,11 +1,11 @@
 package indie.outsource.WorkerRental.worker;
 
+import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.rent.RentRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class WorkerService {
             return workerRepository.findById(id).get();
         }
         else
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException();
     }
 
     public List<Worker> findAll() {
@@ -34,10 +34,10 @@ public class WorkerService {
 
     public void delete(Long id) {
         if(workerRepository.findById(id).isEmpty()){
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException();
         }
         if(rentRepository.existsByWorker_IdAndEndDateIsNotNull(id)){
-            throw new RuntimeException("Worker is rented");
+            throw new WorkerRentedException();
         }
        workerRepository.deleteById(id);
     }

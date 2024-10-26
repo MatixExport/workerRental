@@ -1,7 +1,9 @@
 package indie.outsource.WorkerRental.worker;
 
+import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,20 +16,19 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @GetMapping("/workers/{id}")
-    public ResponseEntity<Worker> getWorker(@PathVariable Long id) {
+    public ResponseEntity<Worker> getWorker(@PathVariable @Valid Long id) {
         Worker worker;
         try{
             worker = workerService.findById(id);
         }
-        catch(Exception e){
-            return ResponseEntity.notFound().build();
+        catch(ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(worker);
     }
 
     @GetMapping("/workers")
     public ResponseEntity<List<Worker>> getAllWorkers() {
-        System.out.println("hi");
         return ResponseEntity.ok(workerService.findAll());
     }
 
@@ -38,15 +39,15 @@ public class WorkerController {
     }
 
     @DeleteMapping("/workers/{id}")
-    public ResponseEntity<String> deleteWorker(@PathVariable Long id) {
+    public ResponseEntity<String> deleteWorker(@PathVariable @Valid Long id) {
         try{
             workerService.delete(id);
         }
-        catch(Exception e){
-            if(e.getMessage().equals("Resource not found")){
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.status(400).body(e.getMessage());
+        catch(ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        catch (WorkerRentedException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.ok().build();
     }

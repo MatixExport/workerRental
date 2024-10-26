@@ -1,5 +1,6 @@
 package indie.outsource.WorkerRental.user;
 
+import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class UserService {
             return userRepository.findById(id).get();
         }
         else
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException("User with id " + id + " not found");
     }
 
     public User findByUsernameExact(String username) {
@@ -25,7 +26,7 @@ public class UserService {
             return userRepository.findByLogin(username).get();
         }
         else
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException("User with username " + username + " not found");
     }
 
     public List<User> findByUsername(String username) {
@@ -37,22 +38,34 @@ public class UserService {
     }
 
     public User save(User user) {
+        if(userRepository.findByLogin(user.getLogin()).isPresent()){
+            throw new UserAlreadyExistsException("User with login " + user.getLogin() + " already exists");
+        }
         return userRepository.save(user);
     }
 
-    public void activateUser(User user) {
-        if(userRepository.findById(user.getId()).isPresent()){
-            userRepository.findById(user.getId()).get().setActive(true);
+    public User updateUser(User user){
+        if (userRepository.findById(user.getId()).isEmpty()){
+            throw new ResourceNotFoundException("User with id " + user.getId() + " not found");
         }
-        else
-            throw new RuntimeException("Resource not found");
+        return userRepository.save(user);
     }
 
-    public void deactivateUser(User user) {
-        if(userRepository.findById(user.getId()).isPresent()){
-            userRepository.findById(user.getId()).get().setActive(false);
+    public User activateUser(Long id) {
+        if(userRepository.findById(id).isEmpty()){
+            throw new ResourceNotFoundException("User with id " + id + " not found");
         }
-        else
-            throw new RuntimeException("Resource not found");
+        User user = userRepository.findById(id).get();
+        user.setActive(true);
+        return user;
+    }
+
+    public User deactivateUser(Long id) {
+        if(userRepository.findById(id).isEmpty()){
+            throw new ResourceNotFoundException("User with id " + id + " not found");
+        }
+        User user = userRepository.findById(id).get();
+        user.setActive(false);
+        return user;
     }
 }

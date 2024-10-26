@@ -1,8 +1,11 @@
 package indie.outsource.WorkerRental.rent;
 
+import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.user.User;
+import indie.outsource.WorkerRental.user.UserInactiveException;
 import indie.outsource.WorkerRental.user.UserRepository;
 import indie.outsource.WorkerRental.worker.Worker;
+import indie.outsource.WorkerRental.worker.WorkerRentedException;
 import indie.outsource.WorkerRental.worker.WorkerRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -26,23 +29,23 @@ public class RentService {
             return rentRepository.findById(id).get();
         }
         else
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException("Rent not found");
     }
 
     public Rent createRent(Long clientId, Long workerId, LocalDateTime startDate) {
         Optional<User> user = userRepository.findById(clientId);
         if(user.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         if(! user.get().isActive()){
-            throw new RuntimeException("User is not active");
+            throw new UserInactiveException();
         }
         Optional<Worker> worker = workerRepository.findById(workerId);
         if(worker.isEmpty()){
-            throw new RuntimeException("Worker not found");
+            throw new ResourceNotFoundException("Worker not found");
         }
         if(rentRepository.existsByWorker_IdAndEndDateIsNotNull(workerId)){
-            throw new RuntimeException("Worker occupied");
+            throw new WorkerRentedException();
         }
         Rent rent = new Rent();
         rent.setUser(user.get());
@@ -51,27 +54,39 @@ public class RentService {
         return rentRepository.save(rent);
     }
 
-    public List<Rent> getClientRents(Long clientId){
+    public List<Rent> getClientActiveRents(Long clientId){
+        if(rentRepository.findById(clientId).isEmpty()){
+            throw new ResourceNotFoundException("User not found");
+        }
         return rentRepository.findByUser_IdAndEndDateIsNull(clientId);
     }
     public List<Rent> getClientEndedRents(Long clientId){
+        if(rentRepository.findById(clientId).isEmpty()){
+            throw new ResourceNotFoundException("User not found");
+        }
         return rentRepository.findByUser_IdAndEndDateBefore(clientId, LocalDateTime.now());
     }
 
-    public List<Rent> getWorkerRents(Long workerId){
+    public List<Rent> getWorkerActiveRents(Long workerId){
+        if(rentRepository.findById(workerId).isEmpty()){
+            throw new ResourceNotFoundException("Worker not found");
+        }
         return rentRepository.findByWorker_IdAndEndDateIsNull(workerId);
     }
     public List<Rent> getWorkerEndedRents(Long workerId){
+        if(rentRepository.findById(workerId).isEmpty()){
+            throw new ResourceNotFoundException("Worker not found");
+        }
         return rentRepository.findByWorker_IdAndEndDateBefore(workerId, LocalDateTime.now());
     }
 
     public Rent endRent(Long rentId){
         if(rentRepository.findById(rentId).isEmpty()){
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException();
         }
         Rent rent = rentRepository.findById(rentId).get();
         if(rent.getEndDate() != null){
-            throw new RuntimeException("End date is already set");
+            throw new RentAlreadyEndedException();
         }
         rent.setEndDate(LocalDateTime.now());
         return rentRepository.save(rent);
@@ -79,10 +94,10 @@ public class RentService {
 
     public void deleteRent(Long rentId){
         if(rentRepository.findById(rentId).isEmpty()){
-            throw new RuntimeException("Resource not found");
+            throw new ResourceNotFoundException();
         }
         if(rentRepository.findById(rentId).get().getEndDate() != null){
-            throw new RuntimeException("Rent is finished, cannot delete it");
+            throw new RentAlreadyEndedException();
         }
         rentRepository.deleteById(rentId);
     }
