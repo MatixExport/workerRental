@@ -1,5 +1,4 @@
 package indie.outsource.WorkerRental.user;
 
-public enum USERTYPE {
-    
+public class UserDTO {
 }

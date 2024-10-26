@@ -1,5 +1,6 @@
 package indie.outsource.WorkerRental.worker;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ public class WorkerController {
 
     private final WorkerService workerService;
 
-    @GetMapping("/worker/{id}")
+    @GetMapping("/workers/{id}")
     public ResponseEntity<Worker> getWorker(@PathVariable Long id) {
         Worker worker;
         try{
@@ -24,18 +25,19 @@ public class WorkerController {
         return ResponseEntity.ok(worker);
     }
 
-    @GetMapping("/worker")
+    @GetMapping("/workers")
     public ResponseEntity<List<Worker>> getAllWorkers() {
         System.out.println("hi");
         return ResponseEntity.ok(workerService.findAll());
     }
 
-    @PostMapping(value = "/worker")
-    public ResponseEntity<Worker> createWorker(@RequestBody Worker worker) {
+    @PostMapping(value = "/workers")
+    public ResponseEntity<Worker> createWorker(@RequestBody @Valid Worker worker) {
         return ResponseEntity.ok(workerService.save(worker));
+//        return ResponseEntity.created(workerService.save(worker));
     }
 
-    @DeleteMapping("/worker/{id}")
+    @DeleteMapping("/workers/{id}")
     public ResponseEntity<String> deleteWorker(@PathVariable Long id) {
         try{
             workerService.delete(id);
