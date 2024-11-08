@@ -1,5 +1,6 @@
 package indie.outsource.WorkerRental.rent;
 
+import jakarta.annotation.Priority;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@Priority(10)
 public interface RentRepository extends CrudRepository<Rent, Long> {
 
     List<Rent> findByUser_IdAndEndDateBefore(Long id, LocalDateTime date);
