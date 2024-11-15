@@ -23,6 +23,6 @@ public abstract class AbstractEntity {
     @GeneratedValue
     private UUID id;
 
-    @Version
-    private Long version;
+//    @Version
+//    private Long version;
 }
