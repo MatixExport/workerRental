@@ -1,6 +1,7 @@
 package indie.outsource.WorkerRental.worker;
 
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
+import indie.outsource.worker.WorkerDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,26 +18,24 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @GetMapping("/workers/{id}")
-    public ResponseEntity<Worker> getWorker(@PathVariable @Valid UUID id) {
+    public ResponseEntity<WorkerDTO> getWorker(@PathVariable UUID id) {
         Worker worker;
         try{
-            worker = workerService.findById(id);
+            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.findById(id)));
         }
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(worker);
     }
 
     @GetMapping("/workers")
-    public ResponseEntity<List<Worker>> getAllWorkers() {
-        return ResponseEntity.ok(workerService.findAll());
+    public ResponseEntity<List<WorkerDTO>> getAllWorkers() {
+        return ResponseEntity.ok(workerService.findAll().stream().map(WorkerMapper::getWorkerDto).toList());
     }
 
     @PostMapping(value = "/workers")
-    public ResponseEntity<Worker> createWorker(@RequestBody @Valid Worker worker) {
-        return ResponseEntity.ok(workerService.save(worker));
-//        return ResponseEntity.created(workerService.save(worker));
+    public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid Worker worker) {
+        return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(worker)));
     }
 
     @DeleteMapping("/workers/{id}")

@@ -3,6 +3,9 @@ package indie.outsource.WorkerRental.rent;
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.user.UserInactiveException;
 import indie.outsource.WorkerRental.worker.WorkerRentedException;
+import indie.outsource.rent.CreateRentDTO;
+import indie.outsource.rent.RentDTO;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +20,18 @@ public class RentController {
     private RentService rentService;
 
     @GetMapping("/rents/{id}")
-    public ResponseEntity<Rent> getRent(@PathVariable UUID id) {
+    public ResponseEntity<RentDTO> getRent(@PathVariable UUID id) {
         try {
-            return ResponseEntity.ok(rentService.findById(id));
+            return ResponseEntity.ok(RentMapper.getRentDTO(rentService.findById(id)));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PostMapping("/rents/users/{clientId}/workers/{workerId}")
-    public ResponseEntity<Rent> createRent(@PathVariable UUID clientId, @PathVariable UUID workerId, @RequestBody Rent rent) {
+    public ResponseEntity<RentDTO> createRent(@PathVariable UUID clientId, @PathVariable UUID workerId, @RequestBody @Valid CreateRentDTO rent) {
         try {
-            return ResponseEntity.ok(rentService.createRent(clientId, workerId, rent.startDate));
+            return ResponseEntity.ok(RentMapper.getRentDTO(rentService.createRent(clientId, workerId, rent.getStartDate())));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (UserInactiveException | WorkerRentedException e) {
@@ -37,9 +40,9 @@ public class RentController {
     }
 
     @PostMapping("/rents/{id}/finish")
-    public ResponseEntity<Rent> finishRent(@PathVariable UUID id) {
+    public ResponseEntity<RentDTO> finishRent(@PathVariable UUID id) {
         try {
-            return ResponseEntity.ok(rentService.endRent(id));
+            return ResponseEntity.ok(RentMapper.getRentDTO(rentService.endRent(id)));
         }
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -64,9 +67,9 @@ public class RentController {
     }
 
     @GetMapping("/rents/ended/users/{id}")
-    public ResponseEntity<List<Rent>> getClientEndedRents(@PathVariable UUID id) {
+    public ResponseEntity<List<RentDTO>> getClientEndedRents(@PathVariable UUID id) {
         try{
-            return ResponseEntity.ok(rentService.getClientEndedRents(id));
+            return ResponseEntity.ok(rentService.getClientEndedRents(id).stream().map(RentMapper::getRentDTO).toList());
         }
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -74,9 +77,9 @@ public class RentController {
     }
 
     @GetMapping("/rents/ended/workers/{id}")
-    public ResponseEntity<List<Rent>> getWorkerEndedRents(@PathVariable UUID id) {
+    public ResponseEntity<List<RentDTO>> getWorkerEndedRents(@PathVariable UUID id) {
         try{
-            return ResponseEntity.ok(rentService.getWorkerEndedRents(id));
+            return ResponseEntity.ok(rentService.getWorkerEndedRents(id).stream().map(RentMapper::getRentDTO).toList());
         }
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -84,9 +87,9 @@ public class RentController {
     }
 
     @GetMapping("/rents/current/users/{id}")
-    public ResponseEntity<List<Rent>> getClientActiveRents(@PathVariable UUID id) {
+    public ResponseEntity<List<RentDTO>> getClientActiveRents(@PathVariable UUID id) {
         try{
-            return ResponseEntity.ok(rentService.getClientActiveRents(id));
+            return ResponseEntity.ok(rentService.getClientActiveRents(id).stream().map(RentMapper::getRentDTO).toList());
         }
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -94,9 +97,9 @@ public class RentController {
     }
 
     @GetMapping("/rents/current/workers/{id}")
-    public ResponseEntity<List<Rent>> getWorkerActiveRents(@PathVariable UUID id) {
+    public ResponseEntity<List<RentDTO>> getWorkerActiveRents(@PathVariable UUID id) {
         try{
-            return ResponseEntity.ok(rentService.getWorkerActiveRents(id));
+            return ResponseEntity.ok(rentService.getWorkerActiveRents(id).stream().map(RentMapper::getRentDTO).toList());
         }
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

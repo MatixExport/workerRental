@@ -1,6 +1,9 @@
 package indie.outsource.WorkerRental.user;
 
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
+import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.UserDTO;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +18,19 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList());
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.findById(id));
+    public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
+        return ResponseEntity.ok(UserMapper.getUserDTO(userService.findById(id)));
     }
 
     @GetMapping("/users/login/{login}")
-    public ResponseEntity<User> getUserByLogin(@PathVariable String login) {
+    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) {
         try{
-            return ResponseEntity.ok(userService.findByUsernameExact(login));
+            return ResponseEntity.ok(UserMapper.getUserDTO(userService.findByUsernameExact(login)));
         }
         catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -35,25 +38,26 @@ public class UserController {
     }
 
     @GetMapping("/users/loginContains/{login}")
-    public ResponseEntity<List<User>> getUserByLoginContains(@PathVariable String login) {
-        return ResponseEntity.ok(userService.findByUsername(login));
+    public ResponseEntity<List<UserDTO>> getUserByLoginContains(@PathVariable String login) {
+        return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> addUser(@RequestBody @Valid CreateUserDTO user) {
         try{
-            return ResponseEntity.ok(userService.save(user));
+            return ResponseEntity.ok(UserMapper.getUserDTO(userService.save(UserMapper.getUser(user))));
         }
         catch(UserAlreadyExistsException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(user);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(UserMapper.getUserDTO(UserMapper.getUser(user)));
         }
     }
 
     @PostMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User user) {
-        //user.setId
+    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) {
+        User user = UserMapper.getUser(createUserDTO);
+        user.setId(id);
         try{
-            return ResponseEntity.ok(userService.updateUser(user));
+            return ResponseEntity.ok(UserMapper.getUserDTO(userService.updateUser(user)));
         }
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -61,9 +65,9 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}/activate")
-    public ResponseEntity<User> activateUser(@PathVariable UUID id) {
+    public ResponseEntity<UserDTO> activateUser(@PathVariable UUID id) {
         try{
-            return ResponseEntity.ok(userService.activateUser(id));
+            return ResponseEntity.ok(UserMapper.getUserDTO(userService.activateUser(id)));
         }
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -71,9 +75,9 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}/deactivate")
-    public ResponseEntity<User> deactivateUser(@PathVariable UUID id) {
+    public ResponseEntity<UserDTO> deactivateUser(@PathVariable UUID id) {
         try{
-            return ResponseEntity.ok(userService.deactivateUser(id));
+            return ResponseEntity.ok(UserMapper.getUserDTO(userService.deactivateUser(id)));
         }
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
