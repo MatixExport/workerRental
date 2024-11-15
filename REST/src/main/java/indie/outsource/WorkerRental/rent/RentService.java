@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Transactional
@@ -24,7 +25,7 @@ public class RentService {
     private final WorkerRepository workerRepository;
 
 
-    public Rent findById(Long id) {
+    public Rent findById(UUID id) {
         if(rentRepository.findById(id).isPresent()){
             return rentRepository.findById(id).get();
         }
@@ -32,7 +33,7 @@ public class RentService {
             throw new ResourceNotFoundException("Rent not found");
     }
 
-    public Rent createRent(Long clientId, Long workerId, LocalDateTime startDate) {
+    public Rent createRent(UUID clientId, UUID workerId, LocalDateTime startDate) {
         Optional<User> user = userRepository.findById(clientId);
         if(user.isEmpty()){
             throw new ResourceNotFoundException("User not found");
@@ -44,7 +45,7 @@ public class RentService {
         if(worker.isEmpty()){
             throw new ResourceNotFoundException("Worker not found");
         }
-        if(rentRepository.existsByWorker_IdAndEndDateIsNotNull(workerId)){
+        if(rentRepository.existsByWorker_IdAndEndDateIsNull(workerId)){
             throw new WorkerRentedException();
         }
         Rent rent = new Rent();
@@ -54,33 +55,33 @@ public class RentService {
         return rentRepository.save(rent);
     }
 
-    public List<Rent> getClientActiveRents(Long clientId){
+    public List<Rent> getClientActiveRents(UUID clientId){
         if(rentRepository.findById(clientId).isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
         return rentRepository.findByUser_IdAndEndDateIsNull(clientId);
     }
-    public List<Rent> getClientEndedRents(Long clientId){
+    public List<Rent> getClientEndedRents(UUID clientId){
         if(rentRepository.findById(clientId).isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
         return rentRepository.findByUser_IdAndEndDateBefore(clientId, LocalDateTime.now());
     }
 
-    public List<Rent> getWorkerActiveRents(Long workerId){
+    public List<Rent> getWorkerActiveRents(UUID workerId){
         if(rentRepository.findById(workerId).isEmpty()){
             throw new ResourceNotFoundException("Worker not found");
         }
         return rentRepository.findByWorker_IdAndEndDateIsNull(workerId);
     }
-    public List<Rent> getWorkerEndedRents(Long workerId){
+    public List<Rent> getWorkerEndedRents(UUID workerId){
         if(rentRepository.findById(workerId).isEmpty()){
             throw new ResourceNotFoundException("Worker not found");
         }
         return rentRepository.findByWorker_IdAndEndDateBefore(workerId, LocalDateTime.now());
     }
 
-    public Rent endRent(Long rentId){
+    public Rent endRent(UUID rentId){
         if(rentRepository.findById(rentId).isEmpty()){
             throw new ResourceNotFoundException();
         }
@@ -92,12 +93,12 @@ public class RentService {
         return rentRepository.save(rent);
     }
 
-    public void deleteRent(Long rentId){
+    public void deleteRent(UUID rentId){
         if(rentRepository.findById(rentId).isEmpty()){
             throw new ResourceNotFoundException();
         }
         if(rentRepository.findById(rentId).get().getEndDate() != null){
-            throw new RentAlreadyEndedException();
+            throw new RentNotEndedException();
         }
         rentRepository.deleteById(rentId);
     }

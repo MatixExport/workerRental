@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController()
@@ -19,8 +20,23 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<User> getUser(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @GetMapping("/users/login/{login}")
+    public ResponseEntity<User> getUserByLogin(@PathVariable String login) {
+        try{
+            return ResponseEntity.ok(userService.findByUsernameExact(login));
+        }
+        catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/users/loginContains/{login}")
+    public ResponseEntity<List<User>> getUserByLoginContains(@PathVariable String login) {
+        return ResponseEntity.ok(userService.findByUsername(login));
     }
 
     @PostMapping("/users")
@@ -34,10 +50,10 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User user) {
         //user.setId
         try{
-            return ResponseEntity.ok(userService.save(user));
+            return ResponseEntity.ok(userService.updateUser(user));
         }
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -45,7 +61,7 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}/activate")
-    public ResponseEntity<User> activateUser(@PathVariable Long id) {
+    public ResponseEntity<User> activateUser(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(userService.activateUser(id));
         }
@@ -55,7 +71,7 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}/deactivate")
-    public ResponseEntity<User> deactivateUser(@PathVariable Long id) {
+    public ResponseEntity<User> deactivateUser(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(userService.deactivateUser(id));
         }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController()
@@ -16,7 +17,7 @@ public class RentController {
     private RentService rentService;
 
     @GetMapping("/rents/{id}")
-    public ResponseEntity<Rent> getRent(@PathVariable Long id) {
+    public ResponseEntity<Rent> getRent(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(rentService.findById(id));
         } catch (ResourceNotFoundException e) {
@@ -25,7 +26,7 @@ public class RentController {
     }
 
     @PostMapping("/rents/users/{clientId}/workers/{workerId}")
-    public ResponseEntity<Rent> createRent(@PathVariable Long clientId, @PathVariable Long workerId, @RequestBody Rent rent) {
+    public ResponseEntity<Rent> createRent(@PathVariable UUID clientId, @PathVariable UUID workerId, @RequestBody Rent rent) {
         try {
             return ResponseEntity.ok(rentService.createRent(clientId, workerId, rent.startDate));
         } catch (ResourceNotFoundException e) {
@@ -36,7 +37,7 @@ public class RentController {
     }
 
     @PostMapping("/rents/{id}/finish")
-    public ResponseEntity<Rent> finishRent(@PathVariable Long id) {
+    public ResponseEntity<Rent> finishRent(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(rentService.endRent(id));
         }
@@ -49,7 +50,7 @@ public class RentController {
     }
 
     @DeleteMapping("/rents/{id}/delete")
-    public ResponseEntity<String> deleteRent(@PathVariable Long id) {
+    public ResponseEntity<String> deleteRent(@PathVariable UUID id) {
         try {
             rentService.deleteRent(id);
             return ResponseEntity.ok("");
@@ -57,13 +58,13 @@ public class RentController {
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        catch (RentAlreadyEndedException e){
+        catch (RentNotEndedException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
     @GetMapping("/rents/ended/users/{id}")
-    public ResponseEntity<List<Rent>> getClientEndedRents(@PathVariable Long id) {
+    public ResponseEntity<List<Rent>> getClientEndedRents(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(rentService.getClientEndedRents(id));
         }
@@ -73,7 +74,7 @@ public class RentController {
     }
 
     @GetMapping("/rents/ended/workers/{id}")
-    public ResponseEntity<List<Rent>> getWorkerEndedRents(@PathVariable Long id) {
+    public ResponseEntity<List<Rent>> getWorkerEndedRents(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(rentService.getWorkerEndedRents(id));
         }
@@ -83,7 +84,7 @@ public class RentController {
     }
 
     @GetMapping("/rents/current/users/{id}")
-    public ResponseEntity<List<Rent>> getClientActiveRents(@PathVariable Long id) {
+    public ResponseEntity<List<Rent>> getClientActiveRents(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(rentService.getClientActiveRents(id));
         }
@@ -93,7 +94,7 @@ public class RentController {
     }
 
     @GetMapping("/rents/current/workers/{id}")
-    public ResponseEntity<List<Rent>> getWorkerActiveRents(@PathVariable Long id) {
+    public ResponseEntity<List<Rent>> getWorkerActiveRents(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(rentService.getWorkerActiveRents(id));
         }

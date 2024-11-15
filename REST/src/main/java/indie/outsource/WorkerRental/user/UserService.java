@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Transactional
@@ -13,7 +14,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User findById(Long id) {
+    public User findById(UUID id) {
         if(userRepository.findById(id).isPresent()){
             return userRepository.findById(id).get();
         }
@@ -51,7 +52,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User activateUser(Long id) {
+    public User activateUser(UUID id) {
         if(userRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException("User with id " + id + " not found");
         }
@@ -60,7 +61,7 @@ public class UserService {
         return user;
     }
 
-    public User deactivateUser(Long id) {
+    public User deactivateUser(UUID id) {
         if(userRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException("User with id " + id + " not found");
         }

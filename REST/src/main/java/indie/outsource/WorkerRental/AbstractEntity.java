@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +21,7 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID id;
 
     @Version
     private Long version;

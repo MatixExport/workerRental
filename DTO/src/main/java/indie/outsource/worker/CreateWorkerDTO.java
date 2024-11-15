@@ -1,5 +1,6 @@
-package indie.outsource.user;
+package indie.outsource.worker;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,13 +12,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserDTO {
+public class CreateWorkerDTO {
 
     @NotBlank
     @Size(min = 2, max = 50)
-    private String login;
-
-    @NotBlank
-    @Size(min = 2, max = 50)
-    private String password;
+    private String name;
 }

@@ -1,21 +1,18 @@
 package indie.outsource.rent;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RentDTO {
-
-    //https://www.baeldung.com/javax-validation-method-constraints
     LocalDateTime startDate;
     LocalDateTime endDate;
-    private Long userID;
-    private Long workerID;
+    private UUID userID;
+    private UUID workerID;
+    private UUID id;
 }

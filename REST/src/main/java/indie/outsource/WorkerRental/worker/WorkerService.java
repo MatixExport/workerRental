@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Transactional
@@ -16,7 +17,7 @@ public class WorkerService {
     private WorkerRepository workerRepository;
     private RentRepository rentRepository;
 
-    public Worker findById(Long id) {
+    public Worker findById(UUID id) {
         if(workerRepository.findById(id).isPresent()){
             return workerRepository.findById(id).get();
         }
@@ -32,11 +33,11 @@ public class WorkerService {
         return workerRepository.save(worker);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if(workerRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException();
         }
-        if(rentRepository.existsByWorker_IdAndEndDateIsNotNull(id)){
+        if(rentRepository.existsByWorker_IdAndEndDateIsNull(id)){
             throw new WorkerRentedException();
         }
        workerRepository.deleteById(id);

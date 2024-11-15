@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController()
@@ -16,7 +17,7 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @GetMapping("/workers/{id}")
-    public ResponseEntity<Worker> getWorker(@PathVariable @Valid Long id) {
+    public ResponseEntity<Worker> getWorker(@PathVariable @Valid UUID id) {
         Worker worker;
         try{
             worker = workerService.findById(id);
@@ -39,7 +40,7 @@ public class WorkerController {
     }
 
     @DeleteMapping("/workers/{id}")
-    public ResponseEntity<String> deleteWorker(@PathVariable @Valid Long id) {
+    public ResponseEntity<String> deleteWorker(@PathVariable @Valid UUID id) {
         try{
             workerService.delete(id);
         }
