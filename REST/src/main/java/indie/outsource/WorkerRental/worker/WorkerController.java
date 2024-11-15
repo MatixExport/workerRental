@@ -1,6 +1,11 @@
 package indie.outsource.WorkerRental.worker;
 
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
+import indie.outsource.WorkerRental.user.User;
+import indie.outsource.WorkerRental.user.UserMapper;
+import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.UserDTO;
+import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -34,8 +39,20 @@ public class WorkerController {
     }
 
     @PostMapping(value = "/workers")
-    public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid Worker worker) {
-        return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(worker)));
+    public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid CreateWorkerDTO worker) {
+        return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(WorkerMapper.getWorker(worker))));
+    }
+
+    @PostMapping("/workers/{id}")
+    public ResponseEntity<WorkerDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) {
+        Worker worker = WorkerMapper.getWorker(createWorkerDTO);
+        worker.setId(id);
+        try{
+            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(worker)));
+        }
+        catch(ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/workers/{id}")
