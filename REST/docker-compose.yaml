@@ -5,7 +5,15 @@ services:
     image: postgres:14-alpine
     ports:
       - "5432:5432"
-
     environment:
       - POSTGRES_PASSWORD=1qaz2wsx
       - POSTGRES_USER=root
+
+  mongodb:
+    image: mongo:8.0.1
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ADMIN
+      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
+      - MONGO_INITDB_DATABASE=KWIATEX
