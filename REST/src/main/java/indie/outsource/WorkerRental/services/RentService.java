@@ -2,7 +2,7 @@ package indie.outsource.WorkerRental.services;
 
 import indie.outsource.WorkerRental.exceptions.*;
 import indie.outsource.WorkerRental.model.Rent;
-import indie.outsource.WorkerRental.model.User;
+import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.model.Worker;

@@ -1,5 +1,6 @@
-package indie.outsource.WorkerRental.model;
+package indie.outsource.WorkerRental.dtoMappers;
 
+import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
 

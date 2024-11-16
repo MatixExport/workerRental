@@ -1,7 +1,7 @@
 package indie.outsource.WorkerRental.controllers;
 
 import indie.outsource.WorkerRental.exceptions.*;
-import indie.outsource.WorkerRental.model.RentMapper;
+import indie.outsource.WorkerRental.dtoMappers.RentMapper;
 import indie.outsource.WorkerRental.services.RentService;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.RentDTO;

@@ -1,5 +1,6 @@
 package indie.outsource.WorkerRental.model;
 
+import indie.outsource.WorkerRental.model.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;

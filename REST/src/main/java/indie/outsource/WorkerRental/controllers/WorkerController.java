@@ -2,7 +2,7 @@ package indie.outsource.WorkerRental.controllers;
 
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.model.Worker;
-import indie.outsource.WorkerRental.model.WorkerMapper;
+import indie.outsource.WorkerRental.dtoMappers.WorkerMapper;
 import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.services.WorkerService;
 import indie.outsource.worker.CreateWorkerDTO;

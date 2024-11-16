@@ -1,11 +1,12 @@
-package indie.outsource.WorkerRental.model;
+package indie.outsource.WorkerRental.dtoMappers;
 
+import indie.outsource.WorkerRental.model.Rent;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.RentDTO;
 
 public final class RentMapper {
     public static RentDTO getRentDTO(Rent rent){
-        return new RentDTO(rent.startDate, rent.endDate, rent.getUser().getId(), rent.getWorker().getId(), rent.getId());
+        return new RentDTO(rent.getStartDate(), rent.getEndDate(), rent.getUser().getId(), rent.getWorker().getId(), rent.getId());
     }
 
     static Rent getRentFromCreateRent(CreateRentDTO createRentDTO){
