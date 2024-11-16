@@ -1,18 +1,18 @@
 package indie.outsource.WorkerRental;
 
-import indie.outsource.user.CreateUserDTO;
-import io.restassured.common.mapper.TypeRef;
+import indie.outsource.WorkerRental.rent.RentRepository;
+import indie.outsource.WorkerRental.user.UserRepository;
 import indie.outsource.WorkerRental.worker.WorkerRepository;
 import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static indie.outsource.WorkerRental.requests.UserRequests.getUsers;
 import static indie.outsource.WorkerRental.requests.WorkerRequests.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,11 +21,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class WorkerTest {
 
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     WorkerRepository workerRepository;
+    @Autowired
+    RentRepository rentRepository;
 
+    @Before
+    public void fullTeardown(){
+        rentRepository.deleteAll();
+        userRepository.deleteAll();
+        workerRepository.deleteAll();
+    }
 
-    @BeforeEach
-    public void setup(){
+    @AfterEach
+    public void teardown(){
         workerRepository.deleteAll();
     }
 

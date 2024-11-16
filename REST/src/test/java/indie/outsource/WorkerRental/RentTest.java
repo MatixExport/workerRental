@@ -8,7 +8,8 @@ import indie.outsource.rent.RentDTO;
 import indie.outsource.user.UserDTO;
 import indie.outsource.worker.WorkerDTO;
 import io.restassured.common.mapper.TypeRef;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,13 +35,13 @@ class RentTest {
     @Autowired
     RentRepository rentRepository;
 
-    @BeforeEach
-    public void setup(){
+    @Before
+    @AfterEach
+    public void teardown(){
+        rentRepository.deleteAll();
         userRepository.deleteAll();
         workerRepository.deleteAll();
-        rentRepository.deleteAll();
     }
-
 
     @Test
     void rentTest(){

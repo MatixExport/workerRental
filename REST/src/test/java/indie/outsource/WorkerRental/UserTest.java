@@ -1,10 +1,13 @@
 package indie.outsource.WorkerRental;
 
+import indie.outsource.WorkerRental.rent.RentRepository;
 import indie.outsource.WorkerRental.user.UserRepository;
+import indie.outsource.WorkerRental.worker.WorkerRepository;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.UserDTO;
 import io.restassured.common.mapper.TypeRef;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,14 +22,26 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserTest {
 
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    WorkerRepository workerRepository;
+    @Autowired
+    RentRepository rentRepository;
 
-    @BeforeEach
-    public void setup(){
+    @Before
+    public void fullTeardown(){
+        rentRepository.deleteAll();
+        userRepository.deleteAll();
+        workerRepository.deleteAll();
+    }
+
+    @AfterEach
+    public void teardown(){
         userRepository.deleteAll();
     }
 
-    @Autowired
-    UserRepository userRepository;
+
 
     @Test
     void createUserTest(){
