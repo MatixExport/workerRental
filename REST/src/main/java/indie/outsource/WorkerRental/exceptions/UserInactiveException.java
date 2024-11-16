@@ -1,4 +1,4 @@
-package indie.outsource.WorkerRental.user;
+package indie.outsource.WorkerRental.exceptions;
 
 public class UserInactiveException extends RuntimeException {
     public UserInactiveException(String message) {

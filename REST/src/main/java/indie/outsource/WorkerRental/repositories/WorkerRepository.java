@@ -1,6 +1,7 @@
-package indie.outsource.WorkerRental.worker;
+package indie.outsource.WorkerRental.repositories;
 
 
+import indie.outsource.WorkerRental.model.Worker;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

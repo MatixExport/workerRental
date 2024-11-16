@@ -1,6 +1,5 @@
-package indie.outsource.WorkerRental.user;
+package indie.outsource.WorkerRental.model;
 
-import indie.outsource.WorkerRental.AbstractEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package indie.outsource.WorkerRental;
 
 import io.restassured.common.mapper.TypeRef;
-import indie.outsource.WorkerRental.worker.WorkerRepository;
+import indie.outsource.WorkerRental.repositories.WorkerRepository;
 import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,5 @@
-package indie.outsource.WorkerRental.worker;
+package indie.outsource.WorkerRental.model;
 
-import indie.outsource.WorkerRental.AbstractEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;

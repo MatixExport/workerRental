@@ -1,4 +1,4 @@
-package indie.outsource.WorkerRental.worker;
+package indie.outsource.WorkerRental.model;
 
 import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;

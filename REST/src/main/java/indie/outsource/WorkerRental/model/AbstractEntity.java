@@ -1,10 +1,9 @@
-package indie.outsource.WorkerRental;
+package indie.outsource.WorkerRental.model;
 
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

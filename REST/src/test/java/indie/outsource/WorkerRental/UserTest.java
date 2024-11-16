@@ -1,6 +1,6 @@
 package indie.outsource.WorkerRental;
 
-import indie.outsource.WorkerRental.user.UserRepository;
+import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.UserDTO;
 import io.restassured.common.mapper.TypeRef;

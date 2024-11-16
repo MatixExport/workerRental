@@ -1,12 +1,12 @@
-package indie.outsource.WorkerRental.rent;
+package indie.outsource.WorkerRental.services;
 
-import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
-import indie.outsource.WorkerRental.user.User;
-import indie.outsource.WorkerRental.user.UserInactiveException;
-import indie.outsource.WorkerRental.user.UserRepository;
-import indie.outsource.WorkerRental.worker.Worker;
-import indie.outsource.WorkerRental.worker.WorkerRentedException;
-import indie.outsource.WorkerRental.worker.WorkerRepository;
+import indie.outsource.WorkerRental.exceptions.*;
+import indie.outsource.WorkerRental.model.Rent;
+import indie.outsource.WorkerRental.model.User;
+import indie.outsource.WorkerRental.repositories.RentRepository;
+import indie.outsource.WorkerRental.repositories.UserRepository;
+import indie.outsource.WorkerRental.model.Worker;
+import indie.outsource.WorkerRental.repositories.WorkerRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

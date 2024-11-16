@@ -1,4 +1,4 @@
-package indie.outsource.WorkerRental.rent;
+package indie.outsource.WorkerRental.exceptions;
 
 public class RentAlreadyEndedException extends RuntimeException {
     public RentAlreadyEndedException(String message) {

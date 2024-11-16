@@ -1,8 +1,8 @@
-package indie.outsource.WorkerRental.rent;
+package indie.outsource.WorkerRental.controllers;
 
-import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
-import indie.outsource.WorkerRental.user.UserInactiveException;
-import indie.outsource.WorkerRental.worker.WorkerRentedException;
+import indie.outsource.WorkerRental.exceptions.*;
+import indie.outsource.WorkerRental.model.RentMapper;
+import indie.outsource.WorkerRental.services.RentService;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.RentDTO;
 import jakarta.validation.Valid;

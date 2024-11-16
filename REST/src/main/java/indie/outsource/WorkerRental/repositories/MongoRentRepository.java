@@ -1,4 +1,4 @@
-package indie.outsource.WorkerRental.rent;
+package indie.outsource.WorkerRental.repositories;
 
 
 import org.springframework.stereotype.Repository;

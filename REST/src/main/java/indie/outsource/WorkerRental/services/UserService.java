@@ -1,6 +1,9 @@
-package indie.outsource.WorkerRental.user;
+package indie.outsource.WorkerRental.services;
 
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
+import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
+import indie.outsource.WorkerRental.model.User;
+import indie.outsource.WorkerRental.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

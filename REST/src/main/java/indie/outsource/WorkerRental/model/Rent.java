@@ -1,8 +1,5 @@
-package indie.outsource.WorkerRental.rent;
+package indie.outsource.WorkerRental.model;
 
-import indie.outsource.WorkerRental.AbstractEntity;
-import indie.outsource.WorkerRental.user.User;
-import indie.outsource.WorkerRental.worker.Worker;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
