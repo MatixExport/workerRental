@@ -15,12 +15,16 @@ import java.util.UUID;
 @Component
 @Repository
 public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> implements WorkerRepository {
-    MongoConnection mongoConnection;
-    MongoCollection<WorkerMgd> collection;
 
     @Autowired
     public MongoWorkerRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, WorkerMgd.class);
+    }
+
+    @Override
+    protected void createCollection() {
+        super.createCollection();
+
     }
 
     @Override
@@ -39,8 +43,7 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
 
     @Override
     public Worker save(Worker worker) {
-        mongoSave(new WorkerMgd(worker));
-        return worker;
+       return mongoSave(new WorkerMgd(worker)).toDomainModel();
     }
 
     @Override

@@ -10,25 +10,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MongoSchema {
-    private static final Map<String, ValidationOptions> schemaMap = new HashMap<String, ValidationOptions>() {{
+    private static final Map<String, ValidationOptions> schemaMap = new HashMap<>() {{
         put(UserMgd.class.getSimpleName(), new ValidationOptions().validator(
                 Document.parse("""
                 {
                   $jsonSchema:{
                       "bsonType": "object",
-                      "required": ["product","productInfo"],
+                      "required": ["login","password"],
                       "properties":{
-                      "productInfo":{
-                          "bsonType": "object",
-                          "required": ["quantity"],
-                          "properties":{
-                              "quantity": {
-                                  "bsonType": "int",
-                                  "minimum":0
-                              }
-                          }
-            
-                      }
+                          "login":{
+                              "bsonType": "string",
+                              "minLength": 3,
+                              "maxLength": 20
+                          },
+                         "password": {
+                          "bsonType": "string",
+                          "minLength": 3,
+                          "maxLength": 20
+                         },
                       }
                   }
                 }
@@ -40,20 +39,15 @@ public class MongoSchema {
                 {
                   $jsonSchema:{
                       "bsonType": "object",
-                      "required": ["product","productInfo"],
+                      "required": ["startDate","endDate","worker","user"],
                       "properties":{
-                      "productInfo":{
-                          "bsonType": "object",
-                          "required": ["quantity"],
-                          "properties":{
-                              "quantity": {
-                                  "bsonType": "int",
-                                  "minimum":0
-                              }
+                          "startDate":{
+                            "bsonType": "date"
+                          },
+                          "endDate":{
+                            "bsonType": "date"
                           }
-            
-                      }
-                      }
+                          }
                   }
                 }
                 """
@@ -64,18 +58,12 @@ public class MongoSchema {
                 {
                   $jsonSchema:{
                       "bsonType": "object",
-                      "required": ["product","productInfo"],
+                      "required": ["name"],
                       "properties":{
-                      "productInfo":{
-                          "bsonType": "object",
-                          "required": ["quantity"],
-                          "properties":{
-                              "quantity": {
-                                  "bsonType": "int",
-                                  "minimum":0
-                              }
-                          }
-            
+                      "name":{
+                          "bsonType": "string",
+                           "minLength": 3,
+                           "maxLength": 20
                       }
                       }
                   }

@@ -7,6 +7,7 @@ import indie.outsource.WorkerRental.model.user.Manager;
 import indie.outsource.WorkerRental.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
@@ -24,6 +25,7 @@ public class UserMgd extends AbstractEntityMgd {
     @BsonProperty("active")
     private boolean active;
 
+    @BsonCreator
     public UserMgd(
             @BsonProperty("_id") UUID id,
             @BsonProperty("login") String login,

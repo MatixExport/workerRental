@@ -1,12 +1,15 @@
 package indie.outsource.WorkerRental.repositories;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Collation;
+import com.mongodb.client.model.CollationStrength;
 import com.mongodb.client.model.Filters;
-import indie.outsource.WorkerRental.documents.WorkerMgd;
+import com.mongodb.client.model.IndexOptions;
 import indie.outsource.WorkerRental.documents.user.UserMgd;
-import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -22,13 +25,23 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
     @Autowired
     public MongoUserRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, UserMgd.class);
+    }
 
-        if(mongoConnection.getMongoDatabase().listCollectionNames()
-                .into(new ArrayList<>())
-                .contains(UserMgd.class.getSimpleName())){
-            return;
-        }
-
+    @Override
+    protected void createCollection() {
+        super.createCollection();
+        IndexOptions indexOptions = new IndexOptions()
+                .unique(true)
+                .collation(
+                        Collation.builder()
+                                .locale("en")
+                                .collationStrength(CollationStrength.PRIMARY).build()
+                );
+        MongoCollection<UserMgd> collection = mongoConnection.getMongoDatabase().getCollection(UserMgd.class.getSimpleName(), UserMgd.class);
+        collection.createIndex(
+            new Document("login",1),indexOptions
+        );
+        collection.createIndex(new Document("login","text"));
     }
 
     @Override
@@ -43,14 +56,15 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
 
     //https://www.mongodb.com/docs/drivers/java/sync/v4.3/fundamentals/indexes/
     //https://www.mongodb.com/docs/manual/core/link-text-indexes/#std-label-text-search-on-premises
-    //It could be faster
     @Override
     public List<User> findByLoginContainsIgnoreCase(String login) {
-//        Document filter = Filters.text(
-//
-//        )
-//        return getCollection().find(new Document("login", login)).into(new ArrayList<>());
-        return List.of();
+        String searchQuery = ".*" + login + ".*";
+        Bson regexFilter = Filters.regex("login",searchQuery , "i");
+        return getCollection().find(regexFilter)
+                .into(new ArrayList<>())
+                .stream()
+                .map(UserMgd::toDomainModel)
+                .toList();
     }
 
     @Override
@@ -69,8 +83,7 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
 
     @Override
     public User save(User user) {
-        mongoSave(UserMgd.fromDomainModel(user));
-        return user;
+        return mongoSave(UserMgd.fromDomainModel(user)).toDomainModel();
     }
 
     @Override

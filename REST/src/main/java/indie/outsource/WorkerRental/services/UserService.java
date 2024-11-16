@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public User save(User user) {
@@ -59,8 +59,10 @@ public class UserService {
         if(userRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException("User with id " + id + " not found");
         }
+
         User user = userRepository.findById(id).get();
         user.setActive(true);
+        userRepository.save(user);
         return user;
     }
 
@@ -70,6 +72,7 @@ public class UserService {
         }
         User user = userRepository.findById(id).get();
         user.setActive(false);
+        userRepository.save(user);
         return user;
     }
 }

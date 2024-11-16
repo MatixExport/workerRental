@@ -1,13 +1,10 @@
 package indie.outsource.WorkerRental.documents;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
@@ -21,6 +18,7 @@ public abstract class AbstractEntityMgd {
     @BsonProperty("_id")
     private UUID id;
 
+    @BsonCreator
     public AbstractEntityMgd(
          @BsonProperty("_id") UUID id
     ) {

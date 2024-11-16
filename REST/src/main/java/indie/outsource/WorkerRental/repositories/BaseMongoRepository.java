@@ -3,11 +3,10 @@ package indie.outsource.WorkerRental.repositories;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.ReplaceOptions;
+import com.mongodb.client.result.UpdateResult;
 import indie.outsource.WorkerRental.documents.AbstractEntityMgd;
-import indie.outsource.WorkerRental.documents.user.UserMgd;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoSchema;
-import lombok.AllArgsConstructor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import java.util.ArrayList;
@@ -34,13 +33,11 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
 
     protected MongoCollection<T> getCollection() {
           return collection;
-    };
-
-    protected MongoConnection getMongoConnection() {
-        return mongoConnection;
     }
 
+
     protected void createCollection() {
+        System.out.println("Creating " + entityClass.getSimpleName() + " collection");
         CreateCollectionOptions createCollectionOptions = new CreateCollectionOptions().validationOptions(
                 MongoSchema.getSchema(entityClass.getSimpleName())
         );
@@ -48,7 +45,7 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
     }
 
     protected List<T> mongoFindAll() {
-        return getCollection().find().into(new ArrayList<T>());
+        return getCollection().find().into(new ArrayList<>());
     }
 
 
@@ -58,9 +55,17 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
 
     protected T mongoSave(T t) {
         //todo: change to return actual new id
+        if(t.getId() == null){
+            t.setId(UUID.randomUUID());
+        }
         ReplaceOptions options = new ReplaceOptions().upsert(true);
         Bson filter = new Document("_id", t.getId());
-        getCollection().replaceOne(filter, t, options);
+        UpdateResult result = getCollection().replaceOne(filter, t, options);
+        if(!result.wasAcknowledged()){
+            //Exception
+            return null;
+        }
+
         return t;
     }
 

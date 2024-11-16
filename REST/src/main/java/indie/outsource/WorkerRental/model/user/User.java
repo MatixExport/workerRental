@@ -14,6 +14,5 @@ public class User extends AbstractEntity {
     @Column(unique=true)
     private String login;
     private String password;
-
     private boolean active;
 }
