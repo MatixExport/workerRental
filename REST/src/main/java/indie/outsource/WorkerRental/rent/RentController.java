@@ -28,6 +28,11 @@ public class RentController {
         }
     }
 
+    @GetMapping("/rents")
+    public ResponseEntity<List<RentDTO>> getRents() {
+        return ResponseEntity.ok(rentService.findAll().stream().map(RentMapper::getRentDTO).toList());
+    }
+
     @PostMapping("/rents/users/{clientId}/workers/{workerId}")
     public ResponseEntity<RentDTO> createRent(@PathVariable UUID clientId, @PathVariable UUID workerId, @RequestBody @Valid CreateRentDTO rent) {
         try {

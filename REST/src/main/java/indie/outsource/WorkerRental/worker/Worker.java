@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Worker extends AbstractEntity {
-    @Column(unique = true)
+
     @NotBlank
     private String name;
 }

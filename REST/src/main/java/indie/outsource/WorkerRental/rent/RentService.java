@@ -7,6 +7,7 @@ import indie.outsource.WorkerRental.user.UserRepository;
 import indie.outsource.WorkerRental.worker.Worker;
 import indie.outsource.WorkerRental.worker.WorkerRentedException;
 import indie.outsource.WorkerRental.worker.WorkerRepository;
+import indie.outsource.rent.RentDTO;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,10 @@ public class RentService {
         }
         else
             throw new ResourceNotFoundException("Rent not found");
+    }
+
+    public List<Rent> findAll() {
+        return (List<Rent>) rentRepository.findAll();
     }
 
     public Rent createRent(UUID clientId, UUID workerId, LocalDateTime startDate) {
@@ -102,4 +107,5 @@ public class RentService {
         }
         rentRepository.deleteById(rentId);
     }
+
 }
