@@ -28,7 +28,12 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
-        return ResponseEntity.ok(UserMapper.getUserDTO(userService.findById(id)));
+        try{
+            return ResponseEntity.ok(UserMapper.getUserDTO(userService.findById(id)));
+        }
+        catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/users/login/{login}")

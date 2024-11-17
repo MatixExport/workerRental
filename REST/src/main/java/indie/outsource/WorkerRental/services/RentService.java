@@ -33,6 +33,10 @@ public class RentService {
             throw new ResourceNotFoundException("Rent not found");
     }
 
+    public List<Rent> findAll() {
+        return (List<Rent>) rentRepository.findAll();
+    }
+
     public Rent createRent(UUID clientId, UUID workerId, LocalDateTime startDate) {
         Optional<User> user = userRepository.findById(clientId);
         if(user.isEmpty()){
