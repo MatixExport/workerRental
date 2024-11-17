@@ -1,6 +1,5 @@
 package indie.outsource.WorkerRental.repositories;
 
-import com.mongodb.client.MongoCollection;
 import indie.outsource.WorkerRental.documents.WorkerMgd;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
@@ -43,7 +42,11 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
 
     @Override
     public Worker save(Worker worker) {
-       return mongoSave(new WorkerMgd(worker)).toDomainModel();
+        WorkerMgd mgd = new WorkerMgd(worker);
+        if(worker.getId() == null) {
+            mgd.setIsRented(0);
+        }
+       return mongoSave(mgd).toDomainModel();
     }
 
     @Override

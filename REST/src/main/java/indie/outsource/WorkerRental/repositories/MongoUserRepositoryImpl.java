@@ -1,11 +1,13 @@
 package indie.outsource.WorkerRental.repositories;
 
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.CollationStrength;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import indie.outsource.WorkerRental.documents.user.UserMgd;
+import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
 import org.bson.Document;
@@ -83,7 +85,15 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
 
     @Override
     public User save(User user) {
-        return mongoSave(UserMgd.fromDomainModel(user)).toDomainModel();
+        try{
+            return mongoSave(UserMgd.fromDomainModel(user)).toDomainModel();
+        }
+        catch (MongoWriteException e){
+            if(e.getError().getCode() == 11000){
+                throw new UserAlreadyExistsException("User with login " + user.getLogin() + " already exists");
+            }
+            throw e;
+        }
     }
 
     @Override

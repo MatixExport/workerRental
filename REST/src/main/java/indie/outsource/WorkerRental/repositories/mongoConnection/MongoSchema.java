@@ -39,7 +39,7 @@ public class MongoSchema {
                 {
                   $jsonSchema:{
                       "bsonType": "object",
-                      "required": ["startDate","endDate","worker","user"],
+                      "required": ["startDate","worker","user"],
                       "properties":{
                           "startDate":{
                             "bsonType": "date"
@@ -64,7 +64,11 @@ public class MongoSchema {
                           "bsonType": "string",
                            "minLength": 3,
                            "maxLength": 20
-                      }
+                      },
+                      "isRented":{
+                         "bsonType": "int",
+                         "minimum":0,
+                         "maximum":1}
                       }
                   }
                 }

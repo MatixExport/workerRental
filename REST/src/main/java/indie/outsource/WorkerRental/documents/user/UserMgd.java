@@ -44,6 +44,10 @@ public class UserMgd extends AbstractEntityMgd {
         this.active = user.isActive();
     }
 
+    public void removePassword() {
+        this.password = null;
+    }
+
     public User toDomainModel(){
         User user = new User();
         user.setId(getId());

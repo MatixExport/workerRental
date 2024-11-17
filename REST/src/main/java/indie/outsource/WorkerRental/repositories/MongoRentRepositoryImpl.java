@@ -1,7 +1,12 @@
 package indie.outsource.WorkerRental.repositories;
 
+import com.mongodb.MongoWriteException;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import indie.outsource.WorkerRental.documents.RentMgd;
+import indie.outsource.WorkerRental.documents.WorkerMgd;
+import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Rent;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
 import org.bson.Document;
@@ -86,9 +91,42 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         return Optional.empty();
     }
 
+
+    private void updateIsRented(RentMgd rentMgd, int value){
+        MongoCollection<WorkerMgd> workerMongoCollection = mongoConnection.getMongoDatabase().getCollection(WorkerMgd.class.getSimpleName(), WorkerMgd.class);
+        Bson filter = Filters.eq("_id", rentMgd.getWorker().getId());
+        Bson update = Updates.inc("isRented", value);
+        workerMongoCollection.updateOne(filter, update);
+    }
+
+
     @Override
     public Rent save(Rent rent) {
-        return mongoSave(new RentMgd(rent)).toDomainModel();
+        RentMgd mgd = new RentMgd(rent);
+        mgd.getUser().removePassword();
+        if(rent.getId() == null){
+            rent.setId(UUID.randomUUID());
+            try{
+                inSession(mongoConnection.getMongoClient(),()->{
+                    updateIsRented(mgd, 1);
+                    getCollection().insertOne(mgd);
+                });
+                return rent;
+            }catch (MongoWriteException e){
+                throw new WorkerRentedException();
+            }
+        }
+        RentMgd dbMgd = mongoFindById(rent.getId());
+
+        if((dbMgd != null)&&(dbMgd.getEndDate() == null)&&(rent.getEndDate() != null)){
+            inSession(mongoConnection.getMongoClient(),()->{
+                updateIsRented(dbMgd, -1);
+                getCollection().replaceOne(new Document("_id", rent.getId()),mgd);
+            });
+            return rent;
+        }
+        getCollection().replaceOne(new Document("_id", rent.getId()),mgd);
+        return rent;
     }
 
     @Override

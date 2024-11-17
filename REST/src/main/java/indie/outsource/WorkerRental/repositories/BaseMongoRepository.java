@@ -1,5 +1,7 @@
 package indie.outsource.WorkerRental.repositories;
 
+import com.mongodb.client.ClientSession;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.ReplaceOptions;
@@ -54,7 +56,6 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
     }
 
     protected T mongoSave(T t) {
-        //todo: change to return actual new id
         if(t.getId() == null){
             t.setId(UUID.randomUUID());
         }
@@ -81,5 +82,21 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
 
     protected void mongoDeleteAll() {
         getCollection().deleteMany(new Document());
+    }
+
+    protected void inSession(MongoClient client, Runnable work) {
+        ClientSession session = client.startSession();
+        try {
+            session.startTransaction();
+            work.run();
+            session.commitTransaction();
+        }
+        catch (Exception e) {
+            session.abortTransaction();
+            throw e;
+        }
+        finally {
+            session.close();
+        }
     }
 }

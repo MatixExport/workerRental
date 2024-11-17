@@ -1,9 +1,6 @@
 package indie.outsource.WorkerRental.documents;
 
 import indie.outsource.WorkerRental.model.Worker;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,15 +14,20 @@ import java.util.UUID;
 @Getter
 @Setter
 public class WorkerMgd extends AbstractEntityMgd {
-    @BsonProperty
+    @BsonProperty("name")
     private String name;
+    @BsonProperty("isRented")
+    private int isRented;
 
     @BsonCreator
     public WorkerMgd(
            @BsonProperty("_id") UUID id,
-           @BsonProperty String name) {
+           @BsonProperty("name") String name,
+           @BsonProperty("isRented") int isRented
+    ) {
         super(id);
         this.name = name;
+        this.isRented = isRented;
     }
     public WorkerMgd(Worker worker) {
         super(worker.getId());

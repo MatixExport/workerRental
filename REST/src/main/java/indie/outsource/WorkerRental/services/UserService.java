@@ -17,6 +17,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
 
+
     public User findById(UUID id) {
         if(userRepository.findById(id).isPresent()){
             return userRepository.findById(id).get();
