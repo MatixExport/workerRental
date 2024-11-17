@@ -6,6 +6,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import indie.outsource.WorkerRental.documents.RentMgd;
 import lombok.Getter;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -29,6 +30,7 @@ public class MongoConnection {
             PojoCodecProvider.builder()
                     .automatic(true)
                     .conventions(List.of(Conventions.ANNOTATION_CONVENTION,Conventions.CLASS_AND_PROPERTY_CONVENTION))
+                    .register(RentMgd.class)
                     .build()
     );
 

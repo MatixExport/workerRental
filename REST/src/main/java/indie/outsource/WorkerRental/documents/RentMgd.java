@@ -7,6 +7,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.time.LocalDateTime;
@@ -16,23 +17,22 @@ import java.util.UUID;
 @Getter
 public class RentMgd extends AbstractEntityMgd {
 
-    //https://www.baeldung.com/javax-validation-method-constraints
-
-    @BsonProperty
+    @BsonProperty("startDate")
     LocalDateTime startDate;
-    @BsonProperty
+    @BsonProperty("endDate")
     LocalDateTime endDate;
-    @BsonProperty
+    @BsonProperty("worker")
     WorkerMgd worker;
-    @BsonProperty(useDiscriminator = true)
+    @BsonProperty(value = "user",useDiscriminator = true)
     UserMgd user;
 
+    @BsonCreator
     public RentMgd(
             @BsonProperty("_id") UUID id,
-            @BsonProperty LocalDateTime startDate,
-            @BsonProperty LocalDateTime endDate,
-            @BsonProperty WorkerMgd worker,
-            @BsonProperty UserMgd user) {
+            @BsonProperty("startDate") LocalDateTime startDate,
+            @BsonProperty("endDate") LocalDateTime endDate,
+            @BsonProperty("worker") WorkerMgd worker,
+            @BsonProperty("user") UserMgd user) {
         super(id);
         this.startDate = startDate;
         this.endDate = endDate;

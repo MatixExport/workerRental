@@ -105,7 +105,9 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         RentMgd mgd = new RentMgd(rent);
         mgd.getUser().removePassword();
         if(rent.getId() == null){
-            rent.setId(UUID.randomUUID());
+            UUID rentId = UUID.randomUUID();
+            mgd.setId(rentId);
+            rent.setId(rentId);
             try{
                 inSession(mongoConnection.getMongoClient(),()->{
                     updateIsRented(mgd, 1);
@@ -117,7 +119,6 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
             }
         }
         RentMgd dbMgd = mongoFindById(rent.getId());
-
         if((dbMgd != null)&&(dbMgd.getEndDate() == null)&&(rent.getEndDate() != null)){
             inSession(mongoConnection.getMongoClient(),()->{
                 updateIsRented(dbMgd, -1);

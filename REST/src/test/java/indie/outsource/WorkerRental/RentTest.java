@@ -1,8 +1,8 @@
 package indie.outsource.WorkerRental;
 
-import indie.outsource.WorkerRental.rent.RentRepository;
-import indie.outsource.WorkerRental.user.UserRepository;
-import indie.outsource.WorkerRental.worker.WorkerRepository;
+import indie.outsource.WorkerRental.repositories.RentRepository;
+import indie.outsource.WorkerRental.repositories.UserRepository;
+import indie.outsource.WorkerRental.repositories.WorkerRepository;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.RentDTO;
 import indie.outsource.user.UserDTO;
