@@ -1,8 +1,15 @@
 package indie.outsource.WorkerRental.repositories;
 
+import com.mongodb.MongoWriteException;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import indie.outsource.WorkerRental.documents.RentMgd;
 import indie.outsource.WorkerRental.documents.WorkerMgd;
+import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -33,6 +40,13 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
                 .toList();
     }
 
+    private void updateIsRented(UUID workerUUID, int value){
+        Bson filter = Filters.eq("_id", workerUUID);
+        Bson update = Updates.inc("isRented", value);
+        getCollection().updateOne(filter, update);
+    }
+
+
     @Override
     public Optional<Worker> findById(UUID id) {
         WorkerMgd mgd = mongoFindById(id);
@@ -51,12 +65,19 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
 
     @Override
     public void delete(Worker worker) {
-        mongoDelete(new WorkerMgd(worker));
+        deleteById(worker.getId());
     }
 
     @Override
     public void deleteById(UUID t) {
-        mongoDeleteById(t);
+        try{
+            //If this is able to increment isRented value to 1
+            //then that means that this worker was unallocated
+            updateIsRented(t, 1);
+            mongoDeleteById(t);
+        }catch (MongoWriteException e){
+            throw new WorkerRentedException();
+        }
     }
 
     @Override
