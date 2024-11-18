@@ -4,6 +4,7 @@ import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
 import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 import io.restassured.common.mapper.TypeRef;
 import org.junit.Before;
@@ -78,7 +79,7 @@ class UserTest {
     @Test
     void updateUserTest(){
         UserDTO user = createDefaultUser();
-        updateUser(user.getId(), new CreateUserDTO("Marek", "ZAQ!2wsx"));
+        updateUser(user.getId(), new CreateUserDTO("Marek", "ZAQ!2wsx", USERTYPE.CLIENT));
         UserDTO user2 = getUser(user.getId());
 
         assertEquals("Marek", user2.getLogin());
@@ -106,7 +107,7 @@ class UserTest {
 
     @Test
     void tooShortUsernameTest(){
-        CreateUserDTO createUserDTO = new CreateUserDTO("A", "ZAQ!2wsx");
+        CreateUserDTO createUserDTO = new CreateUserDTO("A", "ZAQ!2wsx", USERTYPE.CLIENT);
         given().contentType("application/json").
                 body(createUserDTO).when().post("/users").
                 then().statusCode(400);
@@ -116,7 +117,7 @@ class UserTest {
     @Test
     void usernameExistsTest(){
         UserDTO user = createDefaultUser();
-        CreateUserDTO createUserDTO = new CreateUserDTO("Adam", "ZAQ!2wsx");
+        CreateUserDTO createUserDTO = new CreateUserDTO("Adam", "ZAQ!2wsx", USERTYPE.CLIENT);
         given().contentType("application/json").
                 body(createUserDTO).when().post("/users").
                 then().statusCode(409);

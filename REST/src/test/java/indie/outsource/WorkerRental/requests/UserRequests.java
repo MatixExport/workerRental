@@ -1,6 +1,7 @@
 package indie.outsource.WorkerRental.requests;
 
 import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 import io.restassured.common.mapper.TypeRef;
 
@@ -11,7 +12,7 @@ import static io.restassured.RestAssured.*;
 
 public class UserRequests {
     public static UserDTO createDefaultUser(){
-        CreateUserDTO createUserDTO = new CreateUserDTO("Adam", "ZAQ!2wsx");
+        CreateUserDTO createUserDTO = new CreateUserDTO("Adam", "ZAQ!2wsx", USERTYPE.CLIENT);
         return given().contentType("application/json").
                 body(createUserDTO).when().post("/users").
                 then().statusCode(200).

@@ -1,6 +1,8 @@
 package indie.outsource.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,4 +22,7 @@ public class CreateUserDTO {
     @NotBlank
     @Size(min = 2, max = 50)
     private String password;
+
+    @NotNull
+    USERTYPE type;
 }

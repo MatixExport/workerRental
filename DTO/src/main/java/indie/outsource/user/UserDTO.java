@@ -1,9 +1,7 @@
 package indie.outsource.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -17,4 +15,5 @@ public class UserDTO {
     private boolean active;
     private UUID id;
 
+    USERTYPE type;
 }
