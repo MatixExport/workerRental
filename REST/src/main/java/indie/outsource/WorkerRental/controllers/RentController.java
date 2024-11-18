@@ -66,7 +66,7 @@ public class RentController {
         catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        catch (RentNotEndedException e){
+        catch (RentAlreadyEndedException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }

@@ -2,9 +2,6 @@ package indie.outsource.WorkerRental.documents;
 
 import indie.outsource.WorkerRental.documents.user.UserMgd;
 import indie.outsource.WorkerRental.model.Rent;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;

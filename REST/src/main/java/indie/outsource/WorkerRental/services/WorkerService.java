@@ -5,7 +5,6 @@ import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Transactional
 @Service
 public class WorkerService {
 

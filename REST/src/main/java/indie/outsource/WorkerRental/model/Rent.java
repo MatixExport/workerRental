@@ -1,15 +1,14 @@
 package indie.outsource.WorkerRental.model;
 
 import indie.outsource.WorkerRental.model.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
+
 @Setter
 @Getter
 public class Rent extends AbstractEntity {
@@ -20,9 +19,7 @@ public class Rent extends AbstractEntity {
 
     LocalDateTime endDate;
 
-    @OneToOne
     Worker worker;
 
-    @OneToOne
     User user;
 }

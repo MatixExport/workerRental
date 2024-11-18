@@ -135,6 +135,7 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         mongoDelete(new RentMgd(rent));
     }
 
+    //TODO nie pozwalaj na usunięcie jeżeli zakończony
     @Override
     public void deleteById(UUID t) {
         mongoDeleteById(t);

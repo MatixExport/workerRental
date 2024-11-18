@@ -7,7 +7,6 @@ import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Transactional
 @Service
 public class RentService {
     private final RentRepository rentRepository;
@@ -96,13 +94,12 @@ public class RentService {
         rent.setEndDate(LocalDateTime.now());
         return rentRepository.save(rent);
     }
-
     public void deleteRent(UUID rentId){
         if(rentRepository.findById(rentId).isEmpty()){
             throw new ResourceNotFoundException();
         }
         if(rentRepository.findById(rentId).get().getEndDate() != null){
-            throw new RentNotEndedException();
+            throw new RentAlreadyEndedException();
         }
         rentRepository.deleteById(rentId);
     }

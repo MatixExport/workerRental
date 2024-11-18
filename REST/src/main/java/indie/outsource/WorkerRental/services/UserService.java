@@ -4,7 +4,7 @@ import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.UserRepository;
-import jakarta.transaction.Transactional;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Transactional
 @Service
 public class UserService {
     private final UserRepository userRepository;

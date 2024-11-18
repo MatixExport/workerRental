@@ -1,6 +1,6 @@
 package indie.outsource.rent;
 
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CreateRentDTO {
 
-    @Future
+    @FutureOrPresent
     LocalDateTime startDate;
 }
