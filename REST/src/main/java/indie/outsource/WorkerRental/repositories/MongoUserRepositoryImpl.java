@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-@Component
 public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implements UserRepository {
     @Autowired
     public MongoUserRepositoryImpl(MongoConnection mongoConnection) {

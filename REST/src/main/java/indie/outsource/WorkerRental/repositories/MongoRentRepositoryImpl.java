@@ -6,6 +6,8 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import indie.outsource.WorkerRental.documents.RentMgd;
 import indie.outsource.WorkerRental.documents.WorkerMgd;
+import indie.outsource.WorkerRental.exceptions.RentAlreadyEndedException;
+import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Rent;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
@@ -19,7 +21,6 @@ import java.util.*;
 
 
 
-@Component
 @Repository
 public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements RentRepository {
     public MongoRentRepositoryImpl(MongoConnection mongoConnection) {
@@ -92,9 +93,9 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     }
 
 
-    private void updateIsRented(RentMgd rentMgd, int value){
+    private void updateIsRented(WorkerMgd workerMgd, int value){
         MongoCollection<WorkerMgd> workerMongoCollection = mongoConnection.getMongoDatabase().getCollection(WorkerMgd.class.getSimpleName(), WorkerMgd.class);
-        Bson filter = Filters.eq("_id", rentMgd.getWorker().getId());
+        Bson filter = Filters.eq("_id", workerMgd.getId());
         Bson update = Updates.inc("isRented", value);
         workerMongoCollection.updateOne(filter, update);
     }
@@ -102,31 +103,51 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
 
     @Override
     public Rent save(Rent rent) {
-        RentMgd mgd = new RentMgd(rent);
-        mgd.getUser().removePassword();
         if(rent.getId() == null){
-            UUID rentId = UUID.randomUUID();
-            mgd.setId(rentId);
-            rent.setId(rentId);
-            try{
-                inSession(mongoConnection.getMongoClient(),()->{
-                    updateIsRented(mgd, 1);
-                    getCollection().insertOne(mgd);
-                });
-                return rent;
-            }catch (MongoWriteException e){
-                throw new WorkerRentedException();
-            }
+            rent.setId(UUID.randomUUID());
+            return insert(rent);
         }
-        RentMgd dbMgd = mongoFindById(rent.getId());
-        if((dbMgd != null)&&(dbMgd.getEndDate() == null)&&(rent.getEndDate() != null)){
+        RentMgd rentFromDB = mongoFindById(rent.getId());
+        if(rentFromDB == null){
+            throw new ResourceNotFoundException();
+        }
+        if(rentFromDB.getEndDate() != null){
+            throw new RentAlreadyEndedException();
+        }
+        return update(rent);
+    }
+
+    private Rent insert(Rent rent){
+        RentMgd rentMgd = new RentMgd(rent);
+        rentMgd.getUser().removePassword();
+        try{
             inSession(mongoConnection.getMongoClient(),()->{
-                updateIsRented(dbMgd, -1);
-                getCollection().replaceOne(new Document("_id", rent.getId()),mgd);
+                updateIsRented(rentMgd.getWorker(), 1);
+                getCollection().insertOne(rentMgd);
             });
             return rent;
+        }catch (MongoWriteException e){
+            throw new WorkerRentedException();
         }
-        getCollection().replaceOne(new Document("_id", rent.getId()),mgd);
+    }
+
+    private Rent update(Rent rent){
+        if(rent.getEndDate() != null){
+            return finish(rent);
+        }
+        RentMgd rentMgd = new RentMgd(rent);
+        rentMgd.getUser().removePassword();
+        getCollection().replaceOne(new Document("_id", rent.getId()),rentMgd);
+        return rent;
+    }
+
+    private Rent finish(Rent rent){
+        RentMgd rentMgd = new RentMgd(rent);
+        rentMgd.getUser().removePassword();
+        inSession(mongoConnection.getMongoClient(),()->{
+            updateIsRented(rentMgd.getWorker(), -1);
+            getCollection().replaceOne(new Document("_id", rent.getId()),rentMgd);
+        });
         return rent;
     }
 
@@ -138,6 +159,13 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     //TODO nie pozwalaj na usunięcie jeżeli zakończony
     @Override
     public void deleteById(UUID t) {
+        RentMgd rentFromDB = mongoFindById(t);
+        if(rentFromDB == null){
+            throw new ResourceNotFoundException();
+        }
+        if(rentFromDB.getEndDate() != null){
+            throw new RentAlreadyEndedException();
+        }
         mongoDeleteById(t);
     }
 
