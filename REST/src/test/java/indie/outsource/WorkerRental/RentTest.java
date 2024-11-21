@@ -13,6 +13,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +29,7 @@ import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class RentTest {
 
     @Autowired
@@ -63,6 +67,8 @@ class RentTest {
 
         WorkerDTO worker = createDefaultWorker();
 
+        assertEquals(0,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
+
         CreateRentDTO createRentDTO = new CreateRentDTO(LocalDateTime.now().plusHours(2));
         RentDTO rent = createRent(user.getId(), worker.getId(), createRentDTO);
 
@@ -70,7 +76,6 @@ class RentTest {
         given().contentType("application/json").
                 body(createRentDTO2).when().post("/rents/users/{clientId}/workers/{workerId}", user.getId(), worker.getId()).
                 then().statusCode(409);
-
         assertEquals(1,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
     }
 }

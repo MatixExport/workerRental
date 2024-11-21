@@ -64,7 +64,7 @@ public class WorkerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         catch (WorkerRentedException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.ok().build();
     }

@@ -12,12 +12,15 @@ import indie.outsource.WorkerRental.repositories.WorkerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Component
+@Configuration
+@Profile("!test")
 public class MongoInitializer implements CommandLineRunner {
     RentRepository rentRepository;
 

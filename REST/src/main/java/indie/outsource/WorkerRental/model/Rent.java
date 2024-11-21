@@ -2,7 +2,6 @@ package indie.outsource.WorkerRental.model;
 
 import indie.outsource.WorkerRental.model.user.User;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,6 @@ public class Rent extends AbstractEntity {
         this.user = user;
     }
 
-    //https://www.baeldung.com/javax-validation-method-constraints
-    @NotNull
     LocalDateTime startDate;
 
     LocalDateTime endDate;
