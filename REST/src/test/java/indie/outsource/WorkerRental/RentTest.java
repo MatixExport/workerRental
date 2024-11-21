@@ -28,7 +28,7 @@ import static indie.outsource.WorkerRental.requests.WorkerRequests.createDefault
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 class RentTest {
 
