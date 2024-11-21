@@ -44,11 +44,11 @@ public class WorkerController {
     }
 
     @PostMapping("/workers/{id}")
-    public ResponseEntity<WorkerDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) {
+    public ResponseEntity<WorkerDTO> updateWorker(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) {
         Worker worker = WorkerMapper.getWorker(createWorkerDTO);
         worker.setId(id);
         try{
-            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(worker)));
+            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.updateWorker(worker)));
         }
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

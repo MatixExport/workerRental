@@ -27,7 +27,7 @@ public class WorkerService {
     }
 
     public List<Worker> findAll() {
-        return (List<Worker>) workerRepository.findAll();
+        return workerRepository.findAll();
     }
 
     public Worker save(Worker worker) {
