@@ -20,13 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static indie.outsource.WorkerRental.requests.RentRequests.createRent;
-
+import static indie.outsource.WorkerRental.requests.RentRequests.*;
 import static indie.outsource.WorkerRental.requests.UserRequests.activateUser;
 import static indie.outsource.WorkerRental.requests.UserRequests.createDefaultUser;
 import static indie.outsource.WorkerRental.requests.WorkerRequests.createDefaultWorker;
+import static indie.outsource.WorkerRental.requests.WorkerRequests.getWorker;
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -64,7 +65,6 @@ class RentTest {
     void createRentForRentedWorkerTest(){
         UserDTO user = createDefaultUser();
         activateUser(user.getId());
-
         WorkerDTO worker = createDefaultWorker();
 
         assertEquals(0,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
@@ -78,4 +78,19 @@ class RentTest {
                 then().statusCode(409);
         assertEquals(1,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
     }
+
+
+    @Test
+    void finishRentTest(){
+        UserDTO user = createDefaultUser();
+        activateUser(user.getId());
+        WorkerDTO worker = createDefaultWorker();
+        CreateRentDTO createRentDTO = new CreateRentDTO(LocalDateTime.now().plusSeconds(1));
+        RentDTO rent1 =  createRent(user.getId(), worker.getId(), createRentDTO);
+        finishRent(rent1.getId(),200);
+        rent1 = getRent(rent1.getId());
+        assertNotNull(rent1.getEndDate());
+        finishRent(rent1.getId(),409);
+    }
+
 }
