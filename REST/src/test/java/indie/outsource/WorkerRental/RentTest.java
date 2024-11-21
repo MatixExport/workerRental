@@ -1,5 +1,7 @@
 package indie.outsource.WorkerRental;
 
+import indie.outsource.WorkerRental.dtoMappers.RentMapper;
+import indie.outsource.WorkerRental.model.AbstractEntity;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
@@ -19,6 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static indie.outsource.WorkerRental.requests.RentRequests.createDefaultRent;
+import static indie.outsource.WorkerRental.requests.RentRequests.createRent;
 
 import static indie.outsource.WorkerRental.requests.RentRequests.*;
 import static indie.outsource.WorkerRental.requests.UserRequests.activateUser;
@@ -65,6 +70,7 @@ class RentTest {
     void createRentForRentedWorkerTest(){
         UserDTO user = createDefaultUser();
         activateUser(user.getId());
+
         WorkerDTO worker = createDefaultWorker();
 
         assertEquals(0,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
@@ -79,14 +85,31 @@ class RentTest {
         assertEquals(1,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
     }
 
+    @Test
+    void deleteRentTest(){
+        RentDTO rentDTO = createDefaultRent();
+
+        delete("/rents/{rentId}/delete", rentDTO.getId()).then().statusCode(200);
+        assertEquals(0,get("/rents").as(new TypeRef<List<RentDTO>>() {}).size());
+    }
+
+    @Test
+    void getRentsTest(){
+        RentDTO rentDTO = createDefaultRent();
+
+        assertEquals(1,get("/rents/current/users/{id}",rentDTO.getUserID()).then().statusCode(200).extract().as(new TypeRef<List<RentDTO>>() {}).size());
+        assertEquals(1,get("/rents/current/workers/{id}",rentDTO.getWorkerID()).as(new TypeRef<List<RentDTO>>() {}).size());
+
+        finishRent(rentDTO.getId(),200);
+
+        assertEquals(1,get("/rents/ended/users/{id}",rentDTO.getUserID()).as(new TypeRef<List<RentDTO>>() {}).size());
+        assertEquals(1,get("/rents/ended/workers/{id}",rentDTO.getWorkerID()).as(new TypeRef<List<RentDTO>>() {}).size());
+    }
+
 
     @Test
     void finishRentTest(){
-        UserDTO user = createDefaultUser();
-        activateUser(user.getId());
-        WorkerDTO worker = createDefaultWorker();
-        CreateRentDTO createRentDTO = new CreateRentDTO(LocalDateTime.now().plusSeconds(1));
-        RentDTO rent1 =  createRent(user.getId(), worker.getId(), createRentDTO);
+        RentDTO rent1 =  createDefaultRent();
         finishRent(rent1.getId(),200);
         rent1 = getRent(rent1.getId());
         assertNotNull(rent1.getEndDate());

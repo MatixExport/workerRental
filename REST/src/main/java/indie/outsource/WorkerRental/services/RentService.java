@@ -58,26 +58,26 @@ public class RentService {
     }
 
     public List<Rent> getClientActiveRents(UUID clientId){
-        if(rentRepository.findById(clientId).isEmpty()){
+        if(userRepository.findById(clientId).isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
         return rentRepository.findByUser_IdAndEndDateIsNull(clientId);
     }
     public List<Rent> getClientEndedRents(UUID clientId){
-        if(rentRepository.findById(clientId).isEmpty()){
+        if(userRepository.findById(clientId).isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
         return rentRepository.findByUser_IdAndEndDateBefore(clientId, LocalDateTime.now());
     }
 
     public List<Rent> getWorkerActiveRents(UUID workerId){
-        if(rentRepository.findById(workerId).isEmpty()){
+        if(workerRepository.findById(workerId).isEmpty()){
             throw new ResourceNotFoundException("Worker not found");
         }
         return rentRepository.findByWorker_IdAndEndDateIsNull(workerId);
     }
     public List<Rent> getWorkerEndedRents(UUID workerId){
-        if(rentRepository.findById(workerId).isEmpty()){
+        if(workerRepository.findById(workerId).isEmpty()){
             throw new ResourceNotFoundException("Worker not found");
         }
         return rentRepository.findByWorker_IdAndEndDateBefore(workerId, LocalDateTime.now());
