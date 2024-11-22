@@ -81,7 +81,7 @@ class UserTest {
     @Test
     void updateUserTest(){
         UserDTO user = createDefaultUser();
-        updateUser(user.getId(), new CreateUserDTO("Marek", "ZAQ!2wsx", USERTYPE.CLIENT));
+        updateUser(user.getId(), new CreateUserDTO("Marek", "ZAQ!2wsx", USERTYPE.ADMIN));
         UserDTO user2 = getUser(user.getId());
 
         assertEquals("Marek", user2.getLogin());

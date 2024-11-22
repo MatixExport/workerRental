@@ -156,16 +156,8 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         mongoDelete(new RentMgd(rent));
     }
 
-    //TODO nie pozwalaj na usunięcie jeżeli zakończony
     @Override
     public void deleteById(UUID t) {
-        RentMgd rentFromDB = mongoFindById(t);
-        if(rentFromDB == null){
-            throw new ResourceNotFoundException();
-        }
-        if(rentFromDB.getEndDate() != null){
-            throw new RentAlreadyEndedException();
-        }
         mongoDeleteById(t);
     }
 
