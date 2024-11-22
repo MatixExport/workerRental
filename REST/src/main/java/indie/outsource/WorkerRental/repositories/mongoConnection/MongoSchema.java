@@ -36,20 +36,55 @@ public class MongoSchema {
         ));
         put(RentMgd.class.getSimpleName(), new ValidationOptions().validator(
                 Document.parse("""
-                {
-                  $jsonSchema:{
-                      "bsonType": "object",
-                      "required": ["startDate","worker","user"],
-                      "properties":{
-                          "startDate":{
-                            "bsonType": "date"
-                          },
-                          "endDate":{
-                            "bsonType": "date"
-                          }
-                          }
-                  }
-                }
+                                {
+                                  "$jsonSchema": {
+                                    "bsonType": "object",
+                                    "required": [
+                                      "startDate",
+                                      "worker",
+                                      "user"
+                                    ],
+                                    "properties": {
+                                      "startDate": {
+                                        "bsonType": "date"
+                                      },
+                                      "endDate": {
+                                        "bsonType": "date"
+                                      },
+                                       "user": {
+                                      "bsonType": "object",
+                                      "required": [
+                                        "login"
+                                      ],
+                                      "properties": {
+                                        "login": {
+                                          "bsonType": "string",
+                                          "minLength": 3,
+                                          "maxLength": 20
+                                        }
+                                      }
+                                    },
+                                      "worker": {
+                                        "bsonType": "object",
+                                        "required": [
+                                          "name"
+                                        ],
+                                        "properties": {
+                                          "name": {
+                                            "bsonType": "string",
+                                            "minLength": 3,
+                                            "maxLength": 20
+                                          },
+                                          "isRented": {
+                                            "bsonType": "int",
+                                            "minimum": 0,
+                                            "maximum": 1
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                 """
                 )
         ));
