@@ -5,91 +5,107 @@ import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.services.UserService;
-import indie.outsource.user.CreateUserDTO;
-import indie.outsource.user.UserDTO;
+import indie.outsource.WorkerRental.DTO.user.CreateUserDTO;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-@RestController()
+@Path("/users")
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList());
+    @GET
+    @Path("")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllUsers() {
+        return Response.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList()).build();
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@PathParam("id") UUID id) {
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.findById(id)));
+            return Response.ok(UserMapper.getUserDTO(userService.findById(id))).build();
         }
         catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
-    @GetMapping("/users/login/{login}")
-    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) {
+    @GET
+    @Path("/login/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByLogin(@PathParam("login") String login) {
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.findByUsernameExact(login)));
+            return Response.ok(UserMapper.getUserDTO(userService.findByUsernameExact(login))).build();
         }
         catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
-    @GetMapping("/users/loginContains/{login}")
-    public ResponseEntity<List<UserDTO>> getUserByLoginContains(@PathVariable String login) {
-        return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());
+    @GET
+    @Path("/loginContains/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByLoginContains(@PathParam("login") String login) {
+        return Response.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList()).build();
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<UserDTO> addUser(@RequestBody @Valid CreateUserDTO user) {
+    @POST
+    @Path("")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addUser(@Valid CreateUserDTO user) {
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.save(UserMapper.getUser(user))));
+            return Response.ok(UserMapper.getUserDTO(userService.save(UserMapper.getUser(user)))).build();
         }
         catch(UserAlreadyExistsException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(UserMapper.getUserDTO(UserMapper.getUser(user)));
+            return Response.status(Response.Status.CONFLICT).entity(UserMapper.getUserDTO(UserMapper.getUser(user))).build();
         }
     }
 
-    @PostMapping("/users/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) {
+    @POST
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@PathParam("id") UUID id, @Valid CreateUserDTO createUserDTO) {
         User user = UserMapper.getUser(createUserDTO);
         user.setId(id);
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.updateUser(user)));
+            return Response.ok(UserMapper.getUserDTO(userService.updateUser(user))).build();
         }
         catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
-    @PostMapping("/users/{id}/activate")
-    public ResponseEntity<UserDTO> activateUser(@PathVariable UUID id) {
+    @POST
+    @Path("/{id}/activate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response activateUser(@PathParam("id") UUID id) {
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.activateUser(id)));
+            return Response.ok(UserMapper.getUserDTO(userService.activateUser(id))).build();
         }
         catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
-    @PostMapping("/users/{id}/deactivate")
-    public ResponseEntity<UserDTO> deactivateUser(@PathVariable UUID id) {
+    @POST
+    @Path("/{id}/deactivate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deactivateUser(@PathParam("id") UUID id) {
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.deactivateUser(id)));
+            return Response.ok(UserMapper.getUserDTO(userService.deactivateUser(id))).build();
         }
         catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 

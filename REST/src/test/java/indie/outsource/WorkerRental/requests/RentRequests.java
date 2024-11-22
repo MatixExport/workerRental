@@ -1,9 +1,9 @@
 package indie.outsource.WorkerRental.requests;
 
-import indie.outsource.rent.CreateRentDTO;
-import indie.outsource.rent.RentDTO;
-import indie.outsource.user.UserDTO;
-import indie.outsource.worker.WorkerDTO;
+import indie.outsource.WorkerRental.DTO.rent.CreateRentDTO;
+import indie.outsource.WorkerRental.DTO.rent.RentDTO;
+import indie.outsource.WorkerRental.DTO.user.UserDTO;
+import indie.outsource.WorkerRental.DTO.worker.WorkerDTO;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

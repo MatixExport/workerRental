@@ -5,68 +5,76 @@ import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.dtoMappers.WorkerMapper;
 import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.services.WorkerService;
-import indie.outsource.worker.CreateWorkerDTO;
-import indie.outsource.worker.WorkerDTO;
+import indie.outsource.WorkerRental.DTO.worker.CreateWorkerDTO;
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
-import java.util.List;
+
 import java.util.UUID;
 
-@AllArgsConstructor
-@RestController()
+
+@Path("/workers")
 public class WorkerController {
 
-    private final WorkerService workerService;
+    @Inject
+    WorkerService workerService;
 
-    @GetMapping("/workers/{id}")
-    public ResponseEntity<WorkerDTO> getWorker(@PathVariable UUID id) {
-        Worker worker;
+    @GET()
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWorker(@PathParam("id") UUID id) {
         try{
-            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.findById(id)));
+            return Response.ok(WorkerMapper.getWorkerDto(workerService.findById(id))).build();
         }
         catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
-    @GetMapping("/workers")
-    public ResponseEntity<List<WorkerDTO>> getAllWorkers() {
-        return ResponseEntity.ok(workerService.findAll().stream().map(WorkerMapper::getWorkerDto).toList());
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllWorkers() {
+        return Response.ok(workerService.findAll().stream().map(WorkerMapper::getWorkerDto).toList()).build();
     }
 
-    @PostMapping(value = "/workers")
-    public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid CreateWorkerDTO worker) {
-        return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(WorkerMapper.getWorker(worker))));
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createWorker(@Valid CreateWorkerDTO worker) {
+        return Response.ok(WorkerMapper.getWorkerDto(workerService.save(WorkerMapper.getWorker(worker)))).build();
     }
 
-    @PostMapping("/workers/{id}")
-    public ResponseEntity<WorkerDTO> updateWorker(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) {
+    @POST
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@PathParam("id") UUID id, CreateWorkerDTO createWorkerDTO) {
         Worker worker = WorkerMapper.getWorker(createWorkerDTO);
         worker.setId(id);
         try{
-            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.updateWorker(worker)));
+            return Response.ok(WorkerMapper.getWorkerDto(workerService.updateWorker(worker))).build();
         }
         catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
-    @DeleteMapping("/workers/{id}")
-    public ResponseEntity<String> deleteWorker(@PathVariable @Valid UUID id) {
+    @DELETE
+    @Path("/{id}")
+    public Response deleteWorker(@PathParam("id") UUID id) {
         try{
             workerService.delete(id);
         }
         catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         catch (WorkerRentedException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
 }

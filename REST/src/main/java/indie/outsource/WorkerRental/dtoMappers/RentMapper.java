@@ -1,8 +1,8 @@
 package indie.outsource.WorkerRental.dtoMappers;
 
 import indie.outsource.WorkerRental.model.Rent;
-import indie.outsource.rent.CreateRentDTO;
-import indie.outsource.rent.RentDTO;
+import indie.outsource.WorkerRental.DTO.rent.CreateRentDTO;
+import indie.outsource.WorkerRental.DTO.rent.RentDTO;
 
 public final class RentMapper {
     public static RentDTO getRentDTO(Rent rent){

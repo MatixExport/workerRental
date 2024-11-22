@@ -3,16 +3,15 @@ package indie.outsource.WorkerRental;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
-import indie.outsource.user.CreateUserDTO;
-import indie.outsource.user.USERTYPE;
-import indie.outsource.user.UserDTO;
+import indie.outsource.WorkerRental.DTO.user.CreateUserDTO;
+import indie.outsource.WorkerRental.DTO.user.USERTYPE;
+import indie.outsource.WorkerRental.DTO.user.UserDTO;
+import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
-import org.junit.Before;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,18 +20,17 @@ import static indie.outsource.WorkerRental.requests.UserRequests.*;
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
+@QuarkusTest
 class UserTest {
 
-    @Autowired
+    @Inject
     UserRepository userRepository;
-    @Autowired
+    @Inject
     WorkerRepository workerRepository;
-    @Autowired
+    @Inject
     RentRepository rentRepository;
 
-    @Before
+    @BeforeEach
     public void fullTeardown(){
         rentRepository.deleteAll();
         userRepository.deleteAll();

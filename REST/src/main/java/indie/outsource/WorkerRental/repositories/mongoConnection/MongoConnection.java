@@ -7,20 +7,22 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import indie.outsource.WorkerRental.documents.RentMgd;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.Getter;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 
 import java.util.List;
 
 @Getter
-@Component
+@ApplicationScoped
 public class MongoConnection {
 
     private MongoClient mongoClient;
@@ -52,15 +54,29 @@ public class MongoConnection {
         mongoDatabase = mongoClient.getDatabase(databaseName);
     }
 
-    @Autowired
-    public MongoConnection(Environment environment) {
-        initDbConnection(
-                environment.getProperty("spring.data.mongodb.uri"),
-                environment.getProperty("spring.data.mongodb.username"),
-                environment.getProperty("spring.data.mongodb.password"),
-                environment.getProperty("spring.data.mongodb.authentication-database"),
-                environment.getProperty("spring.data.mongodb.database")
-        );
+    @Inject
+    @ConfigProperty(name = "quarkus.mongodb.connection-string")
+    String uri;
+
+    @Inject
+    @ConfigProperty(name = "quarkus.mongodb.credentials.username", defaultValue = "")
+    String username;
+
+    @Inject
+    @ConfigProperty(name = "quarkus.mongodb.credentials.password", defaultValue = "")
+    String password;
+
+    @Inject
+    @ConfigProperty(name = "quarkus.mongodb.credentials.auth-database", defaultValue = "")
+    String authDatabase;
+
+    @Inject
+    @ConfigProperty(name = "quarkus.mongodb.database", defaultValue = "")
+    String database;
+
+    @PostConstruct
+    public void init() {
+        initDbConnection(uri, username, password, authDatabase, database);
     }
 
 }

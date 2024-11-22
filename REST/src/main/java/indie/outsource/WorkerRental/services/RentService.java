@@ -7,8 +7,9 @@ import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Service
+@ApplicationScoped
 public class RentService {
     private final RentRepository rentRepository;
     private final UserRepository userRepository;

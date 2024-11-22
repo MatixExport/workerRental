@@ -5,14 +5,14 @@ import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Service
+@ApplicationScoped
 public class UserService {
     private final UserRepository userRepository;
 

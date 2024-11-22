@@ -1,6 +1,5 @@
-package indie.outsource.user;
+package indie.outsource.WorkerRental.DTO.user;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.UUID;

@@ -4,9 +4,9 @@ import indie.outsource.WorkerRental.model.user.Admin;
 import indie.outsource.WorkerRental.model.user.Client;
 import indie.outsource.WorkerRental.model.user.Manager;
 import indie.outsource.WorkerRental.model.user.User;
-import indie.outsource.user.CreateUserDTO;
-import indie.outsource.user.USERTYPE;
-import indie.outsource.user.UserDTO;
+import indie.outsource.WorkerRental.DTO.user.CreateUserDTO;
+import indie.outsource.WorkerRental.DTO.user.USERTYPE;
+import indie.outsource.WorkerRental.DTO.user.UserDTO;
 
 public final class UserMapper {
     public static UserDTO getUserDTO(User user){

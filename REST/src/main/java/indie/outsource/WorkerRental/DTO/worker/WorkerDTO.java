@@ -1,4 +1,4 @@
-package indie.outsource.worker;
+package indie.outsource.WorkerRental.DTO.worker;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

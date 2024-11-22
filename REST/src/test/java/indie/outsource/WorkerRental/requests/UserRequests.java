@@ -1,8 +1,8 @@
 package indie.outsource.WorkerRental.requests;
 
-import indie.outsource.user.CreateUserDTO;
-import indie.outsource.user.USERTYPE;
-import indie.outsource.user.UserDTO;
+import indie.outsource.WorkerRental.DTO.user.CreateUserDTO;
+import indie.outsource.WorkerRental.DTO.user.USERTYPE;
+import indie.outsource.WorkerRental.DTO.user.UserDTO;
 import io.restassured.common.mapper.TypeRef;
 
 import java.util.List;

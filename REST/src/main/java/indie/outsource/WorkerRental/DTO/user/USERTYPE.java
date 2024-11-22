@@ -1,4 +1,4 @@
-package indie.outsource.user;
+package indie.outsource.WorkerRental.DTO.user;
 
 import java.util.Objects;
 

@@ -11,18 +11,21 @@ import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Rent;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 
-
-@Repository
+@Singleton
 public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements RentRepository {
+
+    @Inject
     public MongoRentRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, RentMgd.class);
     }

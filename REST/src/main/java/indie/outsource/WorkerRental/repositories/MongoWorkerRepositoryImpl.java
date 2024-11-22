@@ -1,28 +1,25 @@
 package indie.outsource.WorkerRental.repositories;
 
 import com.mongodb.MongoWriteException;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import indie.outsource.WorkerRental.documents.RentMgd;
 import indie.outsource.WorkerRental.documents.WorkerMgd;
 import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bson.conversions.Bson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 
-@Repository
+@Singleton
 public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> implements WorkerRepository {
 
-    @Autowired
+    @Inject
     public MongoWorkerRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, WorkerMgd.class);
     }

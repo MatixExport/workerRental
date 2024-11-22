@@ -1,4 +1,4 @@
-package indie.outsource.rent;
+package indie.outsource.WorkerRental.DTO.rent;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;

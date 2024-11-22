@@ -1,7 +1,6 @@
 package indie.outsource.WorkerRental.documents;
 
 
-import indie.outsource.WorkerRental.model.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

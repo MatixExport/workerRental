@@ -1,23 +1,17 @@
 package indie.outsource.WorkerRental;
 
-import indie.outsource.WorkerRental.dtoMappers.RentMapper;
-import indie.outsource.WorkerRental.model.AbstractEntity;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
-import indie.outsource.rent.CreateRentDTO;
-import indie.outsource.rent.RentDTO;
-import indie.outsource.user.UserDTO;
-import indie.outsource.worker.WorkerDTO;
+import indie.outsource.WorkerRental.DTO.rent.CreateRentDTO;
+import indie.outsource.WorkerRental.DTO.rent.RentDTO;
+import indie.outsource.WorkerRental.DTO.user.UserDTO;
+import indie.outsource.WorkerRental.DTO.worker.WorkerDTO;
+import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,24 +23,21 @@ import static indie.outsource.WorkerRental.requests.RentRequests.*;
 import static indie.outsource.WorkerRental.requests.UserRequests.activateUser;
 import static indie.outsource.WorkerRental.requests.UserRequests.createDefaultUser;
 import static indie.outsource.WorkerRental.requests.WorkerRequests.createDefaultWorker;
-import static indie.outsource.WorkerRental.requests.WorkerRequests.getWorker;
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
+@QuarkusTest
 class RentTest {
 
-    @Autowired
+    @Inject
     UserRepository userRepository;
-    @Autowired
+    @Inject
     WorkerRepository workerRepository;
-    @Autowired
+    @Inject
     RentRepository rentRepository;
 
-    @Before
-    @AfterEach
+    @BeforeEach
     public void teardown(){
         rentRepository.deleteAll();
         userRepository.deleteAll();

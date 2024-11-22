@@ -1,17 +1,15 @@
 package indie.outsource.WorkerRental;
 
-import io.restassured.common.mapper.TypeRef;
+import io.quarkus.test.junit.QuarkusTest;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
-import indie.outsource.worker.CreateWorkerDTO;
-import indie.outsource.worker.WorkerDTO;
-import org.junit.Before;
+import indie.outsource.WorkerRental.DTO.worker.CreateWorkerDTO;
+import indie.outsource.WorkerRental.DTO.worker.WorkerDTO;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -19,18 +17,17 @@ import static indie.outsource.WorkerRental.requests.WorkerRequests.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
+@QuarkusTest
 class WorkerTest {
 
-    @Autowired
+    @Inject
     UserRepository userRepository;
-    @Autowired
+    @Inject
     WorkerRepository workerRepository;
-    @Autowired
+    @Inject
     RentRepository rentRepository;
 
-    @Before
+    @BeforeEach
     public void fullTeardown(){
         rentRepository.deleteAll();
         userRepository.deleteAll();

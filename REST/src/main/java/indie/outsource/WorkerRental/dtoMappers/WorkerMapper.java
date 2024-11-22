@@ -1,8 +1,8 @@
 package indie.outsource.WorkerRental.dtoMappers;
 
 import indie.outsource.WorkerRental.model.Worker;
-import indie.outsource.worker.CreateWorkerDTO;
-import indie.outsource.worker.WorkerDTO;
+import indie.outsource.WorkerRental.DTO.worker.CreateWorkerDTO;
+import indie.outsource.WorkerRental.DTO.worker.WorkerDTO;
 
 public final class WorkerMapper {
     public static WorkerDTO getWorkerDto(Worker worker) {

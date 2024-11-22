@@ -1,4 +1,4 @@
-package indie.outsource.worker;
+package indie.outsource.WorkerRental.DTO.worker;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

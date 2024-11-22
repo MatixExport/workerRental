@@ -5,14 +5,14 @@ import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.model.Worker;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Service
+@ApplicationScoped
 public class WorkerService {
 
     private WorkerRepository workerRepository;

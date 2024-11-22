@@ -9,44 +9,38 @@ import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.RentRepository;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 import indie.outsource.WorkerRental.repositories.WorkerRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import io.quarkus.arc.profile.IfBuildProfile;
+import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Configuration
-@Profile("!test")
-public class MongoInitializer implements CommandLineRunner {
+
+@ApplicationScoped
+@IfBuildProfile("prod")
+public class MongoInitializer {
+    @Inject
     RentRepository rentRepository;
 
+    @Inject
     WorkerRepository workerRepository;
 
+    @Inject
     UserRepository userRepository;
 
-    @Autowired
-    public MongoInitializer(RentRepository rentRepository, WorkerRepository workerRepository, UserRepository userRepository) {
-        this.rentRepository = rentRepository;
-        this.workerRepository = workerRepository;
-        this.userRepository = userRepository;
-    }
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void onStart(@Observes StartupEvent event) {
         rentRepository.deleteAll();
         workerRepository.deleteAll();
         userRepository.deleteAll();
 
-//        User user = new User("User","k1234567",true);
         User client = new Client("Client","k1234567",true);
         User admin = new Admin("Admin","k1234567",true);
         User manager = new Manager("Manager","k1234567",true);
 
-//        user = userRepository.save(user);
         client =userRepository.save(client);
         admin = userRepository.save(admin);
         manager =userRepository.save(manager);

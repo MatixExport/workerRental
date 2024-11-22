@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mongo_1:
     build:
-      context: .
+      context: ..
       dockerfile: customMongoDB
     container_name: mongo1
 
@@ -24,7 +24,7 @@ services:
       retries: 5
   mongo_2:
     build:
-      context: .
+      context: ..
       dockerfile: customMongoDB
     container_name: mongo2
     hostname: mongo2
@@ -44,7 +44,7 @@ services:
       retries: 5
   mongo_3:
     build:
-      context: .
+      context: ..
       dockerfile: customMongoDB
     container_name: mongo3
     hostname: mongo3
@@ -67,7 +67,7 @@ services:
 
   mongoinit:
     build:
-      context: .
+      context: ..
       dockerfile: customMongoDB
     hostname: mongodbinit
     container_name: mongodbinit

@@ -10,20 +10,20 @@ import indie.outsource.WorkerRental.documents.user.UserMgd;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.mongoConnection.MongoConnection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Singleton
 public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implements UserRepository {
-    @Autowired
+    @Inject
     public MongoUserRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, UserMgd.class);
     }
