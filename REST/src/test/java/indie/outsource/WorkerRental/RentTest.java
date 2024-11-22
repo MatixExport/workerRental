@@ -99,11 +99,16 @@ class RentTest {
 
         assertEquals(1,get("/rents/current/users/{id}",rentDTO.getUserID()).then().statusCode(200).extract().as(new TypeRef<List<RentDTO>>() {}).size());
         assertEquals(1,get("/rents/current/workers/{id}",rentDTO.getWorkerID()).as(new TypeRef<List<RentDTO>>() {}).size());
+        assertEquals(0,get("/rents/ended/users/{id}",rentDTO.getUserID()).as(new TypeRef<List<RentDTO>>() {}).size());
+        assertEquals(0,get("/rents/ended/workers/{id}",rentDTO.getWorkerID()).as(new TypeRef<List<RentDTO>>() {}).size());
 
         finishRent(rentDTO.getId(),200);
 
         assertEquals(1,get("/rents/ended/users/{id}",rentDTO.getUserID()).as(new TypeRef<List<RentDTO>>() {}).size());
         assertEquals(1,get("/rents/ended/workers/{id}",rentDTO.getWorkerID()).as(new TypeRef<List<RentDTO>>() {}).size());
+        assertEquals(0,get("/rents/current/users/{id}",rentDTO.getUserID()).then().statusCode(200).extract().as(new TypeRef<List<RentDTO>>() {}).size());
+        assertEquals(0,get("/rents/current/workers/{id}",rentDTO.getWorkerID()).as(new TypeRef<List<RentDTO>>() {}).size());
+
     }
 
 
