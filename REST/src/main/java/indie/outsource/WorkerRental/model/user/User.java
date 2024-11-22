@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends AbstractEntity {
+public abstract class User extends AbstractEntity {
 
     private String login;
     private String password;

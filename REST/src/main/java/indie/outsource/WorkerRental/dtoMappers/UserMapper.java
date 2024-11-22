@@ -14,7 +14,7 @@ public final class UserMapper {
         return new UserDTO(user.getLogin(), user.isActive(), user.getId(), USERTYPE.getByClassname(user.getClass().getSimpleName()));
     }
     public static User getUser(CreateUserDTO createUserDTO){
-        User user = new User();
+        User user = new Client();
         if(createUserDTO.getType() == USERTYPE.CLIENT){
             user = new Client();
         }

@@ -41,12 +41,12 @@ public class MongoInitializer implements CommandLineRunner {
         workerRepository.deleteAll();
         userRepository.deleteAll();
 
-        User user = new User("User","k1234567",true);
+//        User user = new User("User","k1234567",true);
         User client = new Client("Client","k1234567",true);
         User admin = new Admin("Admin","k1234567",true);
         User manager = new Manager("Manager","k1234567",true);
 
-        user = userRepository.save(user);
+//        user = userRepository.save(user);
         client =userRepository.save(client);
         admin = userRepository.save(admin);
         manager =userRepository.save(manager);

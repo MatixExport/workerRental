@@ -49,12 +49,7 @@ public class UserMgd extends AbstractEntityMgd {
     }
 
     public User toDomainModel(){
-        User user = new User();
-        user.setId(getId());
-        user.setLogin(getLogin());
-        user.setPassword(getPassword());
-        user.setActive(isActive());
-        return user;
+        return null;
     }
     public static UserMgd fromDomainModel(User user){
         if(user.getClass().equals(Manager.class)){

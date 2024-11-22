@@ -25,6 +25,7 @@ public class ManagerMgd extends UserMgd {
         super(user.getId(), user.getLogin(), user.getPassword(), user.isActive());
     }
 
+    @Override
     public Manager toDomainModel(){
         Manager manager = new Manager();
         manager.setId(getId());

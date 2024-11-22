@@ -20,6 +20,8 @@ public class ClientMgd extends UserMgd {
     public ClientMgd(User user) {
         super(user.getId(), user.getLogin(), user.getPassword(), user.isActive());
     }
+
+    @Override
     public Client toDomainModel(){
         Client client = new Client();
         client.setId(getId());

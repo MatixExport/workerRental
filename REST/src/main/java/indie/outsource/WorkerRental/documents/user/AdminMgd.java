@@ -23,6 +23,7 @@ public class AdminMgd extends UserMgd {
         super(user.getId(), user.getLogin(), user.getPassword(), user.isActive());
     }
 
+    @Override
     public Admin toDomainModel(){
         Admin admin = new Admin();
         admin.setId(getId());
