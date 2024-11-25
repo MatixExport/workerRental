@@ -14,6 +14,6 @@ import lombok.Setter;
 public class CreateWorkerDTO {
 
     @NotBlank
-    @Size(min = 2, max = 50)
+    @Size(min = 3, max = 50)
     private String name;
 }
