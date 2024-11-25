@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<h1>Register</h1>
+
+<div th:object="${user}">
+    <div th:text="*{login}">  </div>
+    <div th:text="*{active}">  </div>
+</div>
+</body>
+</html>
