@@ -6,59 +6,60 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="util :: modal(~{ :: .content})">
-        <div class="content">
-            <p>
-                Are you sure u want to register
-            </p>
-        </div>
-    </div>
     <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
         <ol class="breadcrumbs breadcrumb mb-0">
             <li class="breadcrumb-item">
-                <a href="#">Home</a>
+                <a href="#" th:text="#{navigation.home}">Home</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Current page</li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
         </ol>
     </nav>
     <div class="row flex-grow-1 ">
-        <nav th:replace="base :: sidebar" />
+        <nav th:replace="base :: sidebar"></nav>
         <div th:replace="base :: content-container(~{ :: .content})">
             <div class="content">
-                <h1>Register</h1>
-                <form th:action="@{/registerSubmit}" method="post" th:object="${user}">
-                    <div>
-                        <label> User Name : <input type="text" name="login" th:value="*{login}" />
-                        </label>
+                <h1 th:text="#{navigation.registration}">Register</h1>
+                <form th:action="@{/registerSubmit}" method="post" id="register-form" th:object="${user} ">
+                    <div class="mb-3">
+                        <label for="login" class="form-label" th:text="#{forms.registration.username}">Login</label>
+                        <input type="text" class="form-control" id="login" name="login" aria-describedby="loginError" th:value="*{login}">
+                        <div id="loginError" class="form-text">
+                            <div th:if="${#fields.hasErrors('login')}">
+                                <p th:each="err : ${#fields.errors('login')}" th:text="${err}"></p>
+                            </div>
+                            <div th:if="${#fields.hasGlobalErrors()}">
+                                <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div th:if="${#fields.hasErrors('login')}">
-                        <p th:each="err : ${#fields.errors('login')}" th:text="${err}"></p>
-                    </div>
-                    <div th:if="${#fields.hasGlobalErrors()}">
-                        <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
-                    </div>
-                    <div>
-                        <label> Password:
-                            <input type="password" name="password" th:value="*{password}"/>
-                        </label>
-                    </div>
-                    <div th:if="${#fields.hasErrors('password')}">
-                        <p th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label" th:text="#{forms.registration.password}" >Password</label>
+                        <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordError" th:value="*{login}">
+                        <div id="passwordError" class="form-text">
+                            <div th:if="${#fields.hasErrors('password')}">
+                                <p th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
+                            </div>
+                        </div>
                     </div>
                     <label>
                         <input th:type="hidden" name="type" th:value="*{type}">
                     </label>
-                    <div>
-                        <input type="submit" value="Sign In"/>
-                    </div>
+                    <input type="button" onclick="validateRegisterForm()"  class="btn btn-primary" value="Sign In"/>
                 </form>
             </div>
         </div>
-        <footer th:replace="base :: footer" />
+        <footer th:replace="base :: footer"></footer>
     </div>
 </div>
 <script>
+    function validateRegisterForm(){
+        let isValid = true;
 
+        if(isValid){
+            $("#register-form").submit();
+        }
+    }
 </script>
 </body>
 </html>
