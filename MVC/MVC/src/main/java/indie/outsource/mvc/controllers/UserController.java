@@ -1,4 +1,4 @@
-package indie.outsource.mvc;
+package indie.outsource.mvc.controllers;
 
 
 import indie.outsource.user.CreateUserDTO;
