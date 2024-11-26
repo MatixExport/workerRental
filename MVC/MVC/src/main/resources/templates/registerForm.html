@@ -1,29 +1,64 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
-<head>
+<head th:insert="base :: header">
     <meta charset="UTF-8">
     <title>Register</title>
 </head>
 <body>
-<h1>Register</h1>
+<div class="container">
+    <div th:replace="util :: modal(~{ :: .content})">
+        <div class="content">
+            <p>
+                Are you sure u want to register
+            </p>
+        </div>
+    </div>
+    <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
+        <ol class="breadcrumbs breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="#">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Current page</li>
+        </ol>
+    </nav>
+    <div class="row flex-grow-1 ">
+        <nav th:replace="base :: sidebar" />
+        <div th:replace="base :: content-container(~{ :: .content})">
+            <div class="content">
+                <h1>Register</h1>
+                <form th:action="@{/registerSubmit}" method="post" th:object="${user}">
+                    <div>
+                        <label> User Name : <input type="text" name="login" th:value="*{login}" />
+                        </label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('login')}">
+                        <p th:each="err : ${#fields.errors('login')}" th:text="${err}"></p>
+                    </div>
+                    <div th:if="${#fields.hasGlobalErrors()}">
+                        <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
+                    </div>
+                    <div>
+                        <label> Password:
+                            <input type="password" name="password" th:value="*{password}"/>
+                        </label>
+                    </div>
+                    <div th:if="${#fields.hasErrors('password')}">
+                        <p th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
+                    </div>
+                    <label>
+                        <input th:type="hidden" name="type" th:value="*{type}">
+                    </label>
+                    <div>
+                        <input type="submit" value="Sign In"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer th:replace="base :: footer" />
+    </div>
+</div>
+<script>
 
-<form th:action="@{/registerSubmit}" method="post" th:object="${user}">
-
-    <div><label> User Name : <input type="text" name="login" th:value="*{login}"/> </label></div>
-    <div th:if="${#fields.hasErrors('login')}">
-        <p th:each="err : ${#fields.errors('login')}" th:text="${err}"></p>
-    </div>
-    <div th:if="${#fields.hasGlobalErrors()}">
-        <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
-    </div>
-    <div><label> Password: <input type="password" name="password" th:value="*{password}"/> </label></div>
-    <div th:if="${#fields.hasErrors('password')}">
-        <p th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
-    </div>
-    <label>
-        <input th:type="hidden" name="type" th:value="*{type}">
-    </label>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+</script>
 </body>
 </html>
