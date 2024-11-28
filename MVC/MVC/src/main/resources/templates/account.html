@@ -8,22 +8,25 @@
 <div class="container">
     <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
         <ol class="breadcrumbs breadcrumb mb-0">
-            <li class="breadcrumb-item">
-                <a href="#">Home</a>
+            <li class="breadcrumb-item" >
+                <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
             </li>
-            <li class="breadcrumb-item">
-                <a href="#">Register</a>
+            <li class="breadcrumb-item" >
+                <a th:href="@{/register}" th:text="#{navigation.registration}">Register</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Current page</li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
         </ol>
     </nav>
     <div class="row flex-grow-1 ">
         <nav th:replace="base :: sidebar"></nav>
         <div th:replace="base :: content-container(~{ :: .content})">
             <div class="content">
+                <h3 th:text="#{forms.registration.success}"></h3>
                 <div th:object="${user}">
-                    <div th:text="*{login}">  </div>
-                    <div th:text="*{active}">  </div>
+                    <span>Login:</span>
+                    <p th:text="*{login}">  </p>
+                    <span>Active:</span>
+                    <p th:text="*{active}">  </p>
                 </div>
             </div>
         </div>

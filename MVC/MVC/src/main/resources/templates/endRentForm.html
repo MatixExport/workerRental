@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:insert="base :: header">
+    <meta charset="UTF-8">
+    <title th:text="#{navigation.account}">Register</title>
+</head>
+<body>
+<div class="container">
+    <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
+        <ol class="breadcrumbs breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
+        </ol>
+    </nav>
+    <div class="row flex-grow-1 ">
+        <nav th:replace="base :: sidebar"></nav>
+        <div th:replace="base :: content-container(~{ :: .content})">
+            <div class="content">
+
+                <form th:action="@{/rent/finish/submit}" method="post" id="finish-rent-form" th:object="${rent}">
+                    <div class="mb-3">
+                        <label for="rent" class="form-label" th:text="#{navigation.rent}">Password</label>
+                        <select th:value="*{rentID}" name="rentID" id="rent" aria-describedby="rentError" class="form-select">
+                                <option th:object="${rents}"  name="rentID" th:each="rentItem : ${rents}"
+                                        th:value="${rentItem.getId()}"
+                                        th:text="${rentItem.getId()}">
+                                </option>
+                        </select>
+                        <div id="rentError" class="form-text">
+                            <div th:if="${#fields.hasErrors('rentID')}">
+                                <p class="text-danger" th:each="err : ${#fields.errors('rentID')}" th:text="${err}"></p>
+                            </div>
+                            <div th:if="${#fields.hasGlobalErrors()}">
+                                <p class="text-danger"  th:each="err : ${#fields.errors('global')}" th:text="${err}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="rent-form-button" class="btn btn-primary" th:text="#{forms.confirm}" >
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="base :: footer"></footer>
+</div>
+
+
+</body>
+</html>

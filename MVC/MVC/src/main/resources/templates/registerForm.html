@@ -9,7 +9,7 @@
     <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
         <ol class="breadcrumbs breadcrumb mb-0">
             <li class="breadcrumb-item">
-                <a href="#" th:text="#{navigation.home}">Home</a>
+                <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
         </ol>
@@ -25,10 +25,10 @@
                         <input type="text" class="form-control" id="login" name="login" aria-describedby="loginError" th:value="*{login}">
                         <div id="loginError" class="form-text">
                             <div th:if="${#fields.hasErrors('login')}">
-                                <p th:each="err : ${#fields.errors('login')}" th:text="${err}"></p>
+                                <p class="text-danger"  th:each="err : ${#fields.errors('login')}" th:text="${err}"></p>
                             </div>
                             <div th:if="${#fields.hasGlobalErrors()}">
-                                <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
+                                <p class="text-danger"  th:each="err : ${#fields.errors('global')}" th:text="${err}"></p>
                             </div>
                         </div>
                     </div>
@@ -38,14 +38,14 @@
                         <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordError" th:value="*{login}">
                         <div id="passwordError" class="form-text">
                             <div th:if="${#fields.hasErrors('password')}">
-                                <p th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
+                                <p class="text-danger"  th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
                             </div>
                         </div>
                     </div>
                     <label>
                         <input th:type="hidden" name="type" th:value="*{type}">
                     </label>
-                    <input th:text="#{forms.registration.confirm}" type="button" onclick="validateRegisterForm()"  class="btn btn-primary" />
+                    <button th:text="#{forms.registration.confirm}" type="button" onclick="validateRegisterForm()"  class="btn btn-primary"  ></button>
                 </form>
             </div>
         </div>
@@ -53,24 +53,44 @@
     </div>
 </div>
 <script>
+
     const loginInput = document.getElementById("login");
     const passwordInput = document.getElementById("password");
+    const loginErrorContainer = document.getElementById("loginError");
+    const passwordErrorContainer = document.getElementById("passwordError");
 
 
-
+    function populateWithErrors(errorList,container){
+        container.innerHTML = "";
+        errorList.forEach((error)=>{
+            container.innerHTML += `<p class="text-danger">${error}</p>`
+        })
+    }
 
     function validateRegisterForm(){
+
+
         let isValid = true;
-        console.log("button clicked")
-
         let login = loginInput.value;
-        if(login)
+        let password = passwordInput.value;
+        let loginErrors = [];
+        let passwordErrors = [];
 
+        if(login.length < 3){
+            isValid = false;
+            loginErrors.push("Login must have at least 3 characters")
+        }
+        if(password.length < 3){
+            isValid = false;
+            passwordErrors.push("Password must have at least 3 characters")
+        }
 
         if(isValid){
-            $("#register-form").submit();
             document.getElementById("register-form").submit();
+            return;
         }
+        populateWithErrors(loginErrors,loginErrorContainer);
+        populateWithErrors(passwordErrors,passwordErrorContainer);
     }
 </script>
 </body>
