@@ -46,6 +46,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/users/loginContains/{login}")
     public ResponseEntity<List<UserDTO>> getUserByLoginContains(@PathVariable String login) {
         return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());
