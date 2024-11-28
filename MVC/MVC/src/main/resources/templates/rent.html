@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:insert="base :: header">
+  <meta charset="UTF-8">
+  <title th:text="#{navigation.rent}" >Register</title>
+</head>
+<body>
+<div class="container">
+  <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
+    <ol class="breadcrumbs breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="#">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="#">Register</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Current page</li>
+    </ol>
+  </nav>
+  <div class="row flex-grow-1 ">
+    <nav th:replace="base :: sidebar" />
+    <div th:replace="base :: content-container(~{ :: .content})">
+      <div class="content">
+        <div th:object="${rent}">
+          <div th:text="*{startDate}">  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer th:replace="base :: footer" />
+</div>
+
+
+</body>
+</html>

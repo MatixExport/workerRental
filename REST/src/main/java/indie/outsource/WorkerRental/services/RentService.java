@@ -38,6 +38,7 @@ public class RentService {
     public Rent createRent(UUID clientId, UUID workerId, LocalDateTime startDate) {
         Optional<User> user = userRepository.findById(clientId);
         if(user.isEmpty()){
+            System.out.println("User not found");
             throw new ResourceNotFoundException("User not found");
         }
         if(! user.get().isActive()){
@@ -45,9 +46,11 @@ public class RentService {
         }
         Optional<Worker> worker = workerRepository.findById(workerId);
         if(worker.isEmpty()){
+            System.out.println("Worker not found");
             throw new ResourceNotFoundException("Worker not found");
         }
         if(rentRepository.existsByWorker_IdAndEndDateIsNull(workerId)){
+            System.out.println("Worker rented!? Śmierć");
             throw new WorkerRentedException();
         }
         Rent rent = new Rent();

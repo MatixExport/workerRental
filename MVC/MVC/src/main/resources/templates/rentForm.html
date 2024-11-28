@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head th:insert="base :: header">
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<div class="container">
+    <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
+        <ol class="breadcrumbs breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="#">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#">Register</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Current page</li>
+        </ol>
+    </nav>
+    <div class="row flex-grow-1 ">
+        <nav th:replace="base :: sidebar" />
+        <div th:replace="base :: content-container(~{ :: .content})">
+            <div class="content">
+                <h1 th:text="#{navigation.registration}">Register</h1>
+                <div class="mb-3">
+                    <label for="loginSearch" class="form-label" th:text="#{forms.rent.login}">Login</label>
+                    <input type="text" class="form-control mt-2" id="loginSearch" name="loginSearch" aria-describedby="loginError">
+                    <div id="logins">
+
+                    </div>
+                    <div id="loginError" class="form-text">
+
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="worker" class="form-label" th:text="#{forms.rent.worker}" >Password</label>
+                    <select th:object="${workers}" name="worker" id="worker" aria-describedby="workerError" class="form-select">
+                        <option name="worker" th:each="worker : ${workers}"
+                                th:value="${worker.id}"
+                                th:text="${worker.name}">
+                        </option>
+                    </select>
+                    <div id="workerError" class="form-text">
+
+                    </div>
+                </div>
+                <form th:action="@{/rentSubmit}" method="post" id="rent-form" th:object="${rent} ">
+
+                    <div class="mb-3">
+                        <label for="start-date" class="form-label" th:text="#{forms.rent.date}" >Password</label>
+                        <input type="datetime-local" id="start-date" name="startDate" th:value="*{startDate}">
+                        <div id="dateError" class="form-text">
+                            <div th:if="${#fields.hasErrors('startDate')}">
+                                <p th:each="err : ${#fields.errors('startDate')}" th:text="${err}"></p>
+                            </div>
+                        </div>
+                        <div th:if="${#fields.hasGlobalErrors()}">
+                            <span th:each="err : ${#fields.errors('global')}" th:text="${err}"></span>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Sign In"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="base :: footer" />
+</div>
+<script>
+    const backendLookup = (method,uri,callback,data=null)=>{
+        let fetch_data = {
+            method: method,
+            headers:{
+            }
+        };
+        if (data) {
+            fetch_data['headers']['Content-Type'] = 'application/json'
+            fetch_data['body'] = JSON.stringify(data);
+        }
+        fetch("http://localhost:8080" +
+            ""+uri, fetch_data).then(response=>{
+                response.json().then((responseBody)=>{
+                    callback(response.status,responseBody)
+                })
+        })
+    }
+
+    const getUsersByLogin = (login,callback)=>{
+        const uri = `/users/loginContains/${login}`
+        backendLookup("GET",uri,callback);
+    }
+
+    const debounce = (func, timeout = 300)=>{
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+
+    const validateId = (id)=>{
+        return id !== null && id.trim() !== "";
+    }
+
+    const loginSearchInput = document.getElementById("loginSearch");
+    const loginContainer = document.getElementById("logins");
+    const loadingEl = "<p>Loading</p>";
+    const rentForm = document.getElementById("rent-form");
+    const worker = document.getElementById("worker");
+    const loginError = document.getElementById("loginError");
+    const workerError = document.getElementById("workerError");
+    const date = document.getElementById("start-date");
+
+    date.addEventListener("input",(e)=>{
+        console.log(e.target.value);
+    })
+
+
+    const getUserIdValue = ()=>{
+        let selectedUser = document.querySelector('input[name="userId"]:checked');
+        console.log(selectedUser);
+        if(!selectedUser){
+            return null;
+        }
+        return selectedUser.value;
+    };
+
+    const getWorkerIdValue = ()=>{
+        return worker.value;
+    }
+
+
+    const refreshUserList = ()=>{
+        let value = loginSearchInput.value;
+        if((!value)||(value.trim() === "")){
+            return;
+        }
+        loginContainer.innerHTML = loadingEl;
+        getUsersByLogin(loginSearchInput.value,(status,body)=>{
+            loginContainer.innerHTML = body.map((user) => {
+                  return ` <div class="form-check">
+                <input class="form-check-input" type="radio" name="userId" id="flexRadioDefault1" value="${user.id}">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        ${user.login}
+                    </label>
+            </div>`
+            }).join();
+        })
+    }
+
+    const debouncedRefreshUserList = debounce(()=>refreshUserList());
+
+    loginSearchInput.addEventListener(
+        "input",
+        (e)=>{
+            debouncedRefreshUserList();
+        }
+    )
+
+    rentForm.addEventListener("submit",(e)=>{
+        e.preventDefault();
+        let isValid = true
+        const userId = getUserIdValue();
+        const workerId = getWorkerIdValue();
+
+        if(!validateId(userId)){
+            isValid = false;
+            loginError.innerHTML = "<p>Empty or invalid user id</p>";
+        }
+        if(!validateId(workerId)){
+            isValid = false;
+            workerError.innerHTML = "<p>Empty or invalid worker id</p>"
+        }
+
+        if(isValid){
+            rentForm.action = `/rent/users/${userId}/workers/${workerId}`;
+            rentForm.submit();
+        }
+
+    })
+
+
+
+</script>
+
+</body>
+</html>
