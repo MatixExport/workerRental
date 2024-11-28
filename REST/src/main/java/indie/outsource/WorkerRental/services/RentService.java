@@ -50,7 +50,6 @@ public class RentService {
             throw new ResourceNotFoundException("Worker not found");
         }
         if(rentRepository.existsByWorker_IdAndEndDateIsNull(workerId)){
-            System.out.println("Worker rented!? Śmierć");
             throw new WorkerRentedException();
         }
         Rent rent = new Rent();

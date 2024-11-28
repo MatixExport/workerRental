@@ -40,12 +40,6 @@ public class RentController {
     @GetMapping("/rent")
     public String rentForm(Model model) {
         CreateRentDTO createRentDTO = new CreateRentDTO();
-//        List<WorkerDTO> list = webClient.get()
-//                .uri("/workers")
-//                .retrieve()
-//                .bodyToMono(new ParameterizedTypeReference<List<WorkerDTO>>() {})
-//                .block();
-
         List<WorkerDTO> list = rentService.getAllWorkers();
         model.addAttribute("rent", createRentDTO);
         model.addAttribute("workers", list);
@@ -59,23 +53,15 @@ public class RentController {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("rent", createRentDTO);
+            model.addAttribute("workers",rentService.getAllWorkers());
             return "rentForm";
         }
 
         RentDTO rentDTO = null;
 
-//            rentDTO = webClient.post().uri("/rents/users/" + clientId + "/workers/" + workerId).bodyValue(createRentDTO).retrieve()
-//                    .bodyToMono(RentDTO.class).onErrorResume(
-//                            _ -> {
-//                                bindingResult.addError(new ObjectError("rent", "Error"));
-//                                return Mono.empty();
-//                            }
-//                    )
-//                    .block();
-
         try{
             rentDTO = rentService.createRent(createRentDTO, clientId, workerId);
-        }catch(WebClientException e){
+        }catch(RuntimeException e){
             bindingResult.addError(new ObjectError("rent", e.getMessage()));
         }
 

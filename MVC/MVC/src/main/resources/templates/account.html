@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
 <head th:insert="base :: header">
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title th:text="#{navigation.account}">Register</title>
 </head>
 <body>
 <div class="container">
@@ -18,7 +18,7 @@
         </ol>
     </nav>
     <div class="row flex-grow-1 ">
-        <nav th:replace="base :: sidebar" />
+        <nav th:replace="base :: sidebar"></nav>
         <div th:replace="base :: content-container(~{ :: .content})">
             <div class="content">
                 <div th:object="${user}">
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <footer th:replace="base :: footer" />
+    <footer th:replace="base :: footer"></footer>
 </div>
 
 

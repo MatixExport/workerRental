@@ -45,7 +45,7 @@
                     <label>
                         <input th:type="hidden" name="type" th:value="*{type}">
                     </label>
-                    <input type="button" onclick="validateRegisterForm()"  class="btn btn-primary" value="Sign In"/>
+                    <input th:text="#{forms.registration.confirm}" type="button" onclick="validateRegisterForm()"  class="btn btn-primary" />
                 </form>
             </div>
         </div>
@@ -53,11 +53,23 @@
     </div>
 </div>
 <script>
+    const loginInput = document.getElementById("login");
+    const passwordInput = document.getElementById("password");
+
+
+
+
     function validateRegisterForm(){
         let isValid = true;
+        console.log("button clicked")
+
+        let login = loginInput.value;
+        if(login)
+
 
         if(isValid){
             $("#register-form").submit();
+            document.getElementById("register-form").submit();
         }
     }
 </script>
