@@ -24,10 +24,19 @@
         <nav th:fragment="sidebar" class="col-md-3 col-lg-2 bg-light sidebar p-3 sticky-top vh-100">
             <ul th:fragment="navbar" class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Strona Główna</a>
+                    <a class="nav-link active" th:href="@{/}" th:text="#{navigation.home}">Strona Główna</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Strona 1</a>
+                    <a class="nav-link" th:href="@{/register}" th:text="#{navigation.registration}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/rent}" th:text="#{navigation.rent}">Strona 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/rent/finish}" th:text="#{navigation.finish_rent}">Strona 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/rents}" th:text="#{navigation.rent_list}">Strona 1</a>
                 </li>
             </ul>
         </nav>

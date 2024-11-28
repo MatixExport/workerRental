@@ -25,6 +25,30 @@ public class RentService {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
     }
 
+    public List<RentDTO> getAllRents() {
+        return webClient.get()
+                .uri("/rents")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<RentDTO>>() {})
+                .block();
+    }
+
+    public void endRent(UUID rentId) {
+        webClient.post()
+                .uri("/rents/"+rentId+"/finish")
+                .retrieve()
+                .onStatus((status)->status.value()==409,_->{
+                    throw new RuntimeException("Rent already ended");
+                })
+                .onStatus((status)->status.value()==404,_->{
+                    throw new RuntimeException("Rent with provided id does not exist");
+                })
+                .onStatus(HttpStatusCode::isError,(clientResponse -> {
+                    throw new RuntimeException(clientResponse.statusCode().toString());
+                })).toBodilessEntity().block();
+    }
+
+
     public List<WorkerDTO> getAllWorkers() {
          return webClient.get()
                  .uri("/workers")
