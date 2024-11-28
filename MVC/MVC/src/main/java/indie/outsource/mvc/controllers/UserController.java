@@ -1,12 +1,12 @@
 package indie.outsource.mvc.controllers;
 
 
+import indie.outsource.mvc.services.UserService;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,17 +14,15 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Controller
 public class UserController {
 
-    private final WebClient webClient;
+    UserService userService;
 
     @Autowired
-    public UserController(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/register")
@@ -43,24 +41,20 @@ public class UserController {
             return "registerForm";
         }
 
-        UserDTO user = webClient.post().uri("/users").bodyValue(createUserDTO).retrieve().onStatus(
-                HttpStatusCode::is4xxClientError,
-                response -> response.bodyToMono(String.class)
-                        .map(errorBody -> new RuntimeException("4xx Error: " + errorBody))
-                )
-                .bodyToMono(UserDTO.class).onErrorResume(
-                        _ ->{
-                            bindingResult.addError(new ObjectError("user", "Username already exists"));
-                            return Mono.empty();
-                        }
-                )
-                .block();
+        UserDTO userDTO = null;
+        try{
+            userDTO = userService.createUser(createUserDTO);
+        }catch (RuntimeException e){
+            bindingResult.addError(new ObjectError("user", e.getMessage()));
+        }
+
+
         if(bindingResult.hasErrors()) {
             model.addAttribute("user", createUserDTO);
             return "registerForm";
         }
 
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDTO);
         return "account";
     }
 }

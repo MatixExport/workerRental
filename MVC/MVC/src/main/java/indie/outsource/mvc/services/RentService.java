@@ -4,10 +4,11 @@ import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.RentDTO;
 import indie.outsource.worker.WorkerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -37,9 +38,9 @@ public class RentService {
                 .uri("/rents/users/" + clientId + "/workers/" + workerId)
                 .bodyValue(createRentDTO)
                 .retrieve()
-//                .onStatus(HttpStatusCode,_->{
-//                    throw new RuntimeException("W");
-//                })
+                .onStatus(status -> status.value() == 409,_->{
+                    throw new RuntimeException("Worker is already rented");
+                })
                 .onStatus(HttpStatusCode::is4xxClientError,(clientResponse -> {
                     return clientResponse.createException().flatMap(Mono::error);
                 }))
