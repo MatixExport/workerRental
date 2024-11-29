@@ -1,6 +1,7 @@
 package indie.outsource.mvc.services;
 
 import indie.outsource.rent.CreateRentDTO;
+import indie.outsource.rent.FullCreateRentDTO;
 import indie.outsource.rent.RentDTO;
 import indie.outsource.worker.WorkerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class RentService {
                  .block();
     }
 
-    public RentDTO createRent(CreateRentDTO createRentDTO, UUID clientId,UUID workerId) {
+    public RentDTO createRent(FullCreateRentDTO createRentDTO) {
         return  webClient.post()
-                .uri("/rents/users/" + clientId + "/workers/" + workerId)
+                .uri("/rents/users/" + createRentDTO.getUserID() + "/workers/" +createRentDTO.getWorkerID())
                 .bodyValue(createRentDTO)
                 .retrieve()
                 .onStatus(status -> status.value() == 409,_->{

@@ -4,6 +4,7 @@ package indie.outsource.mvc.controllers;
 import indie.outsource.mvc.services.RentService;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.FinishRentDTO;
+import indie.outsource.rent.FullCreateRentDTO;
 import indie.outsource.rent.RentDTO;
 import indie.outsource.worker.WorkerDTO;
 import jakarta.validation.Valid;
@@ -36,11 +37,37 @@ public class RentController {
 
     @GetMapping("/rent")
     public String rentForm(Model model) {
-        CreateRentDTO createRentDTO = new CreateRentDTO();
+        FullCreateRentDTO createRentDTO = new FullCreateRentDTO();
         List<WorkerDTO> list = rentService.getAllWorkers();
         model.addAttribute("rent", createRentDTO);
         model.addAttribute("workers", list);
         return "rentForm";
+    }
+
+    @PostMapping("/rent")
+    public String rentSubmit(@ModelAttribute("rent") @Valid FullCreateRentDTO createRentDTO, BindingResult bindingResult, Model model) {
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("rent", createRentDTO);
+            model.addAttribute("workers",rentService.getAllWorkers());
+            return "rentForm";
+        }
+        RentDTO rentDTO = null;
+
+        try{
+            rentDTO = rentService.createRent(createRentDTO);
+        }catch(RuntimeException e){
+            bindingResult.addError(new ObjectError("rent", e.getMessage()));
+        }
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("rent", createRentDTO);
+            model.addAttribute("workers",rentService.getAllWorkers());
+            return "rentForm";
+        }
+        model.addAttribute("rent", rentDTO);
+        return "rent";
+
     }
 
     @GetMapping("/rents")
@@ -59,7 +86,7 @@ public class RentController {
         return "endRentForm";
     }
 
-    @PostMapping("/rent/finish/submit")
+    @PostMapping("/rent/finish")
     public String finishRentSubmit(@ModelAttribute("rent") @Valid FinishRentDTO finishRentDTO,
                                    BindingResult bindingResult, Model model) {
 
@@ -81,31 +108,5 @@ public class RentController {
     }
 
 
-    @PostMapping("/rent/users/{clientId}/workers/{workerId}")
-    public String rentSubmit(@ModelAttribute("rent") @Valid CreateRentDTO createRentDTO, BindingResult bindingResult, Model model,
-                             @PathVariable UUID clientId, @PathVariable UUID workerId) {
 
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("rent", createRentDTO);
-            model.addAttribute("workers",rentService.getAllWorkers());
-            return "rentForm";
-        }
-
-        RentDTO rentDTO = null;
-
-        try{
-            rentDTO = rentService.createRent(createRentDTO, clientId, workerId);
-        }catch(RuntimeException e){
-            bindingResult.addError(new ObjectError("rent", e.getMessage()));
-        }
-
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("rent", createRentDTO);
-            model.addAttribute("workers",rentService.getAllWorkers());
-            return "rentForm";
-        }
-        model.addAttribute("rent", createRentDTO);
-        return "rent";
-
-    }
 }

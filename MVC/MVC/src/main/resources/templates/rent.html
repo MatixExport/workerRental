@@ -21,6 +21,7 @@
     <nav th:replace="base :: sidebar"></nav>
     <div th:replace="base :: content-container(~{ :: .content})">
       <div class="content">
+        <h3 th:text="#{forms.rent.success}"></h3>
         <div th:object="${rent}">
           <div th:text="*{startDate}">  </div>
         </div>
