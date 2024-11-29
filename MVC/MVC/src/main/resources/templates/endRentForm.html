@@ -19,11 +19,11 @@
         <div th:replace="base :: content-container(~{ :: .content})">
             <div class="content">
 
-                <form th:action="@{/rent/finish/submit}" method="post" id="finish-rent-form" th:object="${rent}">
+                <form th:action="@{/rent/finish}" method="post" id="finish-rent-form" th:object="${rent}">
                     <div class="mb-3">
                         <label for="rent" class="form-label" th:text="#{navigation.rent}">Password</label>
                         <select th:value="*{rentID}" name="rentID" id="rent" aria-describedby="rentError" class="form-select">
-                                <option th:object="${rents}"  name="rentID" th:each="rentItem : ${rents}"
+                                <option th:object="${rents}" th:if="${rentItem.getEndDate() == null}"  name="rentID" th:each="rentItem : ${rents}"
                                         th:value="${rentItem.getId()}"
                                         th:text="${rentItem.getId()}">
                                 </option>

@@ -19,7 +19,7 @@
         <div th:replace="base :: content-container(~{ :: .content})">
             <div class="content">
                 <h1 th:text="#{navigation.registration}">Register</h1>
-                <form th:action="@{/registerSubmit}" method="post" id="register-form" th:object="${user} ">
+                <form th:action="@{/register}" method="post" id="register-form" th:object="${user} ">
                     <div class="mb-3">
                         <label for="login" class="form-label" th:text="#{forms.registration.username}">Login</label>
                         <input type="text" class="form-control" id="login" name="login" aria-describedby="loginError" th:value="*{login}">

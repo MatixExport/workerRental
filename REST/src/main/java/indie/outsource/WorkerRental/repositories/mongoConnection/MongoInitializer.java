@@ -54,6 +54,11 @@ public class MongoInitializer implements CommandLineRunner {
         Worker worker = new Worker("Worker1");
         Worker worker2 = new Worker("Worker2");
         Worker worker3 = new Worker("Worker3");
+        Worker worker4 = new Worker("Worker4");
+        Worker worker5 = new Worker("Worker5");
+
+        workerRepository.save(worker4);
+        workerRepository.save(worker5);
 
         worker = workerRepository.save(worker);
         worker2 = workerRepository.save(worker2);
