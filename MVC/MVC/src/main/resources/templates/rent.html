@@ -5,6 +5,15 @@
 
 <title layout:fragment="title" th:text="#{navigation.rent}" >Register</title>
 
+<ol th:fragment="breadcrumbs" class="breadcrumbs breadcrumb mb-0">
+  <li class="breadcrumb-item">
+    <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a th:href="@{/rent}" th:text="#{navigation.rent}">Register</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
+</ol>
 
 
 <div class="content row flex-grow-1 container" layout:fragment="content">

@@ -4,6 +4,15 @@
 
 <title layout:fragment="title" th:text="#{navigation.account}">Register</title>
 
+<ol layout:fragment="breadcrumbs" class="breadcrumbs breadcrumb mb-0">
+    <li class="breadcrumb-item" >
+        <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
+    </li>
+    <li class="breadcrumb-item" >
+        <a th:href="@{/register}" th:text="#{navigation.registration}">Register</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
+</ol>
 
 <div class="row flex-grow-1 content" layout:fragment="content">
     <h3 th:text="#{forms.registration.success}"></h3>

@@ -39,8 +39,10 @@ public class RentController {
             return ResponseEntity.ok(RentMapper.getRentDTO(rentService.createRent(clientId, workerId, rent.getStartDate())));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (UserInactiveException | WorkerRentedException e) {
+        } catch (WorkerRentedException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch(UserInactiveException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
