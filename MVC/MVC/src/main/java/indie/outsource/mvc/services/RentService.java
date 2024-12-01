@@ -66,6 +66,9 @@ public class RentService {
                 .onStatus(status -> status.value() == 409, _->{
                     throw new RuntimeException("Worker is already rented");
                 })
+                .onStatus((status)->status.value()==403,_->{
+                    throw new RuntimeException("User is inactive");
+                })
                 .onStatus(HttpStatusCode::is4xxClientError,(clientResponse -> {
                     return clientResponse.createException().flatMap(Mono::error);
                 }))
