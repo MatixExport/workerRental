@@ -56,13 +56,11 @@ public class RentController {
             rentDTO = rentService.createRent(createRentDTO);
         }catch(RuntimeException e){
             bindingResult.addError(new ObjectError("rent", e.getMessage()));
-        }
-
-        if(bindingResult.hasErrors()) {
             model.addAttribute("rent", createRentDTO);
             model.addAttribute("workers",rentService.getAllWorkers());
             return "rentForm";
         }
+
         model.addAttribute("rent", rentDTO);
         return "rent";
 

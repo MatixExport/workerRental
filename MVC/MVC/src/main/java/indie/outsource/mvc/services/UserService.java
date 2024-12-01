@@ -1,6 +1,7 @@
 package indie.outsource.mvc.services;
 
 import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class UserService {
 
 
     public UserDTO createUser(CreateUserDTO createUserDTO) {
+        createUserDTO.setType(USERTYPE.CLIENT);
         return webClient.post()
                 .uri("/users")
                 .bodyValue(createUserDTO)
