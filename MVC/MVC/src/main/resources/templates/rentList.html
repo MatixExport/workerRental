@@ -8,18 +8,25 @@
 <div class="row flex-grow-1 container content" layout:fragment="content">
     <div class="container mt-5" th:object="${rents}">
         <div class="row g-4">
-            <div class="col-md-4" th:each="rent : ${rents}">
+            <div class="col-md-4" th:each="rentItem : ${rents}">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${rent.getId()}"></h5>
+                        <h5 class="card-title" th:text="${rentItem.getId()}"></h5>
                         <span th:text="#{cards.rent.startDate}"></span>
-                        <p class="card-text" th:text="${rent.getStartDate()}"></p>
+                        <p class="card-text" th:text="${rentItem.getStartDate()}"></p>
                         <span th:text="#{cards.rent.endDate}"></span>
-                        <p class="card-text" th:text="${rent.getEndDate()}"></p>
+                        <p class="card-text" th:text="${rentItem.getEndDate()}"></p>
+                        <div th:if="${rentItem.getEndDate() == null}">
+                            <form th:action="@{/rent/finish}" method="post" id="finish-rent-form">
+                                    <input type="hidden" th:value="${rentItem.getId()}" name="rentID" />
+                                <button type="submit" id="rent-form-button" class="btn btn-primary" th:text="#{forms.confirm}" >
+                                </button>
+                            </form>
+                        </div>
                         <span th:text="#{cards.userId}"></span>
-                        <p class="card-text" th:text="${rent.getUserID()}"></p>
+                        <p class="card-text" th:text="${rentItem.getUserID()}"></p>
                         <span th:text="#{cards.rentId}"></span>
-                        <p class="card-text" th:text="${rent.getWorkerID()}"></p>
+                        <p class="card-text" th:text="${rentItem.getWorkerID()}"></p>
                     </div>
                 </div>
             </div>

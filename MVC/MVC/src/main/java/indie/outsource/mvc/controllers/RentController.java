@@ -69,6 +69,8 @@ public class RentController {
     @GetMapping("/rents")
     public String rentList(Model model) {
         List<RentDTO> list = rentService.getAllRents();
+        FinishRentDTO finishRentDTO = new FinishRentDTO();
+        model.addAttribute("rent", finishRentDTO);
         model.addAttribute("rents", list);
         return "rentList";
     }
