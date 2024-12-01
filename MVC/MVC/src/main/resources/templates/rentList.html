@@ -1,49 +1,30 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:insert="base :: header">
-    <meta charset="UTF-8">
-    <title th:text="#{navigation.account}">Register</title>
-</head>
-<body>
-<div class="container">
-    <nav th:replace="base :: bread-nav(~{ :: .breadcrumbs})">
-        <ol class="breadcrumbs breadcrumb mb-0">
-            <li class="breadcrumb-item">
-                <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}">Current page</li>
-        </ol>
-    </nav>
-    <div class="row flex-grow-1 ">
-        <nav th:replace="base :: sidebar"></nav>
-        <div th:replace="base :: content-container(~{ :: .content})">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{base}">
 
-            <div class="content">
-                <div class="container mt-5" th:object="${rents}">
-                    <div class="row g-4">
-                        <div class="col-md-4" th:each="rent : ${rents}">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${rent.getId()}"></h5>
-                                    <span th:text="#{cards.rent.startDate}"></span>
-                                    <p class="card-text" th:text="${rent.getStartDate()}"></p>
-                                    <span th:text="#{cards.rent.endDate}"></span>
-                                    <p class="card-text" th:text="${rent.getEndDate()}"></p>
-                                    <span th:text="#{cards.userId}"></span>
-                                    <p class="card-text" th:text="${rent.getUserID()}"></p>
-                                    <span th:text="#{cards.rentId}"></span>
-                                    <p class="card-text" th:text="${rent.getWorkerID()}"></p>
-                                </div>
-                            </div>
-                        </div>
+
+<title layout:fragment="title" th:text="#{navigation.account}">Register</title>
+
+<div class="row flex-grow-1 container content" layout:fragment="content">
+    <div class="container mt-5" th:object="${rents}">
+        <div class="row g-4">
+            <div class="col-md-4" th:each="rent : ${rents}">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${rent.getId()}"></h5>
+                        <span th:text="#{cards.rent.startDate}"></span>
+                        <p class="card-text" th:text="${rent.getStartDate()}"></p>
+                        <span th:text="#{cards.rent.endDate}"></span>
+                        <p class="card-text" th:text="${rent.getEndDate()}"></p>
+                        <span th:text="#{cards.userId}"></span>
+                        <p class="card-text" th:text="${rent.getUserID()}"></p>
+                        <span th:text="#{cards.rentId}"></span>
+                        <p class="card-text" th:text="${rent.getWorkerID()}"></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer th:replace="base :: footer"></footer>
 </div>
 
-
-</body>
 </html>

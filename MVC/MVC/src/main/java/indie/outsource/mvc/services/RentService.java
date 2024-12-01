@@ -63,7 +63,7 @@ public class RentService {
                 .uri("/rents/users/" + createRentDTO.getUserID() + "/workers/" +createRentDTO.getWorkerID())
                 .bodyValue(createRentDTO)
                 .retrieve()
-                .onStatus(status -> status.value() == 409,_->{
+                .onStatus(status -> status.value() == 409, _->{
                     throw new RuntimeException("Worker is already rented");
                 })
                 .onStatus(HttpStatusCode::is4xxClientError,(clientResponse -> {

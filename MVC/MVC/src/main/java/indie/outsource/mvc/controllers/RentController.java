@@ -2,7 +2,6 @@ package indie.outsource.mvc.controllers;
 
 
 import indie.outsource.mvc.services.RentService;
-import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.FinishRentDTO;
 import indie.outsource.rent.FullCreateRentDTO;
 import indie.outsource.rent.RentDTO;
@@ -15,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 
 @Controller
