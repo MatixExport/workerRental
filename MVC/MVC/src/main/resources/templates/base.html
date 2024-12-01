@@ -1,6 +1,7 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
-<head th:fragment="header">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title layout:fragment="title">Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -10,19 +11,18 @@
 </head>
 <body>
 <div class="container">
-    <nav th:fragment="bread-nav(breadcrumbs)" class="navbar navbar-expand-lg navbar-light bg-light h-20">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light h-20">
         <div class="container">
-            <ol th:replace="${breadcrumbs}" class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#">Strona Główna</a></li>
-                <li class="breadcrumb-item"><a href="#">Sekcja</a></li>
+            <ol layout:fragment="breadcrumbs" class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{navigation.home}">Strona Główna</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Bieżąca Strona</li>
             </ol>
         </div>
     </nav>
 
     <div class="row flex-grow-1 ">
-        <nav th:fragment="sidebar" class="col-md-3 col-lg-2 bg-light sidebar p-3 sticky-top vh-100">
-            <ul th:fragment="navbar" class="nav flex-column">
+        <nav class="col-md-3 col-lg-2 bg-light sidebar p-3 sticky-top vh-100">
+            <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/}" th:text="#{navigation.home}">Strona Główna</a>
                 </li>
@@ -41,15 +41,17 @@
             </ul>
         </nav>
 
-        <main th:fragment="content-container(content)" class="col-md-9 col-lg-10 px-4 h-100 overflow-auto">
+
+        <main class="col-md-9 col-lg-10 px-4 h-100 overflow-auto">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <div th:replace="${content}" ></div>
+                <div layout:fragment="content"></div>
             </div>
         </main>
+
     </div>
 
 
-    <footer th:fragment="footer" class="footer mt-auto py-3 bg-dark text-light fixed-bottom">
+    <footer class="footer mt-auto py-3 bg-dark text-light fixed-bottom">
         <div class="container text-center">
             <span th:text="#{footer}">© 2024 Worker Rental, Wszelkie prawa zastrzeżone.</span>
         </div>
@@ -57,6 +59,8 @@
 
 </div>
 </body>
+
+<script layout:fragment="script"></script>
 </html>
 
 
