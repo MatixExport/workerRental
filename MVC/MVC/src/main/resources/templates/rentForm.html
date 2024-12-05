@@ -62,41 +62,9 @@
 
 
 <script layout:fragment="script" type="text/javascript">
-    document.addEventListener('DOMContentLoaded', init, false);
-    function init(){
-        const debouncedRefreshUserList = debounce(()=>refreshUserList());
-        const loginSearchInput = document.getElementById("loginSearch");
-        loginSearchInput.addEventListener(
-            "input",
-            (e)=>{
-                debouncedRefreshUserList();
-            }
-        )
-    }
-
-
-    function backendLookup(method,uri,callback,data=null){
-        let fetch_data = {
-            method: method,
-            headers:{
-            }
-        };
-        if (data) {
-            fetch_data['headers']['Content-Type'] = 'application/json'
-            fetch_data['body'] = JSON.stringify(data);
-        }
-        fetch("http://localhost:8080" +
-            ""+uri, fetch_data).then(response=>{
-                response.json().then((responseBody)=>{
-                    callback(response.status,responseBody)
-                })
-        })
-    }
-
-    function getUsersByLogin(login,callback){
-        const uri = `/users/loginContains/${login}`
-        backendLookup("GET",uri,callback);
-    }
+    const debouncedRefreshUserList =  debounce(()=>refreshUserList());
+    const loginSearchInput = document.getElementById("loginSearch");
+    loginSearchInput.addEventListener("input",() => {debouncedRefreshUserList()});
 
     function debounce(func, timeout = 300){
         let timer;
@@ -105,21 +73,6 @@
             timer = setTimeout(() => { func.apply(this, args); }, timeout);
         };
     }
-
-    function validateId(id){
-        return id !== null && id.trim() !== "";
-    }
-
-
-    const modal = document.getElementById("modal");
-
-    const showModal = ()=>{
-        modal.style.display = "block";
-    };
-    const hideModal = ()=>{
-        modal.style.display = "none";
-    };
-
 
     function refreshUserList(){
         const loginContainer = document.getElementById("logins");
@@ -131,7 +84,7 @@
         loginContainer.innerHTML = "<p>Loading</p>";
         getUsersByLogin(loginSearchInput.value,(status,body)=>{
             loginContainer.innerHTML = body.map((user) => {
-            return ` <div class="form-check">
+                return ` <div class="form-check">
                 <input class="form-check-input" type="radio" name="userID" id="flexRadioDefault1" value="${user.id}">
                     <label class="form-check-label" for="flexRadioDefault1">
                         ${user.login}
@@ -141,27 +94,36 @@
         })
     }
 
-    const debouncedRefreshUserList = debounce(()=>refreshUserList());
-    const loginSearchInput = document.getElementById("loginSearch");
-    loginSearchInput.addEventListener(
-        "input",
-        (e)=>{
-            debouncedRefreshUserList();
-        }
-    )
-
-    function getUserIdValue(){
-        let selectedUser = document.querySelector('input[name="userID"]:checked');
-        if(!selectedUser){
-            return null;
-        }
-        return selectedUser.value;
+    function getUsersByLogin(login,callback){
+        const uri = `http://localhost:8080/users/loginContains/${login}`
+        fetch(uri, {method: "GET"})
+            .then(response=>{
+                response.json().then((responseBody)=>{
+                    callback(response.status,responseBody)
+                })
+        })
     }
 
-    function getWorkerIdValue(){
-        const worker = document.getElementById("worker");
-        return worker.value;
+    function handleRentSubmit(){
+        showModal();
     }
+
+    function handleModalConfirm(){
+        validateSubmitRentForm();
+        hideModal();
+    }
+
+    function handleModalCancel(){
+        hideModal();
+    }
+
+    const showModal = ()=>{
+        document.getElementById("modal").style.display = "block";
+    };
+    const hideModal = ()=>{
+        document.getElementById("modal").style.display = "none";
+    };
+
 
     function validateSubmitRentForm() {
         const rentForm = document.getElementById("rent-form");
@@ -181,23 +143,26 @@
         }
 
         if(isValid){
-            // rentForm.action = `/rent/users/${userId}/workers/${workerId}`;
             rentForm.submit();
         }
-
     }
 
-    function handleRentSubmit(){
-        showModal();
+    function getUserIdValue(){
+        let selectedUser = document.querySelector('input[name="userID"]:checked');
+        if(!selectedUser){
+            return null;
+        }
+        return selectedUser.value;
     }
 
-    function handleModalConfirm(){
-        validateSubmitRentForm();
-        hideModal();
+    function getWorkerIdValue(){
+        return document.getElementById("worker").value;
     }
 
-    function handleModalCancel(){
-        hideModal();
+    function validateId(id){
+        return id !== null && id.trim() !== "";
     }
+
+
 </script>
 </html>
