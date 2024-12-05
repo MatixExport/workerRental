@@ -19,7 +19,7 @@
                         <div th:if="${rentItem.getEndDate() == null}">
                             <form th:action="@{/rent/finish}" method="post" id="finish-rent-form">
                                     <input type="hidden" th:value="${rentItem.getId()}" name="rentID" />
-                                <button type="submit" id="rent-form-button" class="btn btn-primary" th:text="#{forms.confirm}" >
+                                <button type="submit" id="rent-form-button" class="btn btn-primary" th:text="#{modal.rent.end}" >
                                 </button>
                             </form>
                         </div>
