@@ -14,16 +14,15 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
+@Path("")
 @AllArgsConstructor
-@Path("/rents")
-@ApplicationScoped
 public class RentController {
 
     @Inject
     RentService rentService;
 
     @GET
-    @Path("/{id}")
+    @Path("/rents/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRent(@PathParam("id") UUID id) {
         try {
@@ -34,14 +33,14 @@ public class RentController {
     }
 
     @GET
-    @Path("")
+    @Path("/rents")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRents() {
         return Response.ok(rentService.findAll().stream().map(RentMapper::getRentDTO).toList()).build();
     }
 
     @POST
-    @Path("/users/{clientId}/workers/{workerId}")
+    @Path("/rents/users/{clientId}/workers/{workerId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createRent(@PathParam("clientId") UUID clientId, @PathParam("workerId") UUID workerId, @Valid CreateRentDTO rent) {
@@ -55,7 +54,7 @@ public class RentController {
     }
 
     @POST
-    @Path("/{id}/finish")
+    @Path("/rents/{id}/finish")
     @Produces(MediaType.APPLICATION_JSON)
     public Response finishRent(@PathParam("id") UUID id) {
         try {
@@ -70,7 +69,7 @@ public class RentController {
     }
 
     @DELETE
-    @Path("/{id}/delete")
+    @Path("/rents/{id}/delete")
     public Response deleteRent(@PathParam("id") UUID id) {
         try {
             rentService.deleteRent(id);
@@ -85,7 +84,7 @@ public class RentController {
     }
 
     @GET
-    @Path("/ended/users/{id}")
+    @Path("/rents/ended/users/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientEndedRents(@PathParam("id") UUID id) {
         try{
@@ -97,7 +96,7 @@ public class RentController {
     }
 
     @GET
-    @Path("/ended/workers/{id}")
+    @Path("/rents/ended/workers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getWorkerEndedRents(@PathParam("id") UUID id) {
         try{
@@ -109,7 +108,7 @@ public class RentController {
     }
 
     @GET
-    @Path("/current/users/{id}")
+    @Path("/rents/current/users/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientActiveRents(@PathParam("id") UUID id) {
         try{
@@ -121,7 +120,7 @@ public class RentController {
     }
 
     @GET
-    @Path("/current/workers/{id}")
+    @Path("/rents/current/workers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getWorkerActiveRents(@PathParam("id") UUID id) {
         try{

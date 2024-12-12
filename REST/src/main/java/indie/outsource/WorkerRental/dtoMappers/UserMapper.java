@@ -10,7 +10,6 @@ import indie.outsource.WorkerRental.DTO.user.UserDTO;
 
 public final class UserMapper {
     public static UserDTO getUserDTO(User user){
-        System.out.println(user.getClass().getSimpleName());
         return new UserDTO(user.getLogin(), user.isActive(), user.getId(), USERTYPE.getByClassname(user.getClass().getSimpleName()));
     }
     public static User getUser(CreateUserDTO createUserDTO){

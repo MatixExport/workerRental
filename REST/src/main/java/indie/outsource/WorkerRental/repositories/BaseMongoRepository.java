@@ -39,7 +39,6 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
 
 
     protected void createCollection() {
-        System.out.println("Creating " + entityClass.getSimpleName() + " collection");
         CreateCollectionOptions createCollectionOptions = new CreateCollectionOptions().validationOptions(
                 MongoSchema.getSchema(entityClass.getSimpleName())
         );

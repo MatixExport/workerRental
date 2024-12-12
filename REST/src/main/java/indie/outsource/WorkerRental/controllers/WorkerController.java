@@ -6,6 +6,7 @@ import indie.outsource.WorkerRental.dtoMappers.WorkerMapper;
 import indie.outsource.WorkerRental.exceptions.WorkerRentedException;
 import indie.outsource.WorkerRental.services.WorkerService;
 import indie.outsource.WorkerRental.DTO.worker.CreateWorkerDTO;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -15,15 +16,14 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
-
-@Path("/workers")
+@Path("")
 public class WorkerController {
 
     @Inject
     WorkerService workerService;
 
     @GET()
-    @Path("/{id}")
+    @Path("/workers/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getWorker(@PathParam("id") UUID id) {
         try{
@@ -35,12 +35,14 @@ public class WorkerController {
     }
 
     @GET
+    @Path("/workers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllWorkers() {
         return Response.ok(workerService.findAll().stream().map(WorkerMapper::getWorkerDto).toList()).build();
     }
 
     @POST
+    @Path("/workers")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createWorker(@Valid CreateWorkerDTO worker) {
@@ -48,7 +50,7 @@ public class WorkerController {
     }
 
     @POST
-    @Path("/{id}")
+    @Path("/workers/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(@PathParam("id") UUID id, CreateWorkerDTO createWorkerDTO) {
@@ -63,7 +65,7 @@ public class WorkerController {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/workers/{id}")
     public Response deleteWorker(@PathParam("id") UUID id) {
         try{
             workerService.delete(id);

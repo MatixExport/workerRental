@@ -6,6 +6,7 @@ import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.services.UserService;
 import indie.outsource.WorkerRental.DTO.user.CreateUserDTO;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,20 +15,20 @@ import lombok.AllArgsConstructor;
 
 import java.util.UUID;
 
+@Path("")
 @AllArgsConstructor
-@Path("/users")
 public class UserController {
     private final UserService userService;
 
     @GET
-    @Path("")
+    @Path("/users")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
         return Response.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList()).build();
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/users/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("id") UUID id) {
         try{
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @GET
-    @Path("/login/{login}")
+    @Path("/users/login/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByLogin(@PathParam("login") String login) {
         try{
@@ -51,14 +52,14 @@ public class UserController {
     }
 
     @GET
-    @Path("/loginContains/{login}")
+    @Path("/users/loginContains/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByLoginContains(@PathParam("login") String login) {
         return Response.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList()).build();
     }
 
     @POST
-    @Path("")
+    @Path("/users")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addUser(@Valid CreateUserDTO user) {
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/{id}")
+    @Path("/users/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(@PathParam("id") UUID id, @Valid CreateUserDTO createUserDTO) {
@@ -86,7 +87,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/{id}/activate")
+    @Path("/users/{id}/activate")
     @Produces(MediaType.APPLICATION_JSON)
     public Response activateUser(@PathParam("id") UUID id) {
         try{
@@ -98,7 +99,7 @@ public class UserController {
     }
 
     @POST
-    @Path("/{id}/deactivate")
+    @Path("/users/{id}/deactivate")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deactivateUser(@PathParam("id") UUID id) {
         try{
