@@ -2,4 +2,4 @@
     let { message } = $props();
 </script>
 
-<p>{message}</p>
+<p class="text-red-500" >{message}</p>
