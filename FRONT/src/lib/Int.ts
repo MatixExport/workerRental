@@ -4,3 +4,9 @@ export interface User {
     id: string;
     type: string;
 }
+
+export interface CreateUser {
+    login: string;
+    password: string;
+    type: string;
+}

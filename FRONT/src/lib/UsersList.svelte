@@ -15,7 +15,6 @@
     function deactivate(id: string){
         const uri = `http://localhost:8080/users/`+id+'/deactivate'
         fetch(uri, {method: "POST"}).then(()=>getUsersByLogin())
-
     }
 
     function activate(id: string){

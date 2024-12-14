@@ -6,6 +6,7 @@ import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.services.UserService;
 import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -61,6 +62,12 @@ public class UserController {
         catch(UserAlreadyExistsException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(UserMapper.getUserDTO(UserMapper.getUser(user)));
         }
+    }
+
+    @PostMapping("/client")
+    public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
+        user.setType(USERTYPE.CLIENT);
+        return addUser(user);
     }
 
     @PostMapping("/users/{id}")
