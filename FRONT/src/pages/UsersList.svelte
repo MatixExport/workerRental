@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type {User} from "./Int.js"
-
+    import type {User} from "../lib/Int.js"
+    import {navigate} from "../stores/router";
     let users = $state<User[]>([])
 
 
@@ -36,6 +36,7 @@
             </p>
             <div class="flex">
                 <input type="button" value="update" class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
+                <input type="button" value="details" onclick={()=>navigate("/userDetails", user)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
                 {#if user.active}
                     <input type="button" value="deactivate" onclick={()=>deactivate(user.id)} class="basis-1/2 border-black border-2 border-solid bg-red-300 p-2 hover:bg-red-500">
                 {:else}

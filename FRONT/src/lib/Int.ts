@@ -10,3 +10,11 @@ export interface CreateUser {
     password: string;
     type: string;
 }
+
+export interface Rent {
+    startDate: Date;
+    endDate: Date;
+    userID: string;
+    workerId: string;
+    id: string;
+}
