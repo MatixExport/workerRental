@@ -3,8 +3,9 @@
     import {navigate} from "../stores/router";
     let users = $state<User[]>([])
 
+    let login = $state("");
 
-    function getUsersByLogin(){
+    function getUsers(){
         const uri = `http://localhost:8080/users`
         fetch(uri, {method: "GET"})
             .then(response=>{
@@ -12,18 +13,31 @@
             })
     }
 
+    function getUsersByLogin2(){
+        if(login.length===0){
+            getUsers()
+        }
+        const uri = `http://localhost:8080/users/loginContains/${login}`
+        fetch(uri, {method: "GET"})
+            .then(response=>{
+                response.json().then(result => users = result)
+                })
+    }
+
     function deactivate(id: string){
         const uri = `http://localhost:8080/users/`+id+'/deactivate'
-        fetch(uri, {method: "POST"}).then(()=>getUsersByLogin())
+        fetch(uri, {method: "POST"}).then(()=>getUsers())
     }
 
     function activate(id: string){
         const uri = `http://localhost:8080/users/`+id+'/activate'
-        fetch(uri, {method: "POST"}).then(()=>getUsersByLogin())
+        fetch(uri, {method: "POST"}).then(()=>getUsers())
     }
+
+    getUsers();
 </script>
 
-<button onclick={getUsersByLogin} class="p-2 border-1 border-solid border-black">fetch</button>
+<input bind:value={login} class="border bg-gray-400" oninput="{getUsersByLogin2}">
 
 <div class="flex">
     {#each users as user}
