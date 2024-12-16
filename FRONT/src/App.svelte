@@ -3,6 +3,7 @@
     import UsersList from "./pages/UsersList.svelte";
     import RegisterForm from "./pages/RegisterForm.svelte";
     import UserDetails from "./pages/UserDetails.svelte";
+    import CreateRent from "./pages/CreateRent.svelte";
 
   const routes = {
       "/":UsersList,
@@ -20,6 +21,9 @@
               break;
           case "/userDetails":
               RouteComponent = UserDetails
+              break;
+          case "/createRent":
+              RouteComponent = CreateRent
               break;
       }
   })
