@@ -1,5 +1,4 @@
 <script >
-    import {navigate} from "../stores/router.js";
     import ValidationError from "../components/ValidationError.svelte";
 
 
@@ -76,18 +75,18 @@
 </script>
 
 <form>
-    <select bind:value={selectedUser}>
+    <select bind:value={selectedUser} class="border">
         {#each users as user}
             <option value="{user}">{user.login}</option>
         {/each}
     </select>
-    <select bind:value={selectedWorker}>
+    <select bind:value={selectedWorker} class="border">
         {#each workers as worker}
             <option value="{worker}">{worker.id}</option>
         {/each}
     </select>
-    <input type="datetime-local" bind:value={startDate}>
-    <input type="button" onclick={createRent} value="Create rent">
+    <input type="datetime-local" bind:value={startDate} class="border">
+    <input type="button" onclick={createRent} value="Create rent" class="border hover:bg-gray-400">
 </form>
 {#each errors as error}
     <ValidationError message={error}/>

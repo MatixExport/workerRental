@@ -19,11 +19,11 @@
           case "/register":
               RouteComponent = RegisterForm
               break;
-          case "/userDetails":
-              RouteComponent = UserDetails
-              break;
           case "/createRent":
               RouteComponent = CreateRent
+              break;
+          case "/userDetails":
+              RouteComponent = UserDetails
               break;
       }
   })
@@ -32,7 +32,10 @@
 </script>
 
 <main>
-    <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") } }>register</a>
+    <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") }} class="border p-2 m-2 hover:bg-gray-400">register</a>
+    <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="border p-2 m-2 hover:bg-gray-400">home</a>
+    <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="border p-2 m-2 hover:bg-gray-400">createRent</a>
+
     <RouteComponent/>
 
 </main>
