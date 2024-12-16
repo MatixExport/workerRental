@@ -1,6 +1,6 @@
 <script lang="ts">
-    import ValidationError from "./ValidationError.svelte";
-    import type {CreateUser} from "./Int";
+    import ValidationError from "../components/ValidationError.svelte";
+    import type {CreateUser} from "../lib/Int";
     import {navigate} from "../stores/router.js";
 
     let user: CreateUser = $state({

@@ -1,7 +1,8 @@
 <script>
     import {currentRoute, navigate} from "./stores/router.js";
-    import UsersList from "./lib/UsersList.svelte";
-  import RegisterForm from "./lib/RegisterForm.svelte";
+    import UsersList from "./pages/UsersList.svelte";
+    import RegisterForm from "./pages/RegisterForm.svelte";
+    import UserDetails from "./pages/UserDetails.svelte";
 
   const routes = {
       "/":UsersList,
@@ -16,6 +17,9 @@
               break;
           case "/register":
               RouteComponent = RegisterForm
+              break;
+          case "/userDetails":
+              RouteComponent = UserDetails
               break;
       }
   })
