@@ -1,5 +1,7 @@
 <script >
     import ValidationError from "../components/ValidationError.svelte";
+    import ConfirmNotification from "../components/ConfirmNotification.svelte";
+    import Notification from "../components/Notification.svelte";
 
 
     let users= $state()
@@ -8,6 +10,8 @@
     let selectedWorker = $state(null)
     let startDate = $state(null)
     let errors = $state([])
+    let showConfirm = $state(false)
+    let notification = $state("")
 
     function getUsers(){
         const uri = `http://localhost:8080/users`
@@ -58,16 +62,17 @@
                     selectedUser = null;
                     startDate = null;
 
-                    errors.push("Rent created")
+                    notification = "Rent created"
                 } else if (response.status === 409) {
-                    errors.push("Worker occupied")
+                    notification = "Worker occupied"
                 } else if (response.status === 403) {
-                    errors.push("User is inactive")
+                    notification = "User is inactive"
                 }
                 else{
-                    errors.push(`Unknown error of status code: ${response.status}`)
+                    notification = `Unknown error of status code: ${response.status}`
                 }
             });
+
     }
 
     getUsers();
@@ -86,8 +91,14 @@
         {/each}
     </select>
     <input type="datetime-local" bind:value={startDate} class="border">
-    <input type="button" onclick={createRent} value="Create rent" class="border hover:bg-gray-400">
+    <input type="button" onclick={()=>{showConfirm=true}} value="Create rent" class="border hover:bg-gray-400">
 </form>
 {#each errors as error}
     <ValidationError message={error}/>
 {/each}
+{#if showConfirm}
+    <ConfirmNotification message="Are you sure?" accept={()=>{createRent(); showConfirm=false;}} cancel={()=>{showConfirm=false}}/>
+{/if}
+{#if notification.length > 0}
+    <Notification message={notification} callback={()=>{notification=""}}/>
+{/if}

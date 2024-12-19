@@ -2,6 +2,7 @@
     //TODO update view on rent finish
     import { navigationProps } from '../stores/router.js';
     import Rent from "../components/Rent.svelte";
+    import Notification from "../components/Notification.svelte";
 
     let user = $state();
     navigationProps.subscribe(value => (user = value));
