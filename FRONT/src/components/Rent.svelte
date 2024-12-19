@@ -1,5 +1,9 @@
 <script>
+    import ConfirmNotification from "./ConfirmNotification.svelte";
+
     let { rent } = $props();
+
+    let confirmNotification
 
     function finishRent(rentId){
         const uri = `http://localhost:8080/rents/`+rentId+'/finish'
@@ -15,6 +19,9 @@
     {/if}
     workerId: {rent.workerID}<br>
     {#if rent.endDate === null}
-        <input type="button" value="finish" onclick={()=>{finishRent(rent.id);}} class="basis-1/2 border-black border-2 border-solid bg-red-300 p-2 hover:bg-red-500">
+        <input type="button" value="finish" onclick={confirmNotification.show} class="basis-1/2 border-black border-2 border-solid bg-red-300 p-2 hover:bg-red-500">
     {/if}
 </p>
+
+
+<ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{finishRent(rent.id);}}/>

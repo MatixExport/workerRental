@@ -3,14 +3,13 @@
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import Notification from "../components/Notification.svelte";
 
-
     let users= $state()
     let workers= $state()
     let selectedUser = $state(null)
     let selectedWorker = $state(null)
     let startDate = $state(null)
     let errors = $state([])
-    let showConfirm = $state(false)
+    let confirmNotification
     let notification = $state("")
 
     function getUsers(){
@@ -91,14 +90,14 @@
         {/each}
     </select>
     <input type="datetime-local" bind:value={startDate} class="border">
-    <input type="button" onclick={()=>{showConfirm=true}} value="Create rent" class="border hover:bg-gray-400">
+    <input type="button" onclick={confirmNotification.show} value="Create rent" class="border hover:bg-gray-400">
 </form>
 {#each errors as error}
     <ValidationError message={error}/>
 {/each}
-{#if showConfirm}
-    <ConfirmNotification message="Are you sure?" accept={()=>{createRent(); showConfirm=false;}} cancel={()=>{showConfirm=false}}/>
-{/if}
+
+<ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{createRent();}}/>
+
 {#if notification.length > 0}
     <Notification message={notification} callback={()=>{notification=""}}/>
 {/if}

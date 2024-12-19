@@ -1,9 +1,9 @@
 <script>
-    import {currentRoute, navigate} from "./stores/router.js";
     import UsersList from "./pages/UsersList.svelte";
     import RegisterForm from "./pages/RegisterForm.svelte";
     import UserDetails from "./pages/UserDetails.svelte";
     import CreateRent from "./pages/CreateRent.svelte";
+    import {navigate, getCurrentRoute} from "./stores/router.svelte.js";
 
   const routes = {
       "/":UsersList,
@@ -12,7 +12,7 @@
 
   let RouteComponent = $state(UsersList);
   $effect(()=>{
-      switch ($currentRoute){
+      switch (getCurrentRoute()){
           case "/":
               RouteComponent = UsersList
               break;
