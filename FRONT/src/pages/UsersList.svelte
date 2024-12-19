@@ -1,7 +1,7 @@
-<script lang="ts">
-    import type {User} from "../lib/Int.js"
-    import {navigate} from "../stores/router";
-    let users = $state<User[]>([])
+<script>
+    import {navigate} from "../stores/router.svelte";
+    import ConfirmNotification from "../components/ConfirmNotification.svelte";
+    let users = $state([])
 
     let login = $state("");
 
@@ -24,17 +24,20 @@
                 })
     }
 
-    function deactivate(id: string){
+    function deactivate(id){
         const uri = `http://localhost:8080/users/`+id+'/deactivate'
         fetch(uri, {method: "POST"}).then(()=>getUsers())
     }
 
-    function activate(id: string){
+    function activate(id){
         const uri = `http://localhost:8080/users/`+id+'/activate'
         fetch(uri, {method: "POST"}).then(()=>getUsers())
     }
 
     getUsers();
+
+    let notificationActivate;
+    let notificationDeactivate;
 </script>
 
 <input bind:value={login} class="border bg-gray-400" oninput="{getUsersByLogin2}">
@@ -49,14 +52,23 @@
                 {user.type}<br>
             </p>
             <div class="flex">
-                <input type="button" value="update" class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
+                <input type="button" value="update" onclick={()=>navigate("/updateUser", user)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
                 <input type="button" value="details" onclick={()=>navigate("/userDetails", user)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
                 {#if user.active}
-                    <input type="button" value="deactivate" onclick={()=>deactivate(user.id)} class="basis-1/2 border-black border-2 border-solid bg-red-300 p-2 hover:bg-red-500">
+                    <input type="button" value="deactivate" onclick={()=>{
+                        notificationDeactivate.setAccept(()=>{deactivate(user.id)});
+                        notificationDeactivate.show();
+                    }} class="basis-1/2 border-black border-2 border-solid bg-red-300 p-2 hover:bg-red-500">
                 {:else}
-                    <input type="button" value="activate" onclick={()=>activate(user.id)} class="basis-1/2 border-black border-2 border-solid bg-green-300 p-2 hover:bg-green-500">
+                    <input type="button" value="activate" onclick={()=>{
+                        notificationActivate.setAccept(()=>{activate(user.id)});
+                        notificationActivate.show()
+                    }} class="basis-1/2 border-black border-2 border-solid bg-green-300 p-2 hover:bg-green-500">
                 {/if}
             </div>
         </div>
     {/each}
 </div>
+
+<ConfirmNotification bind:this = {notificationActivate} message="Are you sure?" />
+<ConfirmNotification bind:this = {notificationDeactivate} message="Are you sure?"/>

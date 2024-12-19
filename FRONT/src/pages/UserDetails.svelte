@@ -1,35 +1,33 @@
 <script>
     //TODO update view on rent finish
-    import { navigationProps } from '../stores/router.js';
+    import {getGlobalProps} from '../stores/router.svelte.js';
     import Rent from "../components/Rent.svelte";
-    import Notification from "../components/Notification.svelte";
 
-    let user = $state();
-    navigationProps.subscribe(value => (user = value));
+    let user = getGlobalProps();
 
     let currentRents = $state([])
     let endedRents = $state([])
 
-    function getCurrentRents(){
+    function getCurrentRents() {
         currentRents = []
-        const uri = `http://localhost:8080/rents/current/users/`+ user.id
+        const uri = `http://localhost:8080/rents/current/users/` + user.id
         fetch(uri, {method: "GET"})
-            .then(response=>{
+            .then(response => {
                 response.json().then(result => currentRents = result)
             })
     }
 
-    function getEndedRents(){
+    function getEndedRents() {
         currentRents = []
-        const uri = `http://localhost:8080/rents/ended/users/`+ user.id
+        const uri = `http://localhost:8080/rents/ended/users/` + user.id
         fetch(uri, {method: "GET"})
-            .then(response=>{
+            .then(response => {
                 response.json().then(result => endedRents = result)
             })
     }
 
 
-    function loadData(){
+    function loadData() {
         getEndedRents();
         getCurrentRents();
     }
@@ -46,7 +44,7 @@
     <h1>Current rents:</h1>
     {#if currentRents.length > 0}
         {#each currentRents as rent}
-            <Rent {rent} ></Rent>
+            <Rent {rent}></Rent>
         {/each}
     {:else}
         <p> Nothing to show </p>
@@ -56,9 +54,9 @@
     <h1>Past rents:</h1>
     {#if endedRents.length > 0}
         {#each endedRents as rent}
-            <Rent {rent} ></Rent>
+            <Rent {rent}></Rent>
         {/each}
     {:else}
-    <p> Nothing to show </p>
+        <p> Nothing to show </p>
     {/if}
 </div>

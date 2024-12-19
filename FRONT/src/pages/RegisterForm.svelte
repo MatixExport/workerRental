@@ -1,7 +1,8 @@
 <script lang="ts">
     import ValidationError from "../components/ValidationError.svelte";
     import type {CreateUser} from "../lib/Int";
-    import {navigate} from "../stores/router.js";
+    import {navigate} from "../stores/router.svelte.js";
+    import ConfirmNotification from "../components/ConfirmNotification.svelte";
 
     let user: CreateUser = $state({
         "login": "",
@@ -12,6 +13,7 @@
     let loginErrors = $state<String[]>([]);
     let passwordErrors = $state<String[]>([]);
     let userErrors = $state<String[]>([]);
+    let confirmNotification;
 
     function validate(){
         userErrors=[]
@@ -80,10 +82,14 @@
             {#each userErrors as error}
                 <ValidationError message={error}></ValidationError>
             {/each}
-            <input type="button" onclick={submit} value="Register"
+            <input type="button" onclick={confirmNotification.show} value="Register"
                    class="w-full mr-0.5 mt-10 align-middle text-center rounded bg-red-500 py-3 px-6 text-xs uppercase
                    text-white shadow-md shadow-red-500/20 transition-all hover:shadow-red-600/40">
         </form>
     </div>
 </div>
+
+
+<ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{submit();}} />
+
 
