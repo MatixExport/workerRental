@@ -21,12 +21,12 @@ public class MongoSchema {
                           "login":{
                               "bsonType": "string",
                               "minLength": 3,
-                              "maxLength": 20
+                              "maxLength": 30
                           },
                          "password": {
-                          "bsonType": "string",
-                          "minLength": 3,
-                          "maxLength": 20
+                              "bsonType": "string",
+                              "minLength": 3,
+                              "maxLength": 30
                          },
                       }
                   }
@@ -60,7 +60,7 @@ public class MongoSchema {
                                         "login": {
                                           "bsonType": "string",
                                           "minLength": 3,
-                                          "maxLength": 20
+                                          "maxLength": 30
                                         }
                                       }
                                     },
@@ -73,7 +73,7 @@ public class MongoSchema {
                                           "name": {
                                             "bsonType": "string",
                                             "minLength": 3,
-                                            "maxLength": 20
+                                            "maxLength": 30
                                           },
                                           "isRented": {
                                             "bsonType": "int",
@@ -98,7 +98,7 @@ public class MongoSchema {
                       "name":{
                           "bsonType": "string",
                            "minLength": 3,
-                           "maxLength": 20
+                           "maxLength": 30
                       },
                       "isRented":{
                          "bsonType": "int",
