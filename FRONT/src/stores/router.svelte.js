@@ -22,3 +22,5 @@ export function getGlobalProps(){
 export function getCurrentRoute(){
     return currentRoute
 }
+
+currentRoute = window.location.pathname;

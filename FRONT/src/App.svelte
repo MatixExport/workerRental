@@ -7,25 +7,14 @@
 
   const routes = {
       "/":UsersList,
-      "/register":RegisterForm
+      "/register":RegisterForm,
+      "/createRent":CreateRent,
+      "/userDetails":UserDetails
   }
 
-  let RouteComponent = $state(UsersList);
+  let RouteComponent = $state();
   $effect(()=>{
-      switch (getCurrentRoute()){
-          case "/":
-              RouteComponent = UsersList
-              break;
-          case "/register":
-              RouteComponent = RegisterForm
-              break;
-          case "/createRent":
-              RouteComponent = CreateRent
-              break;
-          case "/userDetails":
-              RouteComponent = UserDetails
-              break;
-      }
+      RouteComponent = routes[getCurrentRoute()];
   })
 
 
