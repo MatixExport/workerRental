@@ -30,7 +30,7 @@
     function submit(){
         validate()
         if(loginErrors.length===0 && passwordErrors.length===0){
-            const uri = `http://localhost:8080/client`;
+            const uri = `http://localhost:8080/clients`;
             fetch(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},

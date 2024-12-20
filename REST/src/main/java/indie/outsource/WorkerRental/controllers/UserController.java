@@ -48,7 +48,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin
     @GetMapping("/users/loginContains/{login}")
     public ResponseEntity<List<UserDTO>> getUserByLoginContains(@PathVariable String login) {
         return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());
@@ -64,7 +63,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/client")
+    @PostMapping("/clients")
     public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
         user.setType(USERTYPE.CLIENT);
         return addUser(user);

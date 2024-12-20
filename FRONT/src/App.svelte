@@ -4,12 +4,14 @@
     import UserDetails from "./pages/UserDetails.svelte";
     import CreateRent from "./pages/CreateRent.svelte";
     import {navigate, getCurrentRoute} from "./stores/router.svelte.js";
+    import UpdateUserForm from "./pages/UpdateUserForm.svelte";
 
   const routes = {
       "/":UsersList,
       "/register":RegisterForm,
       "/createRent":CreateRent,
-      "/userDetails":UserDetails
+      "/userDetails":UserDetails,
+      "/updateUser":UpdateUserForm
   }
 
   let RouteComponent = $state();
