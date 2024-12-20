@@ -1,5 +1,4 @@
 <script>
-    //TODO update view on rent finish
     import {getGlobalProps} from '../stores/router.svelte.js';
     import Rent from "../components/Rent.svelte";
 
@@ -44,7 +43,7 @@
     <h1>Current rents:</h1>
     {#if currentRents.length > 0}
         {#each currentRents as rent}
-            <Rent {rent}></Rent>
+            <Rent {rent} onFinish={()=>{loadData()}}></Rent>
         {/each}
     {:else}
         <p> Nothing to show </p>
