@@ -1,0 +1,1 @@
+<h1 class="text-9xl p-10">404 not found</h1>
