@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -49,9 +50,11 @@ public class UserService {
     }
 
     public User updateUser(User user){
-        if (userRepository.findById(user.getId()).isEmpty()){
+        Optional<User> getUser = userRepository.findById(user.getId());
+        if (getUser.isEmpty()){
             throw new ResourceNotFoundException("User with id " + user.getId() + " not found");
         }
+        user.setActive(getUser.get().isActive());
         return userRepository.save(user);
     }
 

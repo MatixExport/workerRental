@@ -1,6 +1,6 @@
 <script lang="ts">
     import ValidationError from "../components/ValidationError.svelte";
-    import {navigate, getGlobalProps} from "../stores/router.svelte.js";
+    import {getGlobalProps} from "../stores/router.svelte.js";
     import Notification from "../components/Notification.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
 
@@ -21,7 +21,7 @@
     function submit(){
         validate()
         if(passwordErrors.length===0){
-            const uri = `http://localhost:8080/client`;
+            const uri = `http://localhost:8080/users/${user.id}`;
             fetch(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
@@ -30,7 +30,7 @@
                 response =>{
                     if(response.ok){
                         user.password=""
-                        user.login=""
+                        notification = "User updated"
                     }
                     else if(response.status === 404){
                         notification = "User does not exist"
@@ -48,8 +48,9 @@
 </script>
 <div class="w-full h-full absolute bg-black bg-opacity-50 top-0 left-0">
     <div class="w-1/2 h-1/2 top-1/4 left-1/4 absolute bg-white border-red-500 p-20 rounded-2xl">
+        <p>Updating user: {user.login}</p>
         <form oninput={validate} >
-            <label for="password" class="text-blue-500 mb-2">Password:</label>
+            <label for="password" class="text-blue-500 mb-2">New password:</label>
             <input name="password" type="password" autocomplete="current-password"
                    bind:value={user.password}
                    class:bg-red-500={passwordErrors.length>0} class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md"
@@ -57,7 +58,7 @@
             {#each passwordErrors as error}
                 <ValidationError message={error}/>
             {/each}
-            <input type="button" onclick={confirmNotification.show} value="Register"
+            <input type="button" onclick={confirmNotification.show} value="Update"
                    class="w-full mr-0.5 mt-10 align-middle text-center rounded bg-red-500 py-3 px-6 text-xs uppercase
                    text-white shadow-md shadow-red-500/20 transition-all hover:shadow-red-600/40">
         </form>
