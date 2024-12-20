@@ -77,24 +77,35 @@
     getUsers();
     getWorkers();
 </script>
+<div class="w-1/2 h-1/2 top-1/5 left-1/4 absolute bg-white border-red-500 p-20 rounded-2xl">
+    <h1 class="text-5xl text-green-600 mb-2">Create rent</h1>
+    <form class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
 
-<form>
-    <select bind:value={selectedUser} class="border">
-        {#each users as user}
-            <option value="{user}">{user.login}</option>
-        {/each}
-    </select>
-    <select bind:value={selectedWorker} class="border">
-        {#each workers as worker}
-            <option value="{worker}">{worker.id}</option>
-        {/each}
-    </select>
-    <input type="datetime-local" bind:value={startDate} class="border">
-    <input type="button" onclick={confirmNotification.show} value="Create rent" class="border hover:bg-gray-400">
-</form>
-{#each errors as error}
-    <ValidationError message={error}/>
-{/each}
+        <label for="user" class="text-green-600 mb-2 text-2xl">User:</label>
+        <select name="user" bind:value={selectedUser}
+                class="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+            {#each users as user}
+                <option value="{user}">{user.login}</option>
+            {/each}
+        </select>
+
+        <label for="worker" class="text-green-600 mb-2 text-2xl">Worker:</label>
+        <select name="worker" bind:value={selectedWorker} class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+            {#each workers as worker}
+                <option value="{worker}">{worker.id}</option>
+            {/each}
+        </select>
+
+        <label for="date" class="text-green-600 mb-2 text-2xl">Start date:</label>
+        <input name="date" type="datetime-local" bind:value={startDate} class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+        <input type="button" onclick={confirmNotification.show} value="Create rent" class="px-4 w-full py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+
+    </form>
+</div>
+    {#each errors as error}
+        <ValidationError message={error}/>
+    {/each}
+
 
 <ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{createRent();}}/>
 

@@ -15,23 +15,25 @@
     }
     getRents()
 </script>
-<div class="rounded border bg-gray-100 p-2 m-2">
-    <h1>Current rents:</h1>
-    {#if currentRents.length > 0}
-        {#each currentRents as rent}
-            <Rent {rent} onFinish={()=>{getRents()}}></Rent>
-        {/each}
-    {:else}
-        <p> Nothing to show </p>
-    {/if}
-</div>
-<div class="rounded border bg-gray-100 p-2 m-2">
-    <h1>Past rents:</h1>
-    {#if endedRents.length > 0}
-        {#each endedRents as rent}
-            <Rent {rent}></Rent>
-        {/each}
-    {:else}
-        <p> Nothing to show </p>
-    {/if}
+<div class="p-8 bg-gray-100 min-h-screen">
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Current Rents</h2>
+        {#if currentRents.length > 0}
+            {#each currentRents as rent}
+                <Rent {rent} onFinish={()=>{getRents()}}></Rent>
+            {/each}
+        {:else}
+            <p> Nothing to show </p>
+        {/if}
+    </div>
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Past Rents</h2>
+        {#if endedRents.length > 0}
+            {#each endedRents as rent}
+                <Rent {rent}></Rent>
+            {/each}
+        {:else}
+            <p> Nothing to show </p>
+        {/if}
+    </div>
 </div>

@@ -67,38 +67,41 @@
 
     loadData()
 </script>
-
-{#if notification.length>0}
-    <Notification message="User not found" callback={()=>{navigate("/")}}></Notification>
-{:else}
-    {#if user===null}
-        <p>Loading</p>
+<div class="p-6 bg-gray-100 min-h-screen">
+    {#if notification.length>0}
+        <Notification message="User not found" callback={()=>{navigate("/")}}></Notification>
     {:else}
-        <h1>{user.login}</h1>
-        <h3>Active: {user.active}</h3>
-        <h3>Id: {user.id}</h3>
-        <h3>Type: {user.type}</h3>
-
-
-        <div class="rounded border bg-gray-100 p-2 m-2">
-            <h1>Current rents:</h1>
-            {#if currentRents.length > 0}
-                {#each currentRents as rent}
-                    <Rent {rent} onFinish={()=>{loadData()}}></Rent>
-                {/each}
-            {:else}
-                <p> Nothing to show </p>
+        {#if user===null}
+            <p>Loading</p>
+        {:else}
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">{user.login}</h2>
+                <div class="grid gap-2 text-sm text-gray-700">
+                    <p><span class="font-semibold">Active:</span> {user.active}</p>
+                    <p><span class="font-semibold">ID:</span> {user.id}</p>
+                    <p><span class="font-semibold">Type:</span> {user.type}</p>
+                </div>
+            </div>
+            <div class="rounded border bg-gray-100 p-2 m-2">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Current Rents</h2>
+                {#if currentRents.length > 0}
+                    {#each currentRents as rent}
+                        <Rent {rent} onFinish={()=>{loadData()}}></Rent>
+                    {/each}
+                {:else}
+                    <p> Nothing to show </p>
+                {/if}
+            </div>
+            <div class="rounded border bg-gray-100 p-2 m-2">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Past Rents</h2>
+                {#if endedRents.length > 0}
+                    {#each endedRents as rent}
+                        <Rent {rent}></Rent>
+                    {/each}
+                {:else}
+                    <p> Nothing to show </p>
+                {/if}
+            </div>
             {/if}
-        </div>
-        <div class="rounded border bg-gray-100 p-2 m-2">
-            <h1>Past rents:</h1>
-            {#if endedRents.length > 0}
-                {#each endedRents as rent}
-                    <Rent {rent}></Rent>
-                {/each}
-            {:else}
-                <p> Nothing to show </p>
-            {/if}
-        </div>
-        {/if}
-{/if}
+    {/if}
+</div>

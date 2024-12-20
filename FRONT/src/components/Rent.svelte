@@ -12,19 +12,22 @@
     }
 </script>
 
-<p class="border bg-gray-400 p-2 rounded">
-    id: {rent.id}<br>
-    workerId: {rent.workerID}<br>
-    userId: {rent.userID}<br>
-    start date: {rent.startDate}<br>
-    {#if rent.endDate != null}
-        end date: {rent.endDate}<br>
-    {/if}
+<div class="bg-white p-6 rounded-lg shadow-lg m-6">
+    <div class="grid gap-2 text-sm text-gray-700">
+        <p><span class="font-semibold">ID:</span>{rent.id}</p>
+        <p><span class="font-semibold">workerId:</span>{rent.workerID}</p>
+        <p><span class="font-semibold">userId:</span>{rent.userID}</p>
+        <p><span class="font-semibold">start date:</span>{rent.startDate}</p>
+            {#if rent.endDate != null}
+                <p><span class="font-semibold">end date:</span>{rent.endDate}</p>
+            {/if}
 
-    {#if rent.endDate === null}
-        <input type="button" value="finish" onclick={confirmNotification.show} class="basis-1/2 border-black border-2 border-solid bg-red-300 p-2 hover:bg-red-500">
-    {/if}
-</p>
+            {#if rent.endDate === null}
+                <input type="button" value="Finish" onclick={confirmNotification.show} class="mt-4 w-full px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition">
+            {/if}
+    </div>
+</div>
+
 
 
 <ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{finishRent(rent.id);}}/>
