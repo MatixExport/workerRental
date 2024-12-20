@@ -3,12 +3,12 @@
     import {getCurrentRoute, navigate} from "../stores/router.svelte.js";
     import Notification from "../components/Notification.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
+    import {notify} from "../stores/notifier.svelte";
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
     getUser()
     let notification = $state("")
-    let finalNotification = $state("")
     let passwordErrors = $state<String[]>([]);
     let confirmNotification
 
@@ -31,13 +31,13 @@
                     response.json().then(result => user = result)
                 }
                 else if(response.status === 400){
-                    finalNotification = "Error occurred: invalid uuid"
+                    notification = "Error occurred: invalid uuid"
                 }
                 else if(response.status === 404){
-                    finalNotification = "User not found"
+                    notification = "User not found"
                 }
                 else{
-                    finalNotification = "Unknown error occurred"
+                    notification = "Unknown error occurred"
                 }
             })
     }
@@ -63,15 +63,14 @@
                 response =>{
                     if(response.ok){
                         user.password=""
-                        notification = "User updated"
+                        notify("User updated")
                     }
                     else if(response.status === 404){
-                        notification = "User does not exist"
+                        notify("User does not exist")
                     }
                     else{
-                        notification = "Unknown error occurred"
+                        notify("Unknown error occurred")
                     }
-
                 }
             )
         }
@@ -79,8 +78,8 @@
 
 
 </script>
-{#if finalNotification.length>0}
-    <Notification message={finalNotification} callback={()=>{navigate("/")}}></Notification>
+{#if notification.length>0}
+    <Notification message={notification} callback={()=>{navigate("/")}}></Notification>
 {:else}
     {#if user===null}
         <p>Loading</p>
@@ -102,11 +101,6 @@
                    text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-blue-600/60">
             </form>
         </div>
-
-    {#if notification.length > 0}
-        <Notification message={notification} callback={()=>{notification=""}}/>
-    {/if}
-
 
     <ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{submit();}} />
     {/if}

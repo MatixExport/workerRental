@@ -7,8 +7,10 @@
     import UpdateUserForm from "./pages/UpdateUserForm.svelte";
     import RentList from "./pages/RentList.svelte";
     import NotFound from "./pages/NotFound.svelte";
+    import Notification from "./components/Notification.svelte";
+    import {getNotification} from "./stores/notifier.svelte.js";
 
-  const routes = [
+    const routes = [
       { pattern: /^\/$/, component:UsersList },
       { pattern: /^\/register$/ , component: RegisterForm },
       { pattern: /^\/createRent$/ , component: CreateRent},
@@ -16,15 +18,19 @@
       { pattern: /^\/updateUser@[0-9a-z-]{36}$/ , component: UpdateUserForm},
       { pattern: /^\/rentList$/ , component: RentList},
 
-  ]
+    ]
 
-
-  let RouteComponent = $state();
-  $effect(()=>{
+    let RouteComponent = $state();
+    $effect(()=>{
       RouteComponent = routes[getCurrentRoute()];
       const match = routes.find(route => route.pattern.test(getCurrentRoute()));
       RouteComponent = match ? match.component : NotFound;
-  })
+    })
+
+    let notification = $state("")
+    $effect(()=>{
+        notification = getNotification()
+    })
 
 
 </script>
@@ -43,12 +49,12 @@
         <li>
             <a href="/rentList" onclick={(e) =>{e.preventDefault(); navigate("/rentList") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Rent list</a>
         </li>
-
-
-
     </ul>
 </nav>
 <main>
-    <RouteComponent/>
 
+    <RouteComponent/>
+    {#if notification.length>0}
+        <Notification message={notification} callback={()=>{notification=''}}/>
+    {/if}
 </main>

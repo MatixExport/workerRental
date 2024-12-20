@@ -1,5 +1,6 @@
 <script>
     import Rent from "../components/Rent.svelte";
+    import {notify} from "../stores/notifier.svelte.js";
 
     let allRents = $state([])
     let currentRents = $derived(allRents.filter((rent)=>{return rent.endDate == null}))
@@ -10,7 +11,12 @@
         const uri = `http://localhost:8080/rents`
         fetch(uri, {method: "GET"})
             .then(response => {
-                response.json().then(result => allRents = result)
+                if(response.status === 200){
+                    response.json().then(result =>allRents = result)
+                }
+                else {
+                    notify("Backend error")
+                }
             })
     }
     getRents()

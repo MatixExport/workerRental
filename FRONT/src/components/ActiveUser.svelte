@@ -1,11 +1,21 @@
 <script>
+    import {notify} from "../stores/notifier.svelte.js";
     import {navigate} from "../stores/router.svelte.js";
     import ConfirmNotification from "./ConfirmNotification.svelte";
     let {user, getUsers} = $props()
 
     function deactivate(id){
         const uri = `http://localhost:8080/users/${id}/deactivate`
-        fetch(uri, {method: "POST"}).then(()=>getUsers())
+        fetch(uri, {method: "POST"}).then(
+            result =>{
+                if(result.status === 200){
+                    getUsers()
+                    notify("User deactivated")
+                }
+                else{
+                    notify("Error occurred")
+                }
+            })
     }
 
     let notification;

@@ -2,6 +2,7 @@
     import ValidationError from "../components/ValidationError.svelte";
     import type {CreateUser} from "../lib/Int";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
+    import {notify} from "../stores/notifier.svelte";
 
     let user: CreateUser = $state({
         "login": "",
@@ -11,11 +12,9 @@
 
     let loginErrors = $state<String[]>([]);
     let passwordErrors = $state<String[]>([]);
-    let userErrors = $state<String[]>([]);
     let confirmNotification;
 
     function validate(){
-        userErrors=[]
         loginErrors = []
         passwordErrors = []
         if(user.login.length < 3){
@@ -39,13 +38,13 @@
                     if(response.ok){
                         user.password=""
                         user.login=""
-                        userErrors.push("registered")
+                        notify("registered")
                     }
                     else if(response.status === 409){
-                        userErrors.push("username already exists")
+                        notify("username already exists")
                     }
                     else{
-                        userErrors.push("Unknown error occurred")
+                        notify("Unknown error occurred")
                     }
 
                 }
@@ -77,10 +76,6 @@
                 <ValidationError message={error}/>
             {/each}
 
-
-            {#each userErrors as error}
-                <ValidationError message={error}></ValidationError>
-            {/each}
             <input type="button" onclick={confirmNotification.show} value="Register"
                    class="w-full mr-0.5 mt-10 align-middle text-center rounded bg-blue-500 py-3 px-6 text-xs uppercase
                    text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-blue-600/60">
