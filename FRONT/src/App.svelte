@@ -29,12 +29,26 @@
 
 </script>
 
-<main>
-    <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") }} class="border p-2 m-2 hover:bg-gray-400">register</a>
-    <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="border p-2 m-2 hover:bg-gray-400">home</a>
-    <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="border p-2 m-2 hover:bg-gray-400">createRent</a>
-    <a href="/rentList" onclick={(e) =>{e.preventDefault(); navigate("/rentList") } } class="border p-2 m-2 hover:bg-gray-400">rentList</a>
+<nav class="bg-gray-100 border-b border-gray-300 shadow-sm">
+    <ul class="flex space-x-4 p-4">
+        <li>
+            <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") }} class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Register</a>
+        </li>
+        <li>
+            <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Users</a>
+        </li>
+        <li>
+            <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Create rent</a>
+        </li>
+        <li>
+            <a href="/rentList" onclick={(e) =>{e.preventDefault(); navigate("/rentList") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Rent list</a>
+        </li>
 
+
+
+    </ul>
+</nav>
+<main>
     <RouteComponent/>
 
 </main>
