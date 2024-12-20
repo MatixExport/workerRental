@@ -1,29 +1,37 @@
 <script>
-    import {navigate} from "../stores/router.svelte";
-    import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import ActiveUser from "../components/ActiveUser.svelte";
     import InactiveUser from "../components/InactiveUser.svelte";
+    import {notify} from "../stores/notifier.svelte.js";
     let users = $state([])
 
     let login = $state("");
 
     function getUsers(){
         const uri = `http://localhost:8080/users`
-        fetch(uri, {method: "GET"})
-            .then(response=>{
+        fetch(uri, {method: "GET"}).then(response => {
+            if(response.status === 200){
                 response.json().then(result => users = result)
-            })
+            }
+            else {
+                notify("Backend error")
+            }
+        })
     }
 
-    function getUsersByLogin2(){
+    function getUsersByLogin(){
         if(login.length===0){
             getUsers()
         }
         const uri = `http://localhost:8080/users/loginContains/${login}`
         fetch(uri, {method: "GET"})
-            .then(response=>{
-                response.json().then(result => users = result)
-                })
+            .then(response => {
+                if(response.status === 200){
+                    response.json().then(result => users = result)
+                }
+                else {
+                    notify("Backend error")
+                }
+            })
     }
     getUsers();
 
@@ -34,7 +42,7 @@
         placeholder="Filter users..."
         class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
         bind:value={login}
-        oninput="{getUsersByLogin2}">
+        oninput="{getUsersByLogin}">
 </div>
 
 

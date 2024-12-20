@@ -2,6 +2,7 @@
     import ValidationError from "../components/ValidationError.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import Notification from "../components/Notification.svelte";
+    import {notify} from "../stores/notifier.svelte.js";
 
     let users= $state()
     let workers= $state()
@@ -10,22 +11,30 @@
     let startDate = $state(null)
     let errors = $state([])
     let confirmNotification
-    let notification = $state("")
 
     function getUsers(){
         const uri = `http://localhost:8080/users`
         fetch(uri, {method: "GET"})
-            .then(response=>{
+            .then(response => {
+            if(response.status === 200){
                 response.json().then(result => users = result)
-            })
+            }
+            else {
+                notify("Backend error")
+            }
+        })
     }
 
     function getWorkers(){
         const uri = `http://localhost:8080/workers`
-        fetch(uri, {method: "GET"})
-            .then(response=>{
+        fetch(uri, {method: "GET"}).then(response => {
+            if(response.status === 200){
                 response.json().then(result => workers = result)
-            })
+            }
+            else {
+                notify("Backend error")
+            }
+        })
     }
 
     function validate(){
@@ -60,15 +69,15 @@
                     selectedWorker = null;
                     selectedUser = null;
                     startDate = null;
+                    notify("Rent created")
 
-                    notification = "Rent created"
                 } else if (response.status === 409) {
-                    notification = "Worker occupied"
+                    notify("Worker occupied")
                 } else if (response.status === 403) {
-                    notification = "User is inactive"
+                    notify("User is inactive")
                 }
                 else{
-                    notification = `Unknown error of status code: ${response.status}`
+                    notify(`Unknown error of status code: ${response.status}`)
                 }
             });
 
@@ -108,7 +117,3 @@
 
 
 <ConfirmNotification bind:this={confirmNotification} message="Are you sure?" accept={()=>{createRent();}}/>
-
-{#if notification.length > 0}
-    <Notification message={notification} callback={()=>{notification=""}}/>
-{/if}

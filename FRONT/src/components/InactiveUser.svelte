@@ -1,11 +1,21 @@
 <script>
     import {navigate} from "../stores/router.svelte.js";
     import ConfirmNotification from "./ConfirmNotification.svelte";
+    import {notify} from "../stores/notifier.svelte.js";
 
     let {user, getUsers} = $props()
     function activate(id){
         const uri = `http://localhost:8080/users/${id}/activate`
-        fetch(uri, {method: "POST"}).then(()=>getUsers())
+        fetch(uri, {method: "POST"}).then(
+            result =>{
+            if(result.status === 200){
+                getUsers()
+                notify("User activated")
+            }
+            else{
+                notify("Error occurred")
+            }
+        })
     }
 
     let notification;
