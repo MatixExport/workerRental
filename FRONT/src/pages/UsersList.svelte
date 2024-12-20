@@ -25,12 +25,12 @@
     }
 
     function deactivate(id){
-        const uri = `http://localhost:8080/users/`+id+'/deactivate'
+        const uri = `http://localhost:8080/users/${id}/deactivate`
         fetch(uri, {method: "POST"}).then(()=>getUsers())
     }
 
     function activate(id){
-        const uri = `http://localhost:8080/users/`+id+'/activate'
+        const uri = `http://localhost:8080/users/${id}/activate`
         fetch(uri, {method: "POST"}).then(()=>getUsers())
     }
 
@@ -52,8 +52,8 @@
                 {user.type}<br>
             </p>
             <div class="flex">
-                <input type="button" value="update" onclick={()=>navigate("/updateUser", user)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
-                <input type="button" value="details" onclick={()=>navigate("/userDetails", user)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
+                <input type="button" value="update" onclick={()=>navigate(`/updateUser@${user.id}`)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
+                <input type="button" value="details" onclick={()=>navigate(`/userDetails@${user.id}`)} class="basis-1/2 border-black border-2 border-solid bg-green-300 hover:bg-green-500">
                 {#if user.active}
                     <input type="button" value="deactivate" onclick={()=>{
                         notificationDeactivate.setAccept(()=>{deactivate(user.id)});

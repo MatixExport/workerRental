@@ -6,19 +6,24 @@
     import {navigate, getCurrentRoute} from "./stores/router.svelte.js";
     import UpdateUserForm from "./pages/UpdateUserForm.svelte";
     import RentList from "./pages/RentList.svelte";
+    import NotFound from "./pages/NotFound.svelte";
 
-  const routes = {
-      "/":UsersList,
-      "/register":RegisterForm,
-      "/createRent":CreateRent,
-      "/userDetails":UserDetails,
-      "/updateUser":UpdateUserForm,
-      "/rentList":RentList
-  }
+  const routes = [
+      { pattern: /^\/$/, component:UsersList },
+      { pattern: /^\/register$/ , component: RegisterForm },
+      { pattern: /^\/createRent$/ , component: CreateRent},
+      { pattern: /^\/userDetails@[0-9a-z-]{36}$/ , component: UserDetails},
+      { pattern: /^\/updateUser@[0-9a-z-]{36}$/ , component: UpdateUserForm},
+      { pattern: /^\/rentList$/ , component: RentList},
+
+  ]
+
 
   let RouteComponent = $state();
   $effect(()=>{
       RouteComponent = routes[getCurrentRoute()];
+      const match = routes.find(route => route.pattern.test(getCurrentRoute()));
+      RouteComponent = match ? match.component : NotFound;
   })
 
 
