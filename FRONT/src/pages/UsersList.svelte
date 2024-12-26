@@ -2,7 +2,7 @@
     import ActiveUser from "../components/ActiveUser.svelte";
     import InactiveUser from "../components/InactiveUser.svelte";
     import {notify} from "../stores/notifier.svelte.js";
-        import {SERVER_URI} from "../config/config"
+    import {SERVER_URI} from "../config/config"
 
     let users = $state([])
 

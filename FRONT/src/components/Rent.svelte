@@ -1,12 +1,13 @@
 <script>
     import ConfirmNotification from "./ConfirmNotification.svelte";
+    import {SERVER_URI} from "../config/config"
 
     let { rent, onFinish= ()=>{} } = $props();
 
     let confirmNotification
 
     async function finishRent(rentId){
-        const uri = `http://localhost:8080/rents/`+rentId+'/finish'
+        const uri = `${SERVER_URI}/rents/`+rentId+'/finish'
         await fetch(uri, {method: "POST"})
         onFinish();
     }

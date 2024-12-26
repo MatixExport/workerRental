@@ -1,1 +1,1 @@
-export const SERVER_URI = "http://localhost:8080";
+export const SERVER_URI = "http://192.168.1.133:8080";
