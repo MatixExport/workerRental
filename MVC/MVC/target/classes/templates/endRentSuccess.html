@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{base}">
+
+<title layout:fragment="title" th:text="#{navigation.account}">Register</title>
+
+<ol layout:fragment="breadcrumbs" class="breadcrumbs breadcrumb mb-0">
+  <li class="breadcrumb-item" >
+    <a th:href="@{/}" th:text="#{navigation.home}">Home</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a th:href="@{/rent/finish}" th:text="#{navigation.finish_rent}">Register</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page" th:text="#{navigation.currentPage}" >Current page</li>
+</ol>
+
+<div class="row flex-grow-1 content container" layout:fragment="content">
+  <p th:text="#{forms.end_rent.success}"></p>
+</div>
+
+</html>

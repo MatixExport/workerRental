@@ -32,25 +32,59 @@
         notification = getNotification()
     })
 
+    const navbarRoutes = [
+        {
+            display:"Register",
+            route:"/register"
+        },
+        {
+            display:"Users",
+            route:"/"
+        },
+        {
+            display:"Create rent",
+            route:"/createRent"
+        },
+        {
+            display:"Rent list",
+            route:"/rentList"
+        }
+    ]
+
+
+
 
 </script>
+<nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between">
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
 
-<nav class="bg-gray-100 border-b border-gray-300 shadow-sm">
-    <ul class="flex space-x-4 p-4">
-        <li>
-            <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") }} class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Register</a>
-        </li>
-        <li>
-            <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Users</a>
-        </li>
-        <li>
-            <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Create rent</a>
-        </li>
-        <li>
-            <a href="/rentList" onclick={(e) =>{e.preventDefault(); navigate("/rentList") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Rent list</a>
-        </li>
-    </ul>
-</nav>
+        </div>
+        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="hidden sm:ml-6 sm:block">
+            <div class="flex space-x-4">
+                {#each navbarRoutes as route}
+                    <a href={route['route']}  class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                        {route['display']}
+                    </a>
+                {/each}         
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="sm:hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+            {#each navbarRoutes as route}
+                <a href={route['route']}  class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                    {route['display']}
+                </a>
+            {/each}  
+      </div>
+    </div>
+  </nav>
 <main>
 
     <RouteComponent/>
