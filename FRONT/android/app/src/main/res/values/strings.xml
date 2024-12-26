@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">WorkerRental</string>
+    <string name="title_activity_main">WorkerRental</string>
+    <string name="package_name">rental.worker</string>
+    <string name="custom_url_scheme">rental.worker</string>
+</resources>
