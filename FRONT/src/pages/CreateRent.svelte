@@ -3,6 +3,7 @@
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import Notification from "../components/Notification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
+    import {SERVER_URI} from "../config/config"
 
     let users= $state()
     let workers= $state()
@@ -13,7 +14,7 @@
     let confirmNotification
 
     function getUsers(){
-        const uri = `http://localhost:8080/users`
+        const uri = `${SERVER_URI}/users`
         fetch(uri, {method: "GET"})
             .then(response => {
             if(response.status === 200){
@@ -26,7 +27,7 @@
     }
 
     function getWorkers(){
-        const uri = `http://localhost:8080/workers`
+        const uri = `${SERVER_URI}/workers`
         fetch(uri, {method: "GET"}).then(response => {
             if(response.status === 200){
                 response.json().then(result => workers = result)
@@ -58,7 +59,7 @@
         if(!validate()){
             return
         }
-        const uri = `http://localhost:8080/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
+        const uri = `${SERVER_URI}/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
         fetch(uri, {
             method: "POST",
             headers: {'Content-Type': 'application/json;charset=UTF-8'},
@@ -86,7 +87,7 @@
     getUsers();
     getWorkers();
 </script>
-<div class="w-1/2 h-1/2 top-1/5 left-1/4 absolute bg-white border-red-500 p-20 rounded-2xl">
+<div class="w-10/12 md:w-1/2 h-1/2 top-1/5 md:left-1/4 absolute bg-white border-red-500 p-20 rounded-2xl">
     <h1 class="text-5xl text-green-600 mb-2">Create rent</h1>
     <form class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
 

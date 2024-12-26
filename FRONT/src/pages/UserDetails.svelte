@@ -3,6 +3,7 @@
     import Rent from "../components/Rent.svelte";
     import Notification from "../components/Notification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
+    import {SERVER_URI} from "../config/config"
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
@@ -24,7 +25,7 @@
     }
 
     function getUser(){
-        const uri = `http://localhost:8080/users/${id}`
+        const uri = `${SERVER_URI}/users/${id}`
         fetch(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
@@ -44,7 +45,7 @@
 
     function getCurrentRents() {
         currentRents = []
-        const uri = `http://localhost:8080/rents/current/users/${id}`
+        const uri = `${SERVER_URI}/rents/current/users/${id}`
         fetch(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
@@ -58,7 +59,7 @@
 
     function getEndedRents() {
         currentRents = []
-        const uri = `http://localhost:8080/rents/ended/users/${id}`
+        const uri = `${SERVER_URI}/rents/ended/users/${id}`
         fetch(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){

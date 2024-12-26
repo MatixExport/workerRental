@@ -4,6 +4,7 @@
     import Notification from "../components/Notification.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte";
+    import {SERVER_URI} from "../config/config"
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
@@ -24,7 +25,7 @@
     }
 
     function getUser(){
-        const uri = `http://localhost:8080/users/${id}`
+        const uri = `${SERVER_URI}/users/${id}`
         fetch(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
@@ -54,7 +55,7 @@
     function submit(){
         validate()
         if(passwordErrors.length===0){
-            const uri = `http://localhost:8080/users/${id}`;
+            const uri = `${SERVER_URI}/users/${id}`;
             fetch(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
