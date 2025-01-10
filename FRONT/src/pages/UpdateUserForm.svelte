@@ -36,6 +36,9 @@
                 else if(response.status === 404){
                     notification = "User not found"
                 }
+                else if(response.status === 409){
+                    notification = "Password to long"
+                }
                 else{
                     notification = "Unknown error occurred"
                 }
@@ -47,7 +50,10 @@
     function validate(){
         passwordErrors = []
         if(user.password.length < 3){
-            passwordErrors.push("Password to short")
+            passwordErrors.push("Password too short")
+        }
+        else if(user.password.length > 30){
+            passwordErrors.push("Password too long")
         }
     }
 

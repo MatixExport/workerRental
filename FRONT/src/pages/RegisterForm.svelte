@@ -18,10 +18,16 @@
         loginErrors = []
         passwordErrors = []
         if(user.login.length < 3){
-            loginErrors.push("Username to short")
+            loginErrors.push("Username too short")
         }
         if(user.password.length < 3){
-            passwordErrors.push("Password to short")
+            passwordErrors.push("Password too short")
+        }
+        if(user.login.length > 30){
+            loginErrors.push("Username too long")
+        }
+        if(user.password.length > 30){
+            passwordErrors.push("Password too long")
         }
     }
 
