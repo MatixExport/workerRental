@@ -17,5 +17,8 @@ public abstract class User extends AbstractEntity {
     private String password;
     private boolean active;
 
+    public String getGroups(){
+        return null;
+    }
 
 }

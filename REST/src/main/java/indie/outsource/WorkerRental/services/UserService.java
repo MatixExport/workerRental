@@ -1,5 +1,6 @@
 package indie.outsource.WorkerRental.services;
 
+import indie.outsource.WorkerRental.AuthHelper;
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final AuthHelper authHelper;
 
     public User findById(UUID id) {
         if(userRepository.findById(id).isPresent()){
@@ -93,7 +95,7 @@ public class UserService {
         Optional<User> user = userRepository.findByLogin(login);
         if(user.isPresent()){
             if(passwordEncoder.matches(password, user.get().getPassword())){
-                return "logged in successfully";
+                return authHelper.generateJWT(user.get());
             }
         }
         throw new ResourceNotFoundException("User with login " + login + " not found");
