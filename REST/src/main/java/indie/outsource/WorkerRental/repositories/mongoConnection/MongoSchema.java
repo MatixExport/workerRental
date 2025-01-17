@@ -26,7 +26,7 @@ public class MongoSchema {
                          "password": {
                               "bsonType": "string",
                               "minLength": 3,
-                              "maxLength": 30
+                              "maxLength": 300
                          },
                       }
                   }

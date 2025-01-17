@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -41,10 +43,12 @@ public class MongoInitializer implements CommandLineRunner {
         workerRepository.deleteAll();
         userRepository.deleteAll();
 
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        String password = passwordEncoder.encode("ZAQ!2wsx");
 //        User user = new User("User","k1234567",true);
-        User client = new Client("Client","k1234567",true);
-        User admin = new Admin("Admin","k1234567",true);
-        User manager = new Manager("Manager","k1234567",true);
+        User client = new Client("Client",password,true);
+        User admin = new Admin("Admin",password,true);
+        User manager = new Manager("Manager",password,true);
 
 //        user = userRepository.save(user);
         client =userRepository.save(client);
