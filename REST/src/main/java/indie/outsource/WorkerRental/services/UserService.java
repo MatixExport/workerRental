@@ -6,6 +6,8 @@ import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +18,6 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
 
     public User findById(UUID id) {
         if(userRepository.findById(id).isPresent()){
@@ -43,6 +44,9 @@ public class UserService {
     }
 
     public User save(User user) {
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         if(userRepository.findByLogin(user.getLogin()).isPresent()){
             throw new UserAlreadyExistsException("User with login " + user.getLogin() + " already exists");
         }
@@ -50,6 +54,9 @@ public class UserService {
     }
 
     public User updateUser(User user){
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         Optional<User> getUser = userRepository.findById(user.getId());
         if (getUser.isEmpty()){
             throw new ResourceNotFoundException("User with id " + user.getId() + " not found");
@@ -80,4 +87,15 @@ public class UserService {
     }
 
 
+    public String login(String login, String password) {
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        Optional<User> user = userRepository.findByLogin(login);
+        if(user.isPresent()){
+            if(passwordEncoder.matches(password, user.get().getPassword())){
+                return "logged in successfully";
+            }
+        }
+        throw new ResourceNotFoundException("User with login " + login + " not found");
+    }
 }
