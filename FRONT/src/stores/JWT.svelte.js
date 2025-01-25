@@ -86,7 +86,7 @@ export function getToken(){
 
 export function logout(){
     token = ""
-    sessionStorage.removeItem("token")
+    localStorage.removeItem("token")
     admin = false
     client = false
     manager = false

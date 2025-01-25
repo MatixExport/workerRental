@@ -1,9 +1,8 @@
 <script >
     import ValidationError from "../components/ValidationError.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
-    import Notification from "../components/Notification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
-    import {fetchWithJwt} from "../stores/JWT.svelte.js";
+    import {fetchWithJwt, isAdmin, isManager, isClient} from "../stores/JWT.svelte.js";
 
     let users= $state()
     let workers= $state()
@@ -25,6 +24,7 @@
             }
         })
     }
+
 
     function getWorkers(){
         const uri = `http://localhost:8080/workers`
@@ -59,7 +59,13 @@
         if(!validate()){
             return
         }
-        const uri = `http://localhost:8080/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
+        let uri;
+        if(isAdmin() || isManager()){
+            uri = `http://localhost:8080/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
+        }
+        else{
+            uri = `http://localhost:8080/rents/user/workers/${selectedWorker.id}`;
+        }
         fetchWithJwt(uri, {
             method: "POST",
             headers: {'Content-Type': 'application/json;charset=UTF-8'},
@@ -84,25 +90,31 @@
 
     }
 
-    getUsers();
+    if(isAdmin() || isManager()){
+        getUsers();
+    }
+    else{
+        selectedUser = "na pewno nie null"
+    }
     getWorkers();
 </script>
 <div class="w-1/2 h-1/2 top-1/5 left-1/4 absolute bg-white border-red-500 p-20 rounded-2xl">
     <h1 class="text-5xl text-green-600 mb-2">Create rent</h1>
     <form class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
-
-        <label for="user" class="text-green-600 mb-2 text-2xl">User:</label>
-        <select name="user" bind:value={selectedUser}
-                class="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-            {#each users as user}
-                <option value="{user}">{user.login}</option>
-            {/each}
-        </select>
+        {#if isAdmin() || isManager()}
+            <label for="user" class="text-green-600 mb-2 text-2xl">User:</label>
+            <select name="user" bind:value={selectedUser}
+                    class="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                {#each users as user}
+                    <option value="{user}">{user.login}</option>
+                {/each}
+            </select>
+        {/if}
 
         <label for="worker" class="text-green-600 mb-2 text-2xl">Worker:</label>
         <select name="worker" bind:value={selectedWorker} class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
             {#each workers as worker}
-                <option value="{worker}">{worker.id}</option>
+                <option value="{worker}">{worker.name}</option>
             {/each}
         </select>
 

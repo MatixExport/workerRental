@@ -3,7 +3,7 @@
     import Rent from "../components/Rent.svelte";
     import Notification from "../components/Notification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
-    import {fetchWithJwt} from "../stores/JWT.svelte.js";
+    import {fetchWithJwt, isAdmin, isManager} from "../stores/JWT.svelte.js";
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
@@ -16,16 +16,17 @@
     function getId(path){
         const regex = /^\/userDetails@([0-9a-fA-F\-]{36})$/;
         const match = regex.exec(path);
-
-        if (match) {
-            return match[1];
-        } else {
-            return null
-        }
+        return match[1];
     }
 
     function getUser(){
-        const uri = `http://localhost:8080/users/${id}`
+        let uri
+        if(isAdmin() || isManager()){
+            uri = `http://localhost:8080/users/${id}`
+        }
+        else {
+            uri = `http://localhost:8080/users/self`
+        }
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){

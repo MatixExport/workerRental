@@ -15,7 +15,7 @@
     const routes = [
       { pattern: /^\/$/, component:UsersList, isPermitted: ()=>{return isAdmin() || isManager() || isClient()}},
       { pattern: /^\/register$/ , component: RegisterForm, isPermitted: ()=>{return ! (isAdmin() || isManager() ||  isClient())} },
-      { pattern: /^\/createRent$/ , component: CreateRent, isPermitted: ()=>{return isAdmin() || isManager()}},
+      { pattern: /^\/createRent$/ , component: CreateRent, isPermitted: ()=>{return isAdmin() || isManager() || isClient()}},
       { pattern: /^\/userDetails@[0-9a-z-]{36}$/ , component: UserDetails, isPermitted: ()=>{return isAdmin() || isManager() ||  isClient()}},
       { pattern: /^\/updateUser@[0-9a-z-]{36}$/ , component: UpdateUserForm, isPermitted: ()=>{return isAdmin() || isManager() ||  isClient()}},
       { pattern: /^\/rentList$/ , component: RentList, isPermitted: ()=>{return isAdmin() || isManager()}},
@@ -40,7 +40,7 @@
 
 <nav class="bg-gray-100 border-b border-gray-300 shadow-sm">
     {#if (isAdmin() || isManager() ||  isClient())}
-        <h1>Welcome {getUsername()}</h1>
+        <h1>Welcome {getUsername()} - {#if isClient()}Client{/if}{#if isManager()}Manager{/if}{#if isAdmin()}Admin{/if}</h1>
     {/if}
     <ul class="flex space-x-4 p-4">
         {#if (! (isAdmin() || isManager() ||  isClient()))}
@@ -53,7 +53,7 @@
                 <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Users</a>
             </li>
         {/if}
-        {#if (isAdmin()||isManager())}
+        {#if (isAdmin()||isManager()||isClient())}
             <li>
                 <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Create rent</a>
             </li>

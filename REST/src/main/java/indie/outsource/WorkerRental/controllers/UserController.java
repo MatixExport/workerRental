@@ -44,6 +44,13 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users/self")
+    public ResponseEntity<UserDTO> getSelfUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails= (UserDetails) authentication.getDetails();
+        return ResponseEntity.ok(UserMapper.getUserDTO(userService.findByUsername(userDetails.getUsername()).getFirst()));
+    }
+
     @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users/login/{login}")
     public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) {
