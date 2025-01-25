@@ -3,6 +3,7 @@
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import Notification from "../components/Notification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
+    import {fetchWithJwt} from "../stores/JWT.svelte.js";
 
     let users= $state()
     let workers= $state()
@@ -14,7 +15,7 @@
 
     function getUsers(){
         const uri = `http://localhost:8080/users`
-        fetch(uri, {method: "GET"})
+        fetchWithJwt(uri, {method: "GET"})
             .then(response => {
             if(response.status === 200){
                 response.json().then(result => users = result)
@@ -27,7 +28,7 @@
 
     function getWorkers(){
         const uri = `http://localhost:8080/workers`
-        fetch(uri, {method: "GET"}).then(response => {
+        fetchWithJwt(uri, {method: "GET"}).then(response => {
             if(response.status === 200){
                 response.json().then(result => workers = result)
             }
@@ -59,7 +60,7 @@
             return
         }
         const uri = `http://localhost:8080/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
-        fetch(uri, {
+        fetchWithJwt(uri, {
             method: "POST",
             headers: {'Content-Type': 'application/json;charset=UTF-8'},
             body: JSON.stringify({startDate: startDate})

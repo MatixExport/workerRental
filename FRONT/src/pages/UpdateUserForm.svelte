@@ -4,6 +4,7 @@
     import Notification from "../components/Notification.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte";
+    import {fetchWithJwt} from "../stores/JWT.svelte.js";
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
@@ -25,7 +26,7 @@
 
     function getUser(){
         const uri = `http://localhost:8080/users/${id}`
-        fetch(uri, {method: "GET"})
+        fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
                     response.json().then(result => user = result)
@@ -61,7 +62,7 @@
         validate()
         if(passwordErrors.length===0){
             const uri = `http://localhost:8080/users/${id}`;
-            fetch(uri, {
+            fetchWithJwt(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
                 body: JSON.stringify(user)

@@ -27,7 +27,7 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
+//    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList());
@@ -99,7 +99,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER))")
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @PostMapping("/users/{id}/activate")
     public ResponseEntity<UserDTO> activateUser(@PathVariable UUID id) {
         try{
@@ -110,7 +110,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)) ")
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER) ")
     @PostMapping("/users/{id}/deactivate")
     public ResponseEntity<UserDTO> deactivateUser(@PathVariable UUID id) {
         try{

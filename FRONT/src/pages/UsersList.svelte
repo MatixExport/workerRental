@@ -2,13 +2,16 @@
     import ActiveUser from "../components/ActiveUser.svelte";
     import InactiveUser from "../components/InactiveUser.svelte";
     import {notify} from "../stores/notifier.svelte.js";
+    import {fetchLogin, fetchWithJwt, getToken} from "../stores/JWT.svelte.js";
     let users = $state([])
 
     let login = $state("");
 
+
+
     function getUsers(){
         const uri = `http://localhost:8080/users`
-        fetch(uri, {method: "GET"}).then(response => {
+        fetchWithJwt(uri, {method: "GET", headers: {"Content-Type": "application/json"}}).then(response => {
             if(response.status === 200){
                 response.json().then(result => users = result)
             }
@@ -20,10 +23,10 @@
 
     function getUsersByLogin(){
         if(login.length===0){
-            getUsers()
+            // getUsers()
         }
         const uri = `http://localhost:8080/users/loginContains/${login}`
-        fetch(uri, {method: "GET"})
+        fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
                     response.json().then(result => users = result)
@@ -33,7 +36,7 @@
                 }
             })
     }
-    getUsers();
+    getUsers()
 
 </script>
 <div class="p-4">

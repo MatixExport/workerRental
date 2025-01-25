@@ -1,6 +1,7 @@
 <script>
     import Rent from "../components/Rent.svelte";
     import {notify} from "../stores/notifier.svelte.js";
+    import {fetchWithJwt} from "../stores/JWT.svelte.js";
 
     let allRents = $state([])
     let currentRents = $derived(allRents.filter((rent)=>{return rent.endDate == null}))
@@ -9,7 +10,7 @@
 
     function getRents() {
         const uri = `http://localhost:8080/rents`
-        fetch(uri, {method: "GET"})
+        fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
                     response.json().then(result =>allRents = result)
