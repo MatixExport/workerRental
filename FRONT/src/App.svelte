@@ -9,14 +9,17 @@
     import NotFound from "./pages/NotFound.svelte";
     import Notification from "./components/Notification.svelte";
     import {getNotification} from "./stores/notifier.svelte.js";
+    import Login from "./pages/Login.svelte";
+    import {getUsername, isAdmin, isClient, isManager, logout} from "./stores/JWT.svelte.js";
 
     const routes = [
-      { pattern: /^\/$/, component:UsersList },
-      { pattern: /^\/register$/ , component: RegisterForm },
-      { pattern: /^\/createRent$/ , component: CreateRent},
-      { pattern: /^\/userDetails@[0-9a-z-]{36}$/ , component: UserDetails},
-      { pattern: /^\/updateUser@[0-9a-z-]{36}$/ , component: UpdateUserForm},
-      { pattern: /^\/rentList$/ , component: RentList},
+      { pattern: /^\/$/, component:UsersList, isPermitted: ()=>{return isAdmin() || isManager() || isClient()}},
+      { pattern: /^\/register$/ , component: RegisterForm, isPermitted: ()=>{return ! (isAdmin() || isManager() ||  isClient())} },
+      { pattern: /^\/createRent$/ , component: CreateRent, isPermitted: ()=>{return isAdmin() || isManager()}},
+      { pattern: /^\/userDetails@[0-9a-z-]{36}$/ , component: UserDetails, isPermitted: ()=>{return isAdmin() || isManager() ||  isClient()}},
+      { pattern: /^\/updateUser@[0-9a-z-]{36}$/ , component: UpdateUserForm, isPermitted: ()=>{return isAdmin() || isManager() ||  isClient()}},
+      { pattern: /^\/rentList$/ , component: RentList, isPermitted: ()=>{return isAdmin() || isManager()}},
+      { pattern: /^\/login$/ , component: Login, isPermitted: ()=>{return ! (isAdmin() || isManager() ||  isClient())}},
 
     ]
 
@@ -24,7 +27,7 @@
     $effect(()=>{
       RouteComponent = routes[getCurrentRoute()];
       const match = routes.find(route => route.pattern.test(getCurrentRoute()));
-      RouteComponent = match ? match.component : NotFound;
+      RouteComponent = match && match.isPermitted() ? match.component : NotFound;
     })
 
     let notification = $state("")
@@ -36,19 +39,40 @@
 </script>
 
 <nav class="bg-gray-100 border-b border-gray-300 shadow-sm">
+    {#if (isAdmin() || isManager() ||  isClient())}
+        <h1>Welcome {getUsername()}</h1>
+    {/if}
     <ul class="flex space-x-4 p-4">
-        <li>
-            <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") }} class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Register</a>
-        </li>
-        <li>
-            <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Users</a>
-        </li>
-        <li>
-            <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Create rent</a>
-        </li>
-        <li>
-            <a href="/rentList" onclick={(e) =>{e.preventDefault(); navigate("/rentList") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Rent list</a>
-        </li>
+        {#if (! (isAdmin() || isManager() ||  isClient()))}
+            <li>
+                <a href="/register" onclick={(e) =>{e.preventDefault(); navigate("/register") }} class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Register</a>
+            </li>
+        {/if}
+        {#if (isAdmin()||isManager()||isClient())}
+            <li>
+                <a href="/" onclick={(e) =>{e.preventDefault(); navigate("/") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Users</a>
+            </li>
+        {/if}
+        {#if (isAdmin()||isManager())}
+            <li>
+                <a href="/createRent" onclick={(e) =>{e.preventDefault(); navigate("/createRent") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Create rent</a>
+            </li>
+        {/if}
+        {#if (isAdmin()||isManager())}
+            <li>
+                <a href="/rentList" onclick={(e) =>{e.preventDefault(); navigate("/rentList") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Rent list</a>
+            </li>
+        {/if}
+        {#if (! (isAdmin() || isManager() ||  isClient()))}
+            <li>
+                <a href="/login" onclick={(e) =>{e.preventDefault(); navigate("/login") } } class="px-4 py-2 text-gray-700 font-medium rounded hover:bg-gray-200 hover:text-gray-900">Login</a>
+            </li>
+        {/if}
+        {#if (isAdmin()||isManager()||isClient())}
+            <li>
+                <a href="/logout" onclick={(e) =>{e.preventDefault(); logout() } }>Logout</a>
+            </li>
+        {/if}
     </ul>
 </nav>
 <main>
