@@ -42,7 +42,7 @@ public class SecurityConfig{
                 .cors(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorizeRequests) -> {
-                    authorizeRequests.requestMatchers("/login").anonymous();
+                    authorizeRequests.requestMatchers("/login", "/register").anonymous();
                     authorizeRequests.anyRequest().authenticated();
 
                 });

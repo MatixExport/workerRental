@@ -3,6 +3,7 @@ package indie.outsource.WorkerRental.services;
 import indie.outsource.WorkerRental.AuthHelper;
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
+import indie.outsource.WorkerRental.exceptions.UserInactiveException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 
@@ -95,7 +96,10 @@ public class UserService {
         Optional<User> user = userRepository.findByLogin(login);
         if(user.isPresent()){
             if(passwordEncoder.matches(password, user.get().getPassword())){
-                return authHelper.generateJWT(user.get());
+                if(user.get().isActive()){
+                    return authHelper.generateJWT(user.get());
+                }
+                throw new UserInactiveException("User inactive");
             }
         }
         throw new ResourceNotFoundException("User with login " + login + " not found");
