@@ -5,6 +5,8 @@ import indie.outsource.user.LoginDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -15,7 +17,6 @@ public class AuthController {
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String login(@RequestBody  @Valid LoginDTO loginDTO){
-        System.out.println(loginDTO.getLogin());
         return userService.login(loginDTO.getLogin(), loginDTO.getPassword());
     }
 

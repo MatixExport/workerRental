@@ -60,4 +60,22 @@ public class AuthHelper {
         return expiration.before(new Date());
     }
 
+    public String extractLogin(String jwt){
+        return extractClaim(jwt,"sub");
+    }
+
+    public String extractGroups(String jwt){
+       return extractClaim(jwt, "groups");
+    }
+
+    private String extractClaim(String jwt, String claim){
+        try{
+            SignedJWT signedJWT = SignedJWT.parse(jwt);
+            return signedJWT.getJWTClaimsSet().getClaim(claim).toString();
+        }
+        catch (Exception e){
+            throw new RuntimeException("Error while parsing the token", e);
+        }
+    }
+
 }
