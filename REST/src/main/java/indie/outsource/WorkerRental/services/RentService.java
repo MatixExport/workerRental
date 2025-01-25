@@ -105,4 +105,8 @@ public class RentService {
         }
         rentRepository.deleteById(rentId);
     }
+
+    public boolean isOwner(UUID rentId, String username){
+        return findById(rentId).getUser().getLogin().equals(username);
+    }
 }

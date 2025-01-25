@@ -64,7 +64,8 @@ public class RentController {
         return createRent(user.getId(), workerId, rent);
     }
 
-
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN , T(indie.outsource.WorkerRental.Roles).MANAGER)" +
+            "or @rentService.isOwner(#id, principal.username)")
     @PostMapping("/rents/{id}/finish")
     public ResponseEntity<RentDTO> finishRent(@PathVariable UUID id) {
         try {
