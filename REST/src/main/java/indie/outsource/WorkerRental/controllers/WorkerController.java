@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,6 @@ public class WorkerController {
 
     @GetMapping("/workers/{id}")
     public ResponseEntity<WorkerDTO> getWorker(@PathVariable UUID id) {
-        Worker worker;
         try{
             return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.findById(id)));
         }
@@ -39,11 +39,13 @@ public class WorkerController {
         return ResponseEntity.ok(workerService.findAll().stream().map(WorkerMapper::getWorkerDto).toList());
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @PostMapping(value = "/workers")
     public ResponseEntity<WorkerDTO> createWorker(@RequestBody @Valid CreateWorkerDTO worker) {
         return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.save(WorkerMapper.getWorker(worker))));
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @PostMapping("/workers/{id}")
     public ResponseEntity<WorkerDTO> updateWorker(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) {
         Worker worker = WorkerMapper.getWorker(createWorkerDTO);
@@ -56,6 +58,7 @@ public class WorkerController {
         }
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @DeleteMapping("/workers/{id}")
     public ResponseEntity<String> deleteWorker(@PathVariable @Valid UUID id) {
         try{

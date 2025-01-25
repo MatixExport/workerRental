@@ -12,6 +12,10 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +27,13 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList());
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
         try{
@@ -38,6 +44,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users/login/{login}")
     public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) {
         try{
@@ -48,11 +55,13 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users/loginContains/{login}")
     public ResponseEntity<List<UserDTO>> getUserByLoginContains(@PathVariable String login) {
         return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN)")
     @PostMapping("/users")
     public ResponseEntity<UserDTO> addUser(@RequestBody @Valid CreateUserDTO user) {
         try{
@@ -63,12 +72,21 @@ public class UserController {
         }
     }
 
-    @PostMapping("/clients")
-    public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
-        user.setType(USERTYPE.CLIENT);
-        return addUser(user);
+//    @PostMapping("/clients")
+//    public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
+//        user.setType(USERTYPE.CLIENT);
+//        return addUser(user);
+//    }
+
+    @PostMapping("users/self")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid CreateUserDTO userDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails= (UserDetails) authentication.getDetails();
+        User user = userService.findByUsername(userDetails.getUsername()).getFirst();
+        return updateUser(user.getId(), userDTO);
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN)")
     @PostMapping("/users/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) {
         User user = UserMapper.getUser(createUserDTO);
@@ -81,6 +99,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER))")
     @PostMapping("/users/{id}/activate")
     public ResponseEntity<UserDTO> activateUser(@PathVariable UUID id) {
         try{
@@ -91,6 +110,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)) ")
     @PostMapping("/users/{id}/deactivate")
     public ResponseEntity<UserDTO> deactivateUser(@PathVariable UUID id) {
         try{
