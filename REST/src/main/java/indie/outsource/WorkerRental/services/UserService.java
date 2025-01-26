@@ -1,17 +1,26 @@
 package indie.outsource.WorkerRental.services;
 
+import com.nimbusds.jose.JOSEException;
 import indie.outsource.WorkerRental.AuthHelper;
+import indie.outsource.WorkerRental.JWSUtil;
+import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.exceptions.UserInactiveException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 
+import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.SignedCreateUserDTO;
+import indie.outsource.user.UserDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.StyledEditorKit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,7 +64,6 @@ public class UserService {
         }
         return userRepository.save(user);
     }
-
     public User updateUser(User user){
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -87,6 +95,28 @@ public class UserService {
         user.setActive(false);
         userRepository.save(user);
         return user;
+    }
+
+    public SignedCreateUserDTO signUser(User user ) {
+        SignedCreateUserDTO signedUserDTO = UserMapper.getSignedUserDTO(user);
+        try {
+            signedUserDTO.setSignature(JWSUtil.sign(signedUserDTO.getPayload()));
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+        return signedUserDTO;
+    }
+
+    public Boolean verifySignedCreateUser(SignedCreateUserDTO signedCreateUserDTO) {
+        try {
+            if(!JWSUtil.verifySignature(signedCreateUserDTO.getSignature(),signedCreateUserDTO.getPayload())){
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        System.out.println("VERIFICATION OK");
+        return true;
     }
 
 
