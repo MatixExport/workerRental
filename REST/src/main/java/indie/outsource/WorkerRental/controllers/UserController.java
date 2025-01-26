@@ -6,7 +6,7 @@ import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.services.UserService;
 import indie.outsource.user.CreateUserDTO;
-import indie.outsource.user.USERTYPE;
+import indie.outsource.user.SignedCreateUserDTO;
 import indie.outsource.user.UserDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -44,11 +44,36 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
+    @GetMapping("/users/{id}/signed")
+    public ResponseEntity<SignedCreateUserDTO> getSignedUser(@PathVariable UUID id) {
+        try{
+            return ResponseEntity.ok(userService.signUser(userService.findById(id)));
+        }
+        catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).build();
+        }
+    }
+
     @GetMapping("/users/self")
     public ResponseEntity<UserDTO> getSelfUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails= (UserDetails) authentication.getDetails();
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.findByUsername(userDetails.getUsername()).getFirst()));
+    }
+
+    @GetMapping("/users/self/signed")
+    public ResponseEntity<SignedCreateUserDTO> getSignedSelfUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails= (UserDetails) authentication.getDetails();
+        try {
+            return ResponseEntity.ok(userService.signUser(userService.findByUsername(userDetails.getUsername()).getFirst()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).build();
+        }
     }
 
     @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
@@ -85,6 +110,19 @@ public class UserController {
 //        return addUser(user);
 //    }
 
+    @PostMapping("users/self/signed")
+    public ResponseEntity<UserDTO> updateUserWithSign(@RequestBody @Valid SignedCreateUserDTO userDTO) {
+        try {
+            if(!userService.verifySignedCreateUser(userDTO)){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return updateUser(userDTO);
+    }
+
+
     @PostMapping("users/self")
     public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid CreateUserDTO userDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -104,6 +142,22 @@ public class UserController {
         catch(ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN)")
+    @PostMapping("/users/{id}/signed")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid SignedCreateUserDTO createUserDTO) {
+        System.out.println("GOT REQUEST");
+        try{
+            if(!userService.verifySignedCreateUser(createUserDTO)){
+                System.out.println("VERIFICATION FAILED");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        }
+        catch(ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return updateUser(id,UserMapper.getCreateUserDTOFromSigned(createUserDTO));
     }
 
     @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")

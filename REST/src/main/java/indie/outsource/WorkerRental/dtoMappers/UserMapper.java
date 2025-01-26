@@ -5,13 +5,20 @@ import indie.outsource.WorkerRental.model.user.Client;
 import indie.outsource.WorkerRental.model.user.Manager;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.SignedCreateUserDTO;
 import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 
 public final class UserMapper {
     public static UserDTO getUserDTO(User user){
-        System.out.println(user.getClass().getSimpleName());
         return new UserDTO(user.getLogin(), user.isActive(), user.getId(), USERTYPE.getByClassname(user.getClass().getSimpleName()));
+    }
+    public static SignedCreateUserDTO getSignedUserDTO(User user){
+        return new SignedCreateUserDTO(user.getLogin(),"" , USERTYPE.getByClassname(user.getClass().getSimpleName()));
+    }
+
+    public static CreateUserDTO getCreateUserDTOFromSigned(SignedCreateUserDTO signedUserDTO){
+        return new CreateUserDTO(signedUserDTO.getLogin(),signedUserDTO.getPassword() , signedUserDTO.getType());
     }
     public static User getUser(CreateUserDTO createUserDTO){
         User user = new Client();
