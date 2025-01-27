@@ -8,7 +8,7 @@
     import RentList from "./pages/RentList.svelte";
     import NotFound from "./pages/NotFound.svelte";
     import Notification from "./components/Notification.svelte";
-    import {getNotification} from "./stores/notifier.svelte.js";
+    import {getNotification, notify} from "./stores/notifier.svelte.js";
     import Login from "./pages/Login.svelte";
     import {getUsername, isAdmin, isClient, isManager, logout} from "./stores/JWT.svelte.js";
 
@@ -79,6 +79,6 @@
 
     <RouteComponent/>
     {#if notification.length>0}
-        <Notification message={notification} callback={()=>{notification=''}}/>
+        <Notification message={notification} callback={()=>{notify("")}}/>
     {/if}
 </main>
