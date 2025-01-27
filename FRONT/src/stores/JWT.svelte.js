@@ -39,27 +39,32 @@ export function fetchWithJwt(url, options){
 }
 
 export async function fetchLogin(login, password){
+    try{
+        const uri = `${config.BASE_URL}/login`;
+        return fetch(uri, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json;charset=UTF-8'},
+            body: JSON.stringify({login: login, password: password})
+        }).then(
+            response =>{
+                if(response.ok){
+                    return response.text()
+                }
+                else {
+                    throw response.text()
+                }
+            }
+        ).then(newToken => {
+            token = newToken
+            localStorage.setItem("token", token)
+            loadUserFromToken()
+            navigate("/")
+        })
+    }
+    catch (error){
+        notify(error)
+    }
 
-    const uri = `${config.BASE_URL}/login`;
-    return fetch(uri, {
-        method: "POST",
-        headers: {'Content-Type': 'application/json;charset=UTF-8'},
-        body: JSON.stringify({login: login, password: password})
-    }).then(
-        response =>{
-            if(response.ok){
-                return response.text()
-            }
-            else {
-                notify(response.body)
-            }
-        }
-    ).then(newToken => {
-        token = newToken
-        localStorage.setItem("token", token)
-        loadUserFromToken()
-        navigate("/")
-    })
 }
 
 function loadUserFromToken() {
@@ -92,4 +97,5 @@ export function logout(){
     client = false
     manager = false
     username = ""
+    navigate("/login")
 }

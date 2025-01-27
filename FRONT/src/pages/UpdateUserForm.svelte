@@ -91,7 +91,6 @@
                         notify("User does not exist")
                     }
                     else if(response.status === 401){
-                        //notify seems to only work first time
                         notify("Signature mismatch - data was tampered with")
                     }
                     else{
