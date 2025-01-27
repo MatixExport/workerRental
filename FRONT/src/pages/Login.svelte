@@ -2,6 +2,7 @@
     import ValidationError from "../components/ValidationError.svelte";
     import {fetchLogin} from "../stores/JWT.svelte.js";
 
+
     let user = $state({login:"",password:""})
 
     let loginErrors = $state();

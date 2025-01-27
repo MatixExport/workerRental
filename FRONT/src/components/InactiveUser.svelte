@@ -3,10 +3,11 @@
     import ConfirmNotification from "./ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
     import {fetchWithJwt, isAdmin, isManager} from "../stores/JWT.svelte.js";
+    import config from "../config";
 
     let {user, getUsers} = $props()
     function activate(id){
-        const uri = `http://localhost:8080/users/${id}/activate`
+        const uri = `${config.BASE_URL}/users/${id}/activate`
         fetchWithJwt(uri, {method: "POST"}).then(
             result =>{
             if(result.status === 200){

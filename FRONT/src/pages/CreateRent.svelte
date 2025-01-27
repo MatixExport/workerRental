@@ -3,6 +3,7 @@
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
     import {fetchWithJwt, isAdmin, isManager, isClient} from "../stores/JWT.svelte.js";
+    import config from "../config";
 
     let users= $state()
     let workers= $state()
@@ -13,7 +14,7 @@
     let confirmNotification
 
     function getUsers(){
-        const uri = `http://localhost:8080/users`
+        const uri = `${config.BASE_URL}/users`
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
             if(response.status === 200){
@@ -27,7 +28,7 @@
 
 
     function getWorkers(){
-        const uri = `http://localhost:8080/workers`
+        const uri = `${config.BASE_URL}/workers`
         fetchWithJwt(uri, {method: "GET"}).then(response => {
             if(response.status === 200){
                 response.json().then(result => workers = result)
@@ -61,10 +62,10 @@
         }
         let uri;
         if(isAdmin() || isManager()){
-            uri = `http://localhost:8080/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
+            uri = `${config.BASE_URL}/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
         }
         else{
-            uri = `http://localhost:8080/rents/user/workers/${selectedWorker.id}`;
+            uri = `${config.BASE_URL}/rents/user/workers/${selectedWorker.id}`;
         }
         fetchWithJwt(uri, {
             method: "POST",
