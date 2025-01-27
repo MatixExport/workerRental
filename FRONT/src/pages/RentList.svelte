@@ -2,14 +2,14 @@
     import Rent from "../components/Rent.svelte";
     import {notify} from "../stores/notifier.svelte.js";
     import {fetchWithJwt} from "../stores/JWT.svelte.js";
-
+    import config from "../config";
     let allRents = $state([])
     let currentRents = $derived(allRents.filter((rent)=>{return rent.endDate == null}))
     let endedRents = $derived(allRents.filter((rent)=>{return rent.endDate != null}))
 
 
     function getRents() {
-        const uri = `http://localhost:8080/rents`
+        const uri = `${config.BASE_URL}/rents`
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){

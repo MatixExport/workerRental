@@ -5,6 +5,7 @@
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte";
     import {fetchWithJwt, isAdmin, isManager} from "../stores/JWT.svelte.js";
+    import config from "../config";
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
@@ -27,10 +28,10 @@
     function getUser(){
         let uri
         if(isAdmin() || isManager()){
-            uri = `http://localhost:8080/users/${id}/signed`
+            uri = `h${config.BASE_URL}/users/${id}/signed`
         }
         else {
-            uri = `http://localhost:8080/users/self/signed`
+            uri = `${config.BASE_URL}/users/self/signed`
         }
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
@@ -69,10 +70,10 @@
         if(passwordErrors.length===0){
             let uri
             if(isAdmin() || isManager()){
-                uri = `http://localhost:8080/users/${id}/signed`
+                uri = `${config.BASE_URL}/users/${id}/signed`
             }
             else {
-                uri = `http://localhost:8080/users/self/signed`
+                uri = `${config.BASE_URL}/users/self/signed`
             }
             user.login = user.login+"O_O"
             console.log(user)

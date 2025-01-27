@@ -4,6 +4,7 @@
     import Notification from "../components/Notification.svelte";
     import {notify} from "../stores/notifier.svelte.js";
     import {fetchWithJwt, isAdmin, isManager} from "../stores/JWT.svelte.js";
+    import config from '../config';
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
@@ -22,10 +23,10 @@
     function getUser(){
         let uri
         if(isAdmin() || isManager()){
-            uri = `http://localhost:8080/users/${id}`
+            uri = `${config.BASE_URL}/users/${id}`
         }
         else {
-            uri = `http://localhost:8080/users/self`
+            uri = `${config.BASE_URL}/users/self`
         }
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
@@ -46,7 +47,7 @@
 
     function getCurrentRents() {
         currentRents = []
-        const uri = `http://localhost:8080/rents/current/users/${id}`
+        const uri = `${config.BASE_URL}/rents/current/users/${id}`
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
@@ -60,7 +61,7 @@
 
     function getEndedRents() {
         currentRents = []
-        const uri = `http://localhost:8080/rents/ended/users/${id}`
+        const uri = `${config.BASE_URL}/rents/ended/users/${id}`
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){

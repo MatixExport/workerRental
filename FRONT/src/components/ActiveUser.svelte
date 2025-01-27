@@ -3,10 +3,11 @@
     import {navigate} from "../stores/router.svelte.js";
     import ConfirmNotification from "./ConfirmNotification.svelte";
     import {fetchWithJwt, getUsername, isAdmin, isManager} from "../stores/JWT.svelte.js";
+    import config from "../config";
     let {user, getUsers} = $props()
 
     function deactivate(id){
-        const uri = `http://localhost:8080/users/${id}/deactivate`
+        const uri = `${config.BASE_URL}/users/${id}/deactivate`
         fetchWithJwt(uri, {method: "POST"}).then(
             result =>{
                 if(result.status === 200){

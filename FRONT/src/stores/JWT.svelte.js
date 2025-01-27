@@ -1,6 +1,7 @@
 import {notify} from "./notifier.svelte.js";
 import { jwtDecode } from "jwt-decode";
 import {navigate} from "./router.svelte.js";
+import config from "../config";
 
 let token = $state(localStorage.getItem("token"));
 let admin = $state(false)
@@ -39,7 +40,7 @@ export function fetchWithJwt(url, options){
 
 export async function fetchLogin(login, password){
 
-    const uri = `http://localhost:8080/login`;
+    const uri = `${config.BASE_URL}/login`;
     return fetch(uri, {
         method: "POST",
         headers: {'Content-Type': 'application/json;charset=UTF-8'},

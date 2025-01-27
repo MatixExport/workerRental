@@ -3,6 +3,7 @@
     import type {CreateUser} from "../lib/Int";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte";
+    import config from "../config";
 
     let user: CreateUser = $state({
         "login": "",
@@ -34,7 +35,7 @@
     function submit(){
         validate()
         if(loginErrors.length===0 && passwordErrors.length===0){
-            const uri = `http://localhost:8080/register`;
+            const uri = `${config.BASE_URL}/register`;
             fetch(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
