@@ -27,7 +27,15 @@
     $effect(()=>{
       RouteComponent = routes[getCurrentRoute()];
       const match = routes.find(route => route.pattern.test(getCurrentRoute()));
-      RouteComponent = match && match.isPermitted() ? match.component : NotFound;
+      if(match && match.isPermitted()){
+          RouteComponent = match.component;
+      }
+      else if(isAdmin() || isManager() || isClient()){
+          navigate("/")
+      }
+      else{
+          navigate("/login")
+      }
     })
 
     let notification = $state("")
