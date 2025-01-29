@@ -6,6 +6,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import indie.outsource.WorkerRental.model.user.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -14,7 +15,8 @@ import java.util.Date;
 @Component
 public class AuthHelper {
 
-    private static final String SECRET_KEY = "kt1FXZwHnetaSqGv6GANVozKLaWfGbDvDWYI1klelFh8tbiBw3t7fSSI+MYqySVP";
+    @Value("${secret.key}")
+    private String SECRET_KEY;
     private static final long EXPIRATION_TIME = 1000*60*10; // ms*s*min
 
     public String generateJWT(User user) {

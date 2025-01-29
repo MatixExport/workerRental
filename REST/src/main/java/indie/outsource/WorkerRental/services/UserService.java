@@ -30,6 +30,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final AuthHelper authHelper;
+    private final JWSUtil jwsUtil;
 
     public User findById(UUID id) {
         if(userRepository.findById(id).isPresent()){
@@ -100,7 +101,7 @@ public class UserService {
     public SignedCreateUserDTO signUser(User user ) {
         SignedCreateUserDTO signedUserDTO = UserMapper.getSignedUserDTO(user);
         try {
-            signedUserDTO.setSignature(JWSUtil.sign(signedUserDTO.getPayload()));
+            signedUserDTO.setSignature(jwsUtil.sign(signedUserDTO.getPayload()));
         } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
@@ -109,7 +110,7 @@ public class UserService {
 
     public Boolean verifySignedCreateUser(SignedCreateUserDTO signedCreateUserDTO) {
         try {
-            if(!JWSUtil.verifySignature(signedCreateUserDTO.getSignature(),signedCreateUserDTO.getPayload())){
+            if(!jwsUtil.verifySignature(signedCreateUserDTO.getSignature(),signedCreateUserDTO.getPayload())){
                 return false;
             }
         } catch (Exception e) {
