@@ -2,15 +2,20 @@ package indie.outsource.WorkerRental;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.Collections;
 
+@Component
+
 public class JWSUtil {
+    @Value("${secret.key}")
+    private String SECRET_KEY;
 
-    private static final String SECRET_KEY = "kt1FXZwHnetaSqGv6GANVozKLaWfGbDvDWYI1klelFh8tbiBw3t7fSSI+MYqySVP";
-
-    public static String sign(String payload) throws JOSEException {
+    public String sign(String payload) throws JOSEException {
         Payload detachedPayload = new Payload(payload);
 
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.HS256)
@@ -24,7 +29,7 @@ public class JWSUtil {
         return jwsObject.serialize(true);
     }
 
-    public static boolean verifySignature(String jws, String detachedPayload) throws ParseException, JOSEException {
+    public boolean verifySignature(String jws, String detachedPayload) throws ParseException, JOSEException {
         JWSObject parsedJWSObject = JWSObject.parse(jws, new Payload(detachedPayload));
         return parsedJWSObject.verify(new MACVerifier(SECRET_KEY));
     }
