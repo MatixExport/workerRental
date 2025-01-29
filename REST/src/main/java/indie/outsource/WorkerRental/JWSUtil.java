@@ -12,7 +12,7 @@ import java.util.Collections;
 @Component
 
 public class JWSUtil {
-    @Value("${secret.key}")
+    @Value("${secret.key.jws}")
     private String SECRET_KEY;
 
     public String sign(String payload) throws JOSEException {
