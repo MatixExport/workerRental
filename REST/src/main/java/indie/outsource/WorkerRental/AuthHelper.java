@@ -15,7 +15,7 @@ import java.util.Date;
 @Component
 public class AuthHelper {
 
-    @Value("${secret.key}")
+    @Value("${secret.key.jwt}")
     private String SECRET_KEY;
     private static final long EXPIRATION_TIME = 1000*60*10; // ms*s*min
 
