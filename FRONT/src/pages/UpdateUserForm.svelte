@@ -4,7 +4,7 @@
     import Notification from "../components/Notification.svelte";
     import ConfirmNotification from "../components/ConfirmNotification.svelte";
     import {notify} from "../stores/notifier.svelte";
-    import {fetchWithJwt, isAdmin, isManager} from "../stores/JWT.svelte.js";
+    import {fetchWithJwt, isAdmin, isClient, isManager} from "../stores/JWT.svelte.js";
     import config from "../config";
 
     let user = $state(null)
@@ -18,11 +18,7 @@
         const regex = /^\/updateUser@([0-9a-z-]{36})$/;
         const match = regex.exec(path);
 
-        if (match) {
-            return match[1];
-        } else {
-            return null
-        }
+        return match[1];
     }
 
     function getUser(){
@@ -75,23 +71,26 @@
             else {
                 uri = `${config.BASE_URL}/users/self/signed`
             }
-            user.login = user.login+"O_O"
-            console.log(user)
             fetchWithJwt(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
                 body: JSON.stringify(user)
             }).then(
                 response =>{
+                    user.password=""
+                    user.oldPassword=""
                     if(response.ok){
-                        user.password=""
                         notify("User updated")
                     }
                     else if(response.status === 404){
                         notify("User does not exist")
                     }
-                    else if(response.status === 401){
+                    else if(response.status === 409){
+                        user.login = user.login+" O_O"
                         notify("Signature mismatch - data was tampered with")
+                    }
+                    else if(response.status === 401){
+                        notify("Wrong previous password")
                     }
                     else{
                         notify("Unknown error occurred")
@@ -124,6 +123,13 @@
                     disabled
                     class="border-2 border-gray-300 bg-gray-100 bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 cursor-not-allowed"
                 >
+                {#if isClient()}
+                    <label for="password_old" class="text-blue-700 mb-2 text-2xl">Old password:</label>
+                    <input name="password_old" type="password" autocomplete="current-password"
+                           bind:value={user.oldPassword}
+                           class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                {/if}
                 <label for="password" class="text-blue-700 mb-2 text-2xl">New password:</label>
                 <input name="password" type="password" autocomplete="current-password"
                        bind:value={user.password}

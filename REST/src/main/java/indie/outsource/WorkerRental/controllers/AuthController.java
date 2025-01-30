@@ -4,6 +4,7 @@ import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.exceptions.UserInactiveException;
+import indie.outsource.WorkerRental.exceptions.WrongCredentialsException;
 import indie.outsource.WorkerRental.services.UserService;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.LoginDTO;
@@ -27,12 +28,13 @@ public class AuthController {
         try{
             return ResponseEntity.ok(userService.login(loginDTO.getLogin(), loginDTO.getPassword()));
         }
-        catch (ResourceNotFoundException e){
+        catch (ResourceNotFoundException | WrongCredentialsException em){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
         catch (UserInactiveException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Inactive user");
         }
+
     }
 
     @PostMapping("/register")

@@ -5,6 +5,7 @@ import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.services.UserService;
+import indie.outsource.user.ChangePasswordDto;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.SignedCreateUserDTO;
 import indie.outsource.user.UserDTO;
@@ -111,12 +112,16 @@ public class UserController {
 //    }
 
     @PostMapping("users/self/signed")
-    public ResponseEntity<UserDTO> updateUserWithSign(@RequestBody @Valid SignedCreateUserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUserWithSign(@RequestBody @Valid ChangePasswordDto userDTO) {
+        SignedCreateUserDTO halo = new SignedCreateUserDTO(userDTO.getLogin(), userDTO.getPassword(), userDTO.getType());
         try {
             if(!userService.verifySignedCreateUser(userDTO)){
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if(!userService.verifyPassword(userDTO.getLogin(), userDTO.getOldPassword())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return updateUser(userDTO);
