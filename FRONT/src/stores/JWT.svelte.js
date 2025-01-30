@@ -76,8 +76,7 @@ function loadUserFromToken() {
             manager = decodedToken.groups.includes("MANAGER");
             username = decodedToken.sub;
 
-            console.log("Decoded Token:", decodedToken);
-            console.log("Username:", decodedToken.sub);
+            setTimeout(logout, 1000 * 60 * 10)
         } catch (error) {
             console.error("Failed to decode token:", error);
         }

@@ -7,6 +7,7 @@ import indie.outsource.WorkerRental.dtoMappers.UserMapper;
 import indie.outsource.WorkerRental.exceptions.ResourceNotFoundException;
 import indie.outsource.WorkerRental.exceptions.UserAlreadyExistsException;
 import indie.outsource.WorkerRental.exceptions.UserInactiveException;
+import indie.outsource.WorkerRental.exceptions.WrongCredentialsException;
 import indie.outsource.WorkerRental.model.user.User;
 import indie.outsource.WorkerRental.repositories.UserRepository;
 
@@ -120,19 +121,24 @@ public class UserService {
         return true;
     }
 
-
-    public String login(String login, String password) {
+    public boolean verifyPassword(String login, String password){
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
         Optional<User> user = userRepository.findByLogin(login);
         if(user.isPresent()){
-            if(passwordEncoder.matches(password, user.get().getPassword())){
+            return passwordEncoder.matches(password, user.get().getPassword());
+        }
+        throw new ResourceNotFoundException("User with login " + login + " not found");
+    }
+
+    public String login(String login, String password) {
+        if(verifyPassword(login, password)){
+            Optional<User> user = userRepository.findByLogin(login);
                 if(user.get().isActive()){
                     return authHelper.generateJWT(user.get());
                 }
                 throw new UserInactiveException("User inactive");
-            }
         }
-        throw new ResourceNotFoundException("User with login " + login + " not found");
+        throw new WrongCredentialsException();
     }
 }
