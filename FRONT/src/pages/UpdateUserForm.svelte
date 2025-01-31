@@ -24,7 +24,7 @@
     function getUser(){
         let uri
         if(isAdmin() || isManager()){
-            uri = `h${config.BASE_URL}/users/${id}/signed`
+            uri = `${config.BASE_URL}/users/${id}/signed`
         }
         else {
             uri = `${config.BASE_URL}/users/self/signed`

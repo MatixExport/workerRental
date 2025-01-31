@@ -28,7 +28,7 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-//    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
+    @PreAuthorize("hasAnyRole(T(indie.outsource.WorkerRental.Roles).ADMIN, T(indie.outsource.WorkerRental.Roles).MANAGER)")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList());
@@ -113,7 +113,6 @@ public class UserController {
 
     @PostMapping("users/self/signed")
     public ResponseEntity<UserDTO> updateUserWithSign(@RequestBody @Valid ChangePasswordDto userDTO) {
-        SignedCreateUserDTO halo = new SignedCreateUserDTO(userDTO.getLogin(), userDTO.getPassword(), userDTO.getType());
         try {
             if(!userService.verifySignedCreateUser(userDTO)){
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
