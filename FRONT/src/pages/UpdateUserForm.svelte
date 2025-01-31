@@ -9,6 +9,7 @@
 
     let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
+    let ifMatch = $state("")
     getUser()
     let notification = $state("")
     let passwordErrors = $state<String[]>([]);
@@ -32,6 +33,7 @@
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
+                    ifMatch = response.headers.get("ETag");
                     response.json().then(result => user = result)
                 }
                 else if(response.status === 400){
@@ -73,7 +75,10 @@
             }
             fetchWithJwt(uri, {
                 method: "POST",
-                headers: {'Content-Type': 'application/json;charset=UTF-8'},
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    "If-Match": ifMatch.substring(1,ifMatch.length-1)
+                },
                 body: JSON.stringify(user)
             }).then(
                 response =>{

@@ -59,6 +59,10 @@ export async function fetchLogin(login, password){
             localStorage.setItem("token", token)
             loadUserFromToken()
             navigate("/")
+        }).catch(error=>{
+            error.then(body=>{
+                notify(body)
+            })
         })
     }
     catch (error){
@@ -76,7 +80,7 @@ function loadUserFromToken() {
             manager = decodedToken.groups.includes("MANAGER");
             username = decodedToken.sub;
 
-            setTimeout(logout, 1000 * 60 * 10)
+            setTimeout(logout, 1000 * 60 * 30)
         } catch (error) {
             console.error("Failed to decode token:", error);
         }

@@ -3,6 +3,7 @@ package indie.outsource.WorkerRental;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,7 +30,11 @@ public class SecurityConfig{
         var corsConfig = new CorsConfiguration();
         corsConfig.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:5174","http://localhost:5175"));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        corsConfig.setAllowedHeaders(List.of("*"));
+//        corsConfig.setAllowedHeaders(List.of("*"));
+//        corsConfig.setExposedHeaders(List.of("Authorization", "If-Match", ));
+        corsConfig.addAllowedHeader("*");
+        corsConfig.addExposedHeader(HttpHeaders.ETAG);
+
 //        corsConfig.setAllowCredentials(true);
         return corsConfig;
     }
@@ -39,6 +44,7 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(_ ->{ return corsConfigurationSource();}))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorizeRequests) -> {

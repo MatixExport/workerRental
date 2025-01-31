@@ -109,9 +109,10 @@ public class UserService {
         return signedUserDTO;
     }
 
-    public Boolean verifySignedCreateUser(SignedCreateUserDTO signedCreateUserDTO) {
+    public Boolean verifySignedCreateUser(SignedCreateUserDTO signedCreateUserDTO, String signature) {
         try {
-            if(!jwsUtil.verifySignature(signedCreateUserDTO.getSignature(),signedCreateUserDTO.getPayload())){
+
+            if(!jwsUtil.verifySignature(signature,signedCreateUserDTO.getPayload())){
                 return false;
             }
         } catch (Exception e) {
