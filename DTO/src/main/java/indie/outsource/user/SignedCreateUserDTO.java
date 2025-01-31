@@ -12,9 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SignedCreateUserDTO extends CreateUserDTO {
-
-    @NotEmpty
-    @NotBlank
+    
     private String signature;
 
     public SignedCreateUserDTO(String login, String password, USERTYPE type) {
