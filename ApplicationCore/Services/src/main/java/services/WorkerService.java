@@ -1,10 +1,10 @@
 package services;
 
-import indie.outsource.ApplicationCore.exceptions.ResourceNotFoundException;
-import indie.outsource.ApplicationCore.exceptions.WorkerRentedException;
-import indie.outsource.ApplicationCore.model.Worker;
-import indie.outsource.ApplicationCore.repositories.RentRepository;
-import indie.outsource.ApplicationCore.repositories.WorkerRepository;
+import Entities.WorkerEnt;
+import exceptions.ResourceNotFoundException;
+import exceptions.WorkerRentedException;
+import infrastructure.RentRepository;
+import infrastructure.WorkerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class WorkerService {
     private WorkerRepository workerRepository;
     private RentRepository rentRepository;
 
-    public Worker findById(UUID id) {
+    public WorkerEnt findById(UUID id) throws ResourceNotFoundException {
         if(workerRepository.findById(id).isPresent()){
             return workerRepository.findById(id).get();
         }
@@ -26,22 +26,22 @@ public class WorkerService {
             throw new ResourceNotFoundException();
     }
 
-    public List<Worker> findAll() {
+    public List<WorkerEnt> findAll() {
         return workerRepository.findAll();
     }
 
-    public Worker save(Worker worker) {
+    public WorkerEnt save(WorkerEnt worker) {
         return workerRepository.save(worker);
     }
 
-    public Worker updateWorker(Worker worker){
+    public WorkerEnt updateWorker(WorkerEnt worker) throws ResourceNotFoundException {
         if (workerRepository.findById(worker.getId()).isEmpty()){
             throw new ResourceNotFoundException("Worker with id " + worker.getId() + " not found");
         }
         return workerRepository.save(worker);
     }
 
-    public void delete(UUID id) {
+    public void delete(UUID id) throws ResourceNotFoundException, WorkerRentedException {
         if(workerRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException();
         }
