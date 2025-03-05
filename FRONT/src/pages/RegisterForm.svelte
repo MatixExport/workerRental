@@ -5,7 +5,7 @@
     import {notify} from "../stores/notifier.svelte";
     import config from "../config";
 
-    let user: CreateUser = $state({
+    let Entities.user: CreateUser = $state({
         "login": "",
         "password": "",
         "type": "CLIENT"
@@ -18,16 +18,16 @@
     function validate(){
         loginErrors = []
         passwordErrors = []
-        if(user.login.length < 3){
+        if(Entities.user.login.length < 3){
             loginErrors.push("Username too short")
         }
-        if(user.password.length < 3){
+        if(Entities.user.password.length < 3){
             passwordErrors.push("Password too short")
         }
-        if(user.login.length > 30){
+        if(Entities.user.login.length > 30){
             loginErrors.push("Username too long")
         }
-        if(user.password.length > 30){
+        if(Entities.user.password.length > 30){
             passwordErrors.push("Password too long")
         }
     }
@@ -39,12 +39,12 @@
             fetch(uri, {
                 method: "POST",
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
-                body: JSON.stringify(user)
+                body: JSON.stringify(Entities.user)
             }).then(
                 response =>{
                     if(response.ok){
-                        user.password=""
-                        user.login=""
+                        Entities.user.password=""
+                        Entities.user.login=""
                         notify("registered")
                     }
                     else if(response.status === 409){
@@ -67,7 +67,7 @@
         <form oninput={validate} class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
             <label for="username" class="text-blue-700 mb-2 text-2xl">Login:</label>
             <input name="username" autocomplete="username"
-                   bind:value={user.login}
+                   bind:value={Entities.user.login}
                    class:bg-red-500={loginErrors.length>0} class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
             {#each loginErrors as error}
@@ -76,7 +76,7 @@
 
             <label for="password" class="text-blue-700 mb-2 text-2xl">Password:</label>
             <input name="password" type="password" autocomplete="current-password"
-                   bind:value={user.password}
+                   bind:value={Entities.user.password}
                    class:bg-red-500={passwordErrors.length>0} class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
             {#each passwordErrors as error}

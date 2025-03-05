@@ -11,9 +11,15 @@
 
 	<artifactId>ApplicationCore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<name>ApplicationCore</name>
 	<description>Worker renting application</description>
+	<modules>
+		<module>ApplicationPorts</module>
+		<module>DomainModel</module>
+		<module>Exceptions</module>
+		<module>Services</module>
+	</modules>
 
 
 	<dependencies>
@@ -61,17 +67,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver-sync</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-crypt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver-core</artifactId>
-		</dependency>
+
 	</dependencies>
 </project>

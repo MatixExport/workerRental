@@ -109,9 +109,9 @@ public class UserController {
     }
 
 //    @PostMapping("/clients")
-//    public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
-//        user.setType(USERTYPE.CLIENT);
-//        return addUser(user);
+//    public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO Entities.user) {
+//        Entities.user.setType(USERTYPE.CLIENT);
+//        return addUser(Entities.user);
 //    }
 
     @PostMapping("users/self/signed")

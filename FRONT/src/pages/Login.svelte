@@ -3,14 +3,14 @@
     import {fetchLogin} from "../stores/JWT.svelte.js";
 
 
-    let user = $state({login:"",password:""})
+    let Entities.user = $state({login:"",password:""})
 
     let loginErrors = $state();
     let passwordErrors = $state();
 
 
     function submit(){
-        fetchLogin(user.login, user.password)
+        fetchLogin(Entities.user.login, Entities.user.password)
     }
 
 </script>
@@ -20,7 +20,7 @@
     <form class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
         <label for="username" class="text-blue-700 mb-2 text-2xl">Login:</label>
         <input name="username" autocomplete="username"
-               bind:value={user.login}
+               bind:value={Entities.user.login}
                class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
         {#each loginErrors as error}
@@ -29,7 +29,7 @@
 
         <label for="password" class="text-blue-700 mb-2 text-2xl">Password:</label>
         <input name="password" type="password" autocomplete="current-password"
-               bind:value={user.password}
+               bind:value={Entities.user.password}
                class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
         {#each passwordErrors as error}

@@ -55,7 +55,7 @@ public class RentController {
         }
     }
 
-    @PostMapping("/rents/user/workers/{workerId}")
+    @PostMapping("/rents/Entities.user/workers/{workerId}")
     public ResponseEntity<RentDTO> createRent(@PathVariable UUID workerId, @RequestBody @Valid CreateRentDTO rent) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails= (UserDetails) authentication.getDetails();

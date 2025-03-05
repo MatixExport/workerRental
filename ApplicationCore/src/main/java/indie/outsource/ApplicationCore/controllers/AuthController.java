@@ -32,7 +32,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
         catch (UserInactiveException e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Inactive user");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Inactive Entities.user");
         }
 
     }
