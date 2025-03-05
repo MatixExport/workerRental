@@ -1,24 +1,22 @@
-package repositories;
+package repositories.implementations;
 
-import Entities.WorkerEnt;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import documents.WorkerMgd;
 import exceptions.WorkerRentedException;
-import infrastructure.WorkerRepository;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import repositories.mongoConnection.MongoConnection;
+import mongoConnection.MongoConnection;
+import repositories.interfaces.MongoWorkerRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
 @Repository
-public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> implements WorkerRepository {
+public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> implements MongoWorkerRepository {
 
     @Autowired
     public MongoWorkerRepositoryImpl(MongoConnection mongoConnection) {
@@ -32,10 +30,8 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
     }
 
     @Override
-    public List<WorkerEnt> findAll() {
-        return mongoFindAll().stream()
-                .map(WorkerMgd::toDomainModel)
-                .toList();
+    public List<WorkerMgd> findAll() {
+        return mongoFindAll();
     }
 
     private void updateIsRented(UUID workerUUID, int value){
@@ -46,23 +42,20 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
 
 
     @Override
-    public Optional<WorkerEnt> findById(UUID id) {
-        WorkerMgd mgd = mongoFindById(id);
-        if (mgd != null) {return Optional.of(mgd.toDomainModel());}
-        return Optional.empty();
+    public WorkerMgd findById(UUID id) {
+        return mongoFindById(id);
     }
 
     @Override
-    public WorkerEnt save(WorkerEnt worker) {
-        WorkerMgd mgd = new WorkerMgd(worker);
+    public WorkerMgd save(WorkerMgd worker) {
         if(worker.getId() == null) {
-            mgd.setIsRented(0);
+            worker.setIsRented(0);
         }
-       return mongoSave(mgd).toDomainModel();
+       return mongoSave(worker);
     }
 
     @Override
-    public void delete(WorkerEnt worker) throws WorkerRentedException {
+    public void delete(WorkerMgd worker) throws WorkerRentedException {
         deleteById(worker.getId());
     }
 

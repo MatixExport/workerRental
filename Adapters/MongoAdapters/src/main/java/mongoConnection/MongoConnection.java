@@ -1,4 +1,4 @@
-package repositories.mongoConnection;
+package mongoConnection;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;

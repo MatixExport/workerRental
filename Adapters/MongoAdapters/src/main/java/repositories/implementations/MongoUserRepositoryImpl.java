@@ -1,4 +1,4 @@
-package repositories;
+package repositories.implementations;
 
 import Entities.user.UserEnt;
 import com.mongodb.MongoWriteException;
@@ -14,7 +14,8 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import repositories.mongoConnection.MongoConnection;
+import mongoConnection.MongoConnection;
+import repositories.interfaces.MongoUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implements UserRepository {
+public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implements MongoUserRepository {
     @Autowired
     public MongoUserRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, UserMgd.class);
@@ -46,46 +47,35 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
     }
 
     @Override
-    public Optional<UserEnt> findByLogin(String login) {
-        UserMgd mgd = getCollection().find(new Document("login", login)).first();
-        if (mgd != null) {
-            return Optional.of(mgd.toDomainModel());
-        }
-        return Optional.empty();
+    public UserMgd findByLogin(String login) {
+        return getCollection().find(new Document("login", login)).first();
     }
 
 
     //https://www.mongodb.com/docs/drivers/java/sync/v4.3/fundamentals/indexes/
     //https://www.mongodb.com/docs/manual/core/link-text-indexes/#std-label-text-search-on-premises
     @Override
-    public List<UserEnt> findByLoginContainsIgnoreCase(String login) {
+    public List<UserMgd> findByLoginContainsIgnoreCase(String login) {
         String searchQuery = ".*" + login + ".*";
         Bson regexFilter = Filters.regex("login",searchQuery , "i");
         return getCollection().find(regexFilter)
-                .into(new ArrayList<>())
-                .stream()
-                .map(UserMgd::toDomainModel)
-                .toList();
+                .into(new ArrayList<>());
     }
 
     @Override
-    public List<UserEnt> findAll() {
-        return mongoFindAll().stream()
-                .map(UserMgd::toDomainModel)
-                .toList();
+    public List<UserMgd> findAll() {
+        return mongoFindAll();
     }
 
     @Override
-    public Optional<UserEnt> findById(UUID id) {
-        UserMgd mgd = mongoFindById(id);
-        if (mgd != null) {return Optional.of(mgd.toDomainModel());}
-        return Optional.empty();
+    public UserMgd findById(UUID id) {
+        return mongoFindById(id);
     }
 
     @Override
-    public UserEnt save(UserEnt user) throws UserAlreadyExistsException {
+    public UserMgd save(UserMgd user) throws UserAlreadyExistsException {
         try{
-            return mongoSave(UserMgd.fromDomainModel(user)).toDomainModel();
+            return mongoSave(user);
         }
         catch (MongoWriteException e){
             if(e.getError().getCode() == 11000){
@@ -96,8 +86,8 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
     }
 
     @Override
-    public void delete(UserEnt user) {
-        mongoDelete(UserMgd.fromDomainModel(user));
+    public void delete(UserMgd user) {
+        mongoDelete(user);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package repositories;
+package repositories.implementations;
 
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
@@ -10,8 +10,8 @@ import com.mongodb.client.result.UpdateResult;
 import documents.AbstractEntityMgd;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import repositories.mongoConnection.MongoConnection;
-import repositories.mongoConnection.MongoSchema;
+import mongoConnection.MongoConnection;
+import mongoConnection.MongoSchema;
 
 import java.util.ArrayList;
 import java.util.List;

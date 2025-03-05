@@ -1,4 +1,4 @@
-package repositories.mongoConnection;
+package mongoConnection;
 
 import Entities.RentEnt;
 import Entities.WorkerEnt;

@@ -1,6 +1,5 @@
-package repositories;
+package repositories.implementations;
 
-import Entities.RentEnt;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -11,18 +10,18 @@ import documents.WorkerMgd;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
-import infrastructure.RentRepository;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;
-import repositories.mongoConnection.MongoConnection;
+import mongoConnection.MongoConnection;
+import repositories.interfaces.MongoRentRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 
 @Repository
-public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements RentRepository {
+public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements MongoRentRepository {
     public MongoRentRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, RentMgd.class);
     }
@@ -30,19 +29,14 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     @Override
     protected void createCollection() {
         super.createCollection();
-
     }
 
-    private List<RentEnt> findByFilter(Bson filter) {
-        return getCollection().find(filter)
-                .into(new ArrayList<>())
-                .stream()
-                .map(RentMgd::toDomainModel)
-                .toList();
+    private List<RentMgd> findByFilter(Bson filter) {
+        return getCollection().find(filter).into(new ArrayList<>());
     }
 
     @Override
-    public List<RentEnt> findByUser_IdAndEndDateBefore(UUID id, LocalDateTime date) {
+    public List<RentMgd> findByUser_IdAndEndDateBefore(UUID id, LocalDateTime date) {
         Document idFilter = new Document("Entities.user._id",id);
         //endDate < targetDate
         Document endDateFilter = new Document("endDate",new Document("$lt", date));
@@ -50,14 +44,14 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     }
 
     @Override
-    public List<RentEnt> findByUser_IdAndEndDateIsNull(UUID id) {
+    public List<RentMgd> findByUser_IdAndEndDateIsNull(UUID id) {
         Document idFilter = new Document("Entities.user._id",id);
         Document endDateFilter = new Document("endDate", new Document("$in", Arrays.asList(null, "")));
         return findByFilter(Filters.and(idFilter,endDateFilter));
     }
 
     @Override
-    public List<RentEnt> findByWorker_IdAndEndDateBefore(UUID id, LocalDateTime date) {
+    public List<RentMgd> findByWorker_IdAndEndDateBefore(UUID id, LocalDateTime date) {
         Document idFilter = new Document("worker._id",id);
         //endDate < targetDate
         Document endDateFilter = new Document("endDate",new Document("$lt", date));
@@ -65,7 +59,7 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     }
 
     @Override
-    public List<RentEnt> findByWorker_IdAndEndDateIsNull(UUID id) {
+    public List<RentMgd> findByWorker_IdAndEndDateIsNull(UUID id) {
         Document idFilter = new Document("worker._id",id);
         Document endDateFilter = new Document("endDate", new Document("$in", Arrays.asList(null, "")));
         return findByFilter(Filters.and(idFilter,endDateFilter));
@@ -79,19 +73,14 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     }
 
     @Override
-    public List<RentEnt> findAll() {
-        return mongoFindAll().stream()
-                .map(RentMgd::toDomainModel)
-                .toList();
+    public List<RentMgd> findAll() {
+        return mongoFindAll();
     }
 
     @Override
-    public Optional<RentEnt> findById(UUID id) {
-        RentMgd mgd = mongoFindById(id);
-        if (mgd != null) {return Optional.of(mgd.toDomainModel());}
-        return Optional.empty();
+    public RentMgd findById(UUID id) {
+        return mongoFindById(id);
     }
-
 
     private void updateIsRented(WorkerMgd workerMgd, int value){
         MongoCollection<WorkerMgd> workerMongoCollection = mongoConnection.getMongoDatabase().getCollection(WorkerMgd.class.getSimpleName(), WorkerMgd.class);
@@ -100,9 +89,8 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         workerMongoCollection.updateOne(filter, update);
     }
 
-
     @Override
-    public RentEnt save(RentEnt rent) throws ResourceNotFoundException, RentAlreadyEndedException, WorkerRentedException {
+    public RentMgd save(RentMgd rent) throws ResourceNotFoundException, RentAlreadyEndedException, WorkerRentedException {
         if(rent.getId() == null){
             rent.setId(UUID.randomUUID());
             return insert(rent);
@@ -117,13 +105,12 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         return update(rent);
     }
 
-    private RentEnt insert(RentEnt rent) throws WorkerRentedException {
-        RentMgd rentMgd = new RentMgd(rent);
-        rentMgd.getUser().removePassword();
+    private RentMgd insert(RentMgd rent) throws WorkerRentedException {
+        rent.getUser().removePassword();
         try{
             inSession(mongoConnection.getMongoClient(),()->{
-                updateIsRented(rentMgd.getWorker(), 1);
-                getCollection().insertOne(rentMgd);
+                updateIsRented(rent.getWorker(), 1);
+                getCollection().insertOne(rent);
             });
             return rent;
         }catch (MongoWriteException e){
@@ -131,29 +118,27 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         }
     }
 
-    private RentEnt update(RentEnt rent){
+    private RentMgd update(RentMgd rent){
         if(rent.getEndDate() != null){
             return finish(rent);
         }
-        RentMgd rentMgd = new RentMgd(rent);
-        rentMgd.getUser().removePassword();
-        getCollection().replaceOne(new Document("_id", rent.getId()),rentMgd);
+        rent.getUser().removePassword();
+        getCollection().replaceOne(new Document("_id", rent.getId()),rent);
         return rent;
     }
 
-    private RentEnt finish(RentEnt rent){
-        RentMgd rentMgd = new RentMgd(rent);
-        rentMgd.getUser().removePassword();
+    private RentMgd finish(RentMgd rent){
+        rent.getUser().removePassword();
         inSession(mongoConnection.getMongoClient(),()->{
-            updateIsRented(rentMgd.getWorker(), -1);
-            getCollection().replaceOne(new Document("_id", rent.getId()),rentMgd);
+            updateIsRented(rent.getWorker(), -1);
+            getCollection().replaceOne(new Document("_id", rent.getId()),rent);
         });
         return rent;
     }
 
     @Override
-    public void delete(RentEnt rent) {
-        mongoDelete(new RentMgd(rent));
+    public void delete(RentMgd rent) {
+        mongoDelete(rent);
     }
 
     @Override
