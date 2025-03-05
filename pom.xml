@@ -20,7 +20,6 @@
 	<modules>
 		<module>REST</module>
 		<module>DTO</module>
-		<module>MVC/MVC</module>
 	</modules>
 
 	<dependencies>
