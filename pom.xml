@@ -21,7 +21,7 @@
 	</parent>
 
 	<modules>
-		<module>REST</module>
+		<module>ApplicationCore</module>
 		<module>DTO</module>
 	</modules>
 
