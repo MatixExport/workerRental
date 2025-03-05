@@ -9,34 +9,18 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>indie.outsource</groupId>
 	<artifactId>REST</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>WorkerRentalREST</name>
 	<description>Worker renting application</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>23</java.version>
-	</properties>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>indie.outsource</groupId>
 			<artifactId>DTO</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -45,7 +29,6 @@
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
-			<version>9.31</version>
 		</dependency>
 
 		<dependency>
@@ -59,7 +42,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.34</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -74,30 +56,25 @@
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
-			<version>5.5.0</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver-sync</artifactId>
-			<version>5.1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-crypt</artifactId>
-			<version>1.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver-core</artifactId>
-			<version>5.1.4</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
