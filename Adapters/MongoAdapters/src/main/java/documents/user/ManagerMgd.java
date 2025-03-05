@@ -1,7 +1,5 @@
 package documents.user;
 
-import Entities.user.ManagerEnt;
-import Entities.user.UserEnt;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
@@ -18,17 +16,4 @@ public class ManagerMgd extends UserMgd {
         super(id, login, password, active);
     }
 
-    public ManagerMgd(UserEnt user) {
-        super(user.getId(), user.getLogin(), user.getPassword(), user.isActive());
-    }
-
-    @Override
-    public ManagerEnt toDomainModel(){
-        ManagerEnt manager = new ManagerEnt();
-        manager.setId(getId());
-        manager.setLogin(getLogin());
-        manager.setPassword(getPassword());
-        manager.setActive(isActive());
-        return manager;
-    }
 }

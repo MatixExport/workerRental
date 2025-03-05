@@ -1,7 +1,6 @@
 package documents;
 
 
-import Entities.RentEnt;
 import documents.user.UserMgd;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,23 +35,5 @@ public class RentMgd extends AbstractEntityMgd {
         this.endDate = endDate;
         this.worker = worker;
         this.user = user;
-    }
-
-    public RentMgd(RentEnt rent){
-        super(rent.getId());
-        this.startDate = rent.getStartDate();
-        this.endDate = rent.getEndDate();
-        this.worker = new WorkerMgd(rent.getWorker());
-        this.user = UserMgd.fromDomainModel(rent.getUser());
-    }
-
-    public RentEnt toDomainModel(){
-        RentEnt rent = new RentEnt();
-        rent.setId(getId());
-        rent.setStartDate(getStartDate());
-        rent.setEndDate(getEndDate());
-        rent.setWorker(this.worker.toDomainModel());
-        rent.setUser(this.user.toDomainModel());
-        return rent;
     }
 }
