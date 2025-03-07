@@ -3,7 +3,7 @@ package mongoConnection;
 import com.mongodb.client.model.ValidationOptions;
 import documents.RentMgd;
 import documents.WorkerMgd;
-import documents.user.UserMgd;
+import documents.users.UserMgd;
 import org.bson.Document;
 
 import java.util.HashMap;

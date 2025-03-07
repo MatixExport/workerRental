@@ -10,6 +10,9 @@
     </parent>
 
     <artifactId>Adapters</artifactId>
+    <modules>
+        <module>REST</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>23</maven.compiler.source>

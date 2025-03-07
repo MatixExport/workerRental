@@ -1,7 +1,7 @@
 package documents;
 
 
-import documents.user.UserMgd;
+import documents.users.UserMgd;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;

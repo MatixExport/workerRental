@@ -1,15 +1,13 @@
 package repositories.implementations;
 
-import Entities.user.UserEnt;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.CollationStrength;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
-import documents.user.UserMgd;
+import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;
-import infrastructure.UserRepository;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import repositories.interfaces.MongoUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository

@@ -1,12 +1,12 @@
 package services;
 
 import Entities.user.UserEnt;
-import com.nimbusds.jose.JOSEException;
+//import com.nimbusds.jose.JOSEException;
 
 
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
-import indie.outsource.user.SignedCreateUserDTO;
+//import indie.outsource.user.SignedCreateUserDTO;
 import infrastructure.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements view.UserService {
     private final UserRepository userRepository;
 //    private final AuthHelper authHelper;
 //    private final JWSUtil jwsUtil;

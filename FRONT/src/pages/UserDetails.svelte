@@ -6,7 +6,7 @@
     import {fetchWithJwt, isAdmin, isManager} from "../stores/JWT.svelte.js";
     import config from '../config';
 
-    let Entities.user = $state(null)
+    let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
     getUser()
     let notification = $state("")
@@ -31,7 +31,7 @@
         fetchWithJwt(uri, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
-                    response.json().then(result => Entities.user = result)
+                    response.json().then(result => user = result)
                 }
                 else if(response.status === 400){
                     notification = "Error occurred: invalid uuid"
@@ -85,15 +85,15 @@
     {#if notification.length>0}
         <Notification message="User not found" callback={()=>{navigate("/")}}></Notification>
     {:else}
-        {#if Entities.user===null}
+        {#if user===null}
             <p>Loading</p>
         {:else}
             <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-                <h2 class="text-xl font-bold text-gray-800 mb-2">{Entities.user.login}</h2>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">{user.login}</h2>
                 <div class="grid gap-2 text-sm text-gray-700">
-                    <p><span class="font-semibold">Active:</span> {Entities.user.active}</p>
-                    <p><span class="font-semibold">ID:</span> {Entities.user.id}</p>
-                    <p><span class="font-semibold">Type:</span> {Entities.user.type}</p>
+                    <p><span class="font-semibold">Active:</span> {user.active}</p>
+                    <p><span class="font-semibold">ID:</span> {user.id}</p>
+                    <p><span class="font-semibold">Type:</span> {user.type}</p>
                 </div>
             </div>
             <div class="rounded border bg-gray-100 p-2 m-2">

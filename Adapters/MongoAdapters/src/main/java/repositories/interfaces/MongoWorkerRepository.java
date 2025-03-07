@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
-@Component
 @Repository
 public interface MongoWorkerRepository {
     List<WorkerMgd> findAll();

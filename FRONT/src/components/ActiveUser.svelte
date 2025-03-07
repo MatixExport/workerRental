@@ -4,7 +4,7 @@
     import ConfirmNotification from "./ConfirmNotification.svelte";
     import {fetchWithJwt, getUsername, isAdmin, isManager} from "../stores/JWT.svelte.js";
     import config from "../config";
-    let {Entities.user, getUsers} = $props()
+    let {user, getUsers} = $props()
 
     function deactivate(id){
         const uri = `${config.BASE_URL}/users/${id}/deactivate`
@@ -24,17 +24,17 @@
 </script>
 
 <div class="p-4 bg-green-100 border border-green-400 rounded-lg shadow-md">
-    <h2 class="text-lg font-bold text-green-700">{Entities.user.login}</h2>
-    <p class="text-sm text-green-600">ID: {Entities.user.id}</p>
-    <span class="text-xs font-semibold text-green-700 uppercase">Type: {Entities.user.type}</span>
+    <h2 class="text-lg font-bold text-green-700">{user.login}</h2>
+    <p class="text-sm text-green-600">ID: {user.id}</p>
+    <span class="text-xs font-semibold text-green-700 uppercase">Type: {user.type}</span>
     <div class="mt-4 flex space-x-2">
-        {#if getUsername() === Entities.user.login || isAdmin() || isManager()}
-            <input type="button" value="update" onclick={()=>navigate(`/updateUser@${Entities.user.id}`)} class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700">
-            <input type="button" value="details" onclick={()=>navigate(`/userDetails@${Entities.user.id}`)} class="px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded hover:bg-green-200">
+        {#if getUsername() === user.login || isAdmin() || isManager()}
+            <input type="button" value="update" onclick={()=>navigate(`/updateUser@${user.id}`)} class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700">
+            <input type="button" value="details" onclick={()=>navigate(`/userDetails@${user.id}`)} class="px-4 py-2 text-sm font-medium text-green-600 border border-green-600 rounded hover:bg-green-200">
         {/if}
         {#if isAdmin() || isManager() }
             <input type="button" value="deactivate" onclick={()=>{
-                        notification.setAccept(()=>{deactivate(Entities.user.id)});
+                        notification.setAccept(()=>{deactivate(user.id)});
                         notification.show();
                     }} class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700">
         {/if}

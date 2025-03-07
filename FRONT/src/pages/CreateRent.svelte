@@ -65,7 +65,7 @@
             uri = `${config.BASE_URL}/rents/users/${selectedUser.id}/workers/${selectedWorker.id}`;
         }
         else{
-            uri = `${config.BASE_URL}/rents/Entities.user/workers/${selectedWorker.id}`;
+            uri = `${config.BASE_URL}/rents/user/workers/${selectedWorker.id}`;
         }
         fetchWithJwt(uri, {
             method: "POST",
@@ -103,11 +103,11 @@
     <h1 class="text-5xl text-green-600 mb-2">Create rent</h1>
     <form class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
         {#if isAdmin() || isManager()}
-            <label for="Entities.user" class="text-green-600 mb-2 text-2xl">User:</label>
-            <select name="Entities.user" bind:value={selectedUser}
+            <label for="user" class="text-green-600 mb-2 text-2xl">User:</label>
+            <select name="user" bind:value={selectedUser}
                     class="w-full p-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                {#each users as Entities.user}
-                    <option value="{Entities.user}">{Entities.user.login}</option>
+                {#each users as user}
+                    <option value="{user}">{user.login}</option>
                 {/each}
             </select>
         {/if}

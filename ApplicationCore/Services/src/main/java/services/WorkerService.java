@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class WorkerService {
+public class WorkerService implements view.WorkerService{
 
     private WorkerRepository workerRepository;
     private RentRepository rentRepository;

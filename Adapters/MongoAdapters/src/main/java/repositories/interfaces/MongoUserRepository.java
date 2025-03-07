@@ -1,15 +1,13 @@
 package repositories.interfaces;
 
-import documents.user.UserMgd;
+import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-@Component
 @Repository
 public interface MongoUserRepository {
 

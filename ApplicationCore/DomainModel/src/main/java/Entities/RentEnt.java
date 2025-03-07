@@ -1,10 +1,11 @@
 package Entities;
 
+import Entities.user.UserEnt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import Entities.user.UserEnt;
+
 
 import java.time.LocalDateTime;
 

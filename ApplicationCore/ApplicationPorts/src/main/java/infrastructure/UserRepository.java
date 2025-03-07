@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
+
 @Repository
 public interface UserRepository{
     List<UserEnt> findAll();

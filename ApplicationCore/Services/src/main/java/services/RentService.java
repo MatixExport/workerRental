@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class RentService {
+public class RentService implements view.RentService {
     private final RentRepository rentRepository;
     private final UserRepository userRepository;
     private final WorkerRepository workerRepository;
@@ -39,7 +39,7 @@ public class RentService {
         return (List<RentEnt>) rentRepository.findAll();
     }
 
-    public RentEnt createRent(UUID clientId, UUID workerId, LocalDateTime startDate) throws ResourceNotFoundException, UserInactiveException, WorkerRentedException, RentAlreadyEndedException {
+    public RentEnt createRent(UUID clientId, UUID workerId, LocalDateTime startDate) throws ResourceNotFoundException, UserInactiveException, WorkerRentedException {
         Optional<UserEnt> user = userRepository.findById(clientId);
         if(user.isEmpty()){
             System.out.println("User not found");
@@ -60,7 +60,11 @@ public class RentService {
         rent.setUser(user.get());
         rent.setWorker(worker.get());
         rent.setStartDate(startDate);
-        return rentRepository.save(rent);
+        try {
+            return rentRepository.save(rent);
+        } catch (RentAlreadyEndedException e) {
+            throw new RuntimeException(e);  //TODO fix exceptions
+        }
     }
 
     public List<RentEnt> getClientActiveRents(UUID clientId) throws ResourceNotFoundException {
@@ -89,7 +93,7 @@ public class RentService {
         return rentRepository.findByWorker_IdAndEndDateBefore(workerId, LocalDateTime.now());
     }
 
-    public RentEnt endRent(UUID rentId) throws ResourceNotFoundException, RentAlreadyEndedException, WorkerRentedException {
+    public RentEnt endRent(UUID rentId) throws ResourceNotFoundException, RentAlreadyEndedException {
         if(rentRepository.findById(rentId).isEmpty()){
             throw new ResourceNotFoundException();
         }
@@ -98,7 +102,11 @@ public class RentService {
             throw new RentAlreadyEndedException();
         }
         rent.setEndDate(LocalDateTime.now());
-        return rentRepository.save(rent);
+        try {
+            return rentRepository.save(rent);
+        } catch (WorkerRentedException e) {
+            throw new RuntimeException(e);  //TODO fix exceptions
+        }
     }
     public void deleteRent(UUID rentId) throws ResourceNotFoundException, RentAlreadyEndedException {
         if(rentRepository.findById(rentId).isEmpty()){

@@ -51,11 +51,11 @@
 
 
 <div class="grid grid-cols-4 gap-4 p-4">
-    {#each users as Entities.user}
-        {#if Entities.user.active}
-            <ActiveUser {Entities.user} getUsers={getUsers}/>
+    {#each users as user}
+        {#if user.active}
+            <ActiveUser {user} getUsers={getUsers}/>
         {:else}
-            <InactiveUser {Entities.user} getUsers={getUsers}/>
+            <InactiveUser {user} getUsers={getUsers}/>
         {/if}
     {/each}
 </div>

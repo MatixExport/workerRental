@@ -7,7 +7,7 @@
     import {fetchWithJwt, isAdmin, isClient, isManager} from "../stores/JWT.svelte.js";
     import config from "../config";
 
-    let Entities.user = $state(null)
+    let user = $state(null)
     let id = $state(getId(getCurrentRoute()))
     let ifMatch = $state("")
     getUser()
@@ -34,7 +34,7 @@
             .then(response => {
                 if(response.status === 200){
                     ifMatch = response.headers.get("ETag");
-                    response.json().then(result => Entities.user = result)
+                    response.json().then(result => user = result)
                 }
                 else if(response.status === 400){
                     notification = "Error occurred: invalid uuid"
@@ -55,10 +55,10 @@
 
     function validate(){
         passwordErrors = []
-        if(Entities.user.password.length < 3){
+        if(user.password.length < 3){
             passwordErrors.push("Password too short")
         }
-        else if(Entities.user.password.length > 30){
+        else if(user.password.length > 30){
             passwordErrors.push("Password too long")
         }
     }
@@ -79,11 +79,11 @@
                     'Content-Type': 'application/json;charset=UTF-8',
                     "If-Match": ifMatch.substring(1,ifMatch.length-1)
                 },
-                body: JSON.stringify(Entities.user)
+                body: JSON.stringify(user)
             }).then(
                 response =>{
-                    Entities.user.password=""
-                    Entities.user.oldPassword=""
+                    user.password=""
+                    user.oldPassword=""
                     if(response.ok){
                         notify("User updated")
                     }
@@ -91,7 +91,7 @@
                         notify("User does not exist")
                     }
                     else if(response.status === 409){
-                        Entities.user.login = Entities.user.login+" O_O"
+                        user.login = user.login+" O_O"
                         notify("Signature mismatch - data was tampered with")
                     }
                     else if(response.status === 401){
@@ -110,34 +110,34 @@
 {#if notification.length>0}
     <Notification message={notification} callback={()=>{navigate("/")}}></Notification>
 {:else}
-    {#if Entities.user===null}
+    {#if user===null}
         <p>Loading</p>
     {:else}
         <div class="w-1/2 h-1/2 top-1/5 left-1/4 absolute bg-white border-red-500 p-20 rounded-2xl">
-            <h1 class="text-5xl text-blue-700 mb-2">Updating Entities.user: {Entities.user.login}</h1>
+            <h1 class="text-5xl text-blue-700 mb-2">Updating user: {user.login}</h1>
             <form oninput={validate} class="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-4">
                 <label for="login" class="text-gray-400 mb-2 text-2xl">Login:</label>
                 <input name="login" type="text"
-                    bind:value={Entities.user.login}
+                    bind:value={user.login}
                     disabled
                     class="border-2 border-gray-300 bg-gray-100 bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 cursor-not-allowed"
                 >
                 <label for="type" class="text-gray-400 mb-2 text-2xl">Type:</label>
                 <input name="type" type="text"
-                    bind:value={Entities.user.type}
+                    bind:value={user.type}
                     disabled
                     class="border-2 border-gray-300 bg-gray-100 bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 cursor-not-allowed"
                 >
                 {#if isClient()}
                     <label for="password_old" class="text-blue-700 mb-2 text-2xl">Old password:</label>
                     <input name="password_old" type="password" autocomplete="current-password"
-                           bind:value={Entities.user.oldPassword}
+                           bind:value={user.oldPassword}
                            class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                 {/if}
                 <label for="password" class="text-blue-700 mb-2 text-2xl">New password:</label>
                 <input name="password" type="password" autocomplete="current-password"
-                       bind:value={Entities.user.password}
+                       bind:value={user.password}
                        class:bg-red-500={passwordErrors.length>0} class="border-2 border-solid bg-opacity-50 mt-1 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                 {#each passwordErrors as error}
