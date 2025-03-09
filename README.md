@@ -1,4 +1,4 @@
-<h2 align="center">
+<h3 align="center">
 
 <pre>
  __          __           _                 _____               _          _ 
@@ -11,7 +11,7 @@
                                                                              
 </pre>
 
-</h2>
+</h3>
 
 <h3 align="center">
   Full-Stack Web application that follows a simple business scenario that allows users to reserve and manage resources(in this case workers) 
