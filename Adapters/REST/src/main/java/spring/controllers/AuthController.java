@@ -1,5 +1,10 @@
 package spring.controllers;
 
+import exceptions.ResourceNotFoundException;
+import exceptions.UserInactiveException;
+import exceptions.WrongCredentialsException;
+import indie.outsource.user.LoginDTO;
+import org.springframework.http.MediaType;
 import spring.dtoMappers.UserMapper;
 import exceptions.UserAlreadyExistsException;
 import indie.outsource.user.CreateUserDTO;
@@ -10,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import spring.security.AuthService;
 import view.UserService;
 
 @AllArgsConstructor
@@ -17,19 +23,20 @@ import view.UserService;
 public class AuthController {
 
     UserService userService;
+    AuthService authService;
 
-//    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<String> login(@RequestBody  @Valid LoginDTO loginDTO){
-//        try{
-//            return ResponseEntity.ok(userService.login(loginDTO.getLogin(), loginDTO.getPassword()));
-//        }
-//        catch (ResourceNotFoundException | WrongCredentialsException em){
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-//        }
-//        catch (UserInactiveException e){
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Inactive user");
-//        }
-//    }
+    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> login(@RequestBody  @Valid LoginDTO loginDTO){
+        try{
+            return ResponseEntity.ok(authService.login(loginDTO.getLogin(), loginDTO.getPassword()));
+        }
+        catch (ResourceNotFoundException | WrongCredentialsException em){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
+        catch (UserInactiveException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Inactive user");
+        }
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
