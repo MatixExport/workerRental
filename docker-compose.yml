@@ -1,15 +1,21 @@
 version: '3.8'
-
 services:
 
-#  mongo_lite:
-#    image: mongo:8.0.1
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=ADMIN
-#      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
-#      - MONGO_INITDB_DATABASE=workerRental
+  backend:
+    build:
+      context: backend
+    container_name: spring_back
+    ports:
+      - "8080:8080"
+      - "80:80"
+
+
+  frontend:
+    build:
+      context: frontend
+    container_name: svelte_front
+    ports:
+      - "5174:5174"
 
 
   mongo_1:
@@ -17,7 +23,6 @@ services:
       context: .
       dockerfile: customMongoDB
     container_name: mongo1
-
     hostname: mongo1
     networks:
       - mongonet
@@ -73,8 +78,6 @@ services:
       interval: 10s
       timeout: 2s
       retries: 5
-
-
 
   mongoinit:
     build:
