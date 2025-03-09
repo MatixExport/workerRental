@@ -21,12 +21,12 @@ services:
 
 
 
-#  frontend:
-#    build:
-#      context: frontend
-#    container_name: svelte_front
-#    ports:
-#      - "5174:5174"
+  frontend:
+    build:
+      context: frontend
+    container_name: svelte_front
+    ports:
+      - "5173:5173"
 
 
   mongo1:

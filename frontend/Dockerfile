@@ -1,12 +1,13 @@
-FROM node:latest
-RUN mkdir code
+FROM node:23.9.0-alpine as build
 
-WORKDIR /code
+WORKDIR /app
 
-COPY . .
+COPY package.json .
 
 RUN npm install
 
-EXPOSE 5417
+COPY . .
 
-CMD [ "npm", "start"]
+EXPOSE 5173
+
+CMD [ "npm", "run", "dev"]
