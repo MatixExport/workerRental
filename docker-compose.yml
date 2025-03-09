@@ -11,14 +11,16 @@ services:
       - "8080:8080"
       - "80:80"
     depends_on:
-      mongo_1:
+      mongo1:
         condition: service_healthy
-      mongo_2:
+      mongo2:
         condition: service_healthy
-      mongo_3:
+      mongo3:
         condition: service_healthy
-#
-#
+
+
+
+
 #  frontend:
 #    build:
 #      context: frontend
@@ -27,7 +29,7 @@ services:
 #      - "5174:5174"
 
 
-  mongo_1:
+  mongo1:
     build:
       context: .
       dockerfile: customMongoDB
@@ -47,7 +49,8 @@ services:
       interval: 10s
       timeout: 2s
       retries: 5
-  mongo_2:
+
+  mongo2:
     build:
       context: .
       dockerfile: customMongoDB
@@ -67,7 +70,8 @@ services:
       interval: 10s
       timeout: 2s
       retries: 5
-  mongo_3:
+
+  mongo3:
     build:
       context: .
       dockerfile: customMongoDB
@@ -97,11 +101,11 @@ services:
     networks:
       - mongonet
     depends_on:
-      mongo_1:
+      mongo1:
         condition: service_healthy
-      mongo_2:
+      mongo2:
         condition: service_healthy
-      mongo_3:
+      mongo3:
         condition: service_healthy
 
     command: >
