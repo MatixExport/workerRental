@@ -42,7 +42,7 @@ public class MongoSchema {
                                     "required": [
                                       "startDate",
                                       "worker",
-                                      "Entities.user"
+                                      "user"
                                     ],
                                     "properties": {
                                       "startDate": {
@@ -51,7 +51,7 @@ public class MongoSchema {
                                       "endDate": {
                                         "bsonType": "date"
                                       },
-                                       "Entities.user": {
+                                       "user": {
                                       "bsonType": "object",
                                       "required": [
                                         "login"

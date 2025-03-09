@@ -20,7 +20,7 @@ public class RentMgd extends AbstractEntityMgd {
     LocalDateTime endDate;
     @BsonProperty("worker")
     WorkerMgd worker;
-    @BsonProperty(value = "Entities.user",useDiscriminator = true)
+    @BsonProperty(value = "user",useDiscriminator = true)
     UserMgd user;
 
     @BsonCreator
@@ -29,7 +29,7 @@ public class RentMgd extends AbstractEntityMgd {
             @BsonProperty("startDate") LocalDateTime startDate,
             @BsonProperty("endDate") LocalDateTime endDate,
             @BsonProperty("worker") WorkerMgd worker,
-            @BsonProperty("Entities.user") UserMgd user) {
+            @BsonProperty("user") UserMgd user) {
         super(id);
         this.startDate = startDate;
         this.endDate = endDate;
