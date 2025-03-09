@@ -3,7 +3,7 @@ package indie.outsource.user;
 import java.util.Objects;
 
 public enum USERTYPE {
-    ADMIN("Admin"), CLIENT("Client"), MANAGER("Manager");
+    ADMIN("AdminEnt"), CLIENT("ClientEnt"), MANAGER("ManagerEnt");
 
     private final String className;
 

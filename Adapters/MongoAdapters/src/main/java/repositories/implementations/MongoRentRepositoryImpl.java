@@ -37,7 +37,7 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
 
     @Override
     public List<RentMgd> findByUser_IdAndEndDateBefore(UUID id, LocalDateTime date) {
-        Document idFilter = new Document("Entities.user._id",id);
+        Document idFilter = new Document("user._id",id);
         //endDate < targetDate
         Document endDateFilter = new Document("endDate",new Document("$lt", date));
         return findByFilter(Filters.and(idFilter,endDateFilter));
@@ -45,7 +45,7 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
 
     @Override
     public List<RentMgd> findByUser_IdAndEndDateIsNull(UUID id) {
-        Document idFilter = new Document("Entities.user._id",id);
+        Document idFilter = new Document("user._id",id);
         Document endDateFilter = new Document("endDate", new Document("$in", Arrays.asList(null, "")));
         return findByFilter(Filters.and(idFilter,endDateFilter));
     }
