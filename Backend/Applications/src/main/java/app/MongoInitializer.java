@@ -1,4 +1,4 @@
-package spring.security;
+package app;
 
 import Entities.RentEnt;
 import Entities.WorkerEnt;
@@ -10,6 +10,7 @@ import Entities.user.UserEnt;
 import infrastructure.RentRepository;
 import infrastructure.UserRepository;
 import infrastructure.WorkerRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 
 @Configuration
 @Profile("!test")
+@AllArgsConstructor
 public class MongoInitializer implements CommandLineRunner {
     RentRepository rentRepository;
 
@@ -28,12 +30,7 @@ public class MongoInitializer implements CommandLineRunner {
 
     UserRepository userRepository;
 
-    @Autowired
-    public MongoInitializer(RentRepository rentRepository, WorkerRepository workerRepository, UserRepository userRepository) {
-        this.rentRepository = rentRepository;
-        this.workerRepository = workerRepository;
-        this.userRepository = userRepository;
-    }
+
 
     @Override
     public void run(String... args) throws Exception {

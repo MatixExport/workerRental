@@ -2,20 +2,37 @@ version: '3.8'
 
 services:
 
-#  mongo_lite:
-#    image: mongo:8.0.1
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=ADMIN
-#      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
-#      - MONGO_INITDB_DATABASE=workerRental
-
-
-  mongo_1:
+  backend:
     build:
       context: .
-      dockerfile: customMongoDB
+      dockerfile: Dockerfile-backend
+    container_name: spring_back
+    networks:
+      - mongonet
+    ports:
+      - "8080:8080"
+    depends_on:
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
+
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    container_name: svelte_front
+    ports:
+      - "5173:5173"
+
+
+  mongo1:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongoDB
     container_name: mongo1
 
     hostname: mongo1
@@ -33,10 +50,10 @@ services:
       interval: 10s
       timeout: 2s
       retries: 5
-  mongo_2:
+  mongo2:
     build:
       context: .
-      dockerfile: customMongoDB
+      dockerfile: Dockerfile-mongoDB
     container_name: mongo2
     hostname: mongo2
     networks:
@@ -53,10 +70,10 @@ services:
       interval: 10s
       timeout: 2s
       retries: 5
-  mongo_3:
+  mongo3:
     build:
       context: .
-      dockerfile: customMongoDB
+      dockerfile: Dockerfile-mongoDB
     container_name: mongo3
     hostname: mongo3
     networks:
@@ -79,17 +96,17 @@ services:
   mongoinit:
     build:
       context: .
-      dockerfile: customMongoDB
+      dockerfile: Dockerfile-mongoDB
     hostname: mongodbinit
     container_name: mongodbinit
     networks:
       - mongonet
     depends_on:
-      mongo_1:
+      mongo1:
         condition: service_healthy
-      mongo_2:
+      mongo2:
         condition: service_healthy
-      mongo_3:
+      mongo3:
         condition: service_healthy
 
     command: >
