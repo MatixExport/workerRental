@@ -68,7 +68,7 @@ public class RentController {
     }
 
     @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN , T(spring.security.Roles).MANAGER)" +
-            "or rentService.isOwner(#id, principal.username)")
+            " or @rentService.isOwner(#id, principal.username)")
     @PostMapping("/rents/{id}/finish")
     public ResponseEntity<RentDTO> finishRent(@PathVariable UUID id) {
         try {

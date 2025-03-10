@@ -60,7 +60,7 @@ public class RentRepositoryAdapter implements RentRepository {
 
     @Override
     public List<RentEnt> findByUser_IdAndEndDateBefore(UUID id, LocalDateTime date) {
-        return rentMapper.toDomainModel(mongoRentRepository.findByWorker_IdAndEndDateBefore(id, date));
+        return rentMapper.toDomainModel(mongoRentRepository.findByUser_IdAndEndDateBefore(id, date));
     }
 
     @Override

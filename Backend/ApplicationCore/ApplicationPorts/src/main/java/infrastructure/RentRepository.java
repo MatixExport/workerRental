@@ -5,7 +5,6 @@ import Entities.RentEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
