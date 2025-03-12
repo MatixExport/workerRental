@@ -3,6 +3,7 @@ package requests;
 import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
 import io.restassured.common.mapper.TypeRef;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ public class WorkerRequests {
         CreateWorkerDTO createWorkerDTO = new CreateWorkerDTO("Adam");
         return given().contentType("application/json").
                 body(createWorkerDTO).when().post("/workers").
-                then().statusCode(200).
+                then().statusCode(HttpStatus.OK.value()).
                 extract().as(WorkerDTO.class);
     }
     public static WorkerDTO getWorker(UUID id){

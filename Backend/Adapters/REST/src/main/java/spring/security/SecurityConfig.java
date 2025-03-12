@@ -23,7 +23,8 @@ public class SecurityConfig{
     @Bean
     CorsConfiguration  corsConfigurationSource() {
         var corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:5174","http://localhost:5175"));
+//        corsConfig.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:5174","http://localhost:5175"));
+        corsConfig.setAllowedOrigins(List.of("*"));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         corsConfig.addAllowedHeader("*");
         corsConfig.addExposedHeader(HttpHeaders.ETAG);

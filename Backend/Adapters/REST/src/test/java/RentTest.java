@@ -1,6 +1,3 @@
-//import indie.outsource.ApplicationCore.repositories.RentRepository;
-//import indie.outsource.ApplicationCore.repositories.UserRepository;
-//import indie.outsource.ApplicationCore.repositories.WorkerRepository;
 //import indie.outsource.rent.CreateRentDTO;
 //import indie.outsource.rent.RentDTO;
 //import indie.outsource.user.UserDTO;
@@ -16,14 +13,6 @@
 //
 //import java.time.LocalDateTime;
 //import java.util.List;
-//
-//import static indie.outsource.ApplicationCore.requests.RentRequests.createDefaultRent;
-//import static indie.outsource.ApplicationCore.requests.RentRequests.createRent;
-//
-//import static indie.outsource.ApplicationCore.requests.RentRequests.*;
-//import static indie.outsource.ApplicationCore.requests.UserRequests.activateUser;
-//import static indie.outsource.ApplicationCore.requests.UserRequests.createDefaultUser;
-//import static indie.outsource.ApplicationCore.requests.WorkerRequests.createDefaultWorker;
 //import static io.restassured.RestAssured.*;
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,7 +21,7 @@
 //@ActiveProfiles("test")
 //@Disabled
 //class RentTest {
-//
+////
 //    @Autowired
 //    UserRepository userRepository;
 //    @Autowired
