@@ -1,153 +1,108 @@
-import Entities.WorkerEnt;
+import Entities.RentEnt;
 import exceptions.ResourceNotFoundException;
 
 import static org.hamcrest.Matchers.equalTo;
 
 
-import exceptions.WorkerRentedException;
-import indie.outsource.worker.CreateWorkerDTO;
-import indie.outsource.worker.WorkerDTO;
 import io.restassured.http.ContentType;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import spring.controllers.WorkerController;
-import view.WorkerService;
+import spring.controllers.RentController;
+import view.RentService;
+import view.UserService;
+
 import java.util.UUID;
 
 
-
-@WebMvcTest(WorkerController.class)
+//@WebMvcTest(RentController.class)
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RestTestConfiguration.class)
+@AutoConfigureMockMvc(webClientEnabled = true,webDriverEnabled = true)
 @WithMockUser(username="admin",roles={"ADMIN"})
 class RentControllerTest {
-    private String baseUri = "/workers";
+    private String baseUri = "/rents";
 
     @Mock
-    private WorkerService workerService;
+    private UserService userService;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private RentService rentService;
+
+    @Mock
+    private Authentication authentication;
 
     @InjectMocks
-    private WorkerController workerController;
+    private RentController rentController;
 
     @BeforeEach
     public void initialiseRestAssuredMockMvcStandalone() {
-        RestAssuredMockMvc.standaloneSetup(workerController);
+        RestAssuredMockMvc.standaloneSetup(rentController);
     }
 
     @Test
-    void getWorkerTest() throws ResourceNotFoundException {
-        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
-        Mockito.when(workerService.findById(Mockito.any(UUID.class))).thenReturn(workerEnt);
+    void getRentTest() throws ResourceNotFoundException {
+        RentEnt rentEnt = RestModelFactory.getRentEnt();
+        Mockito.when(rentService.findById(Mockito.any(UUID.class))).thenReturn(rentEnt);
 
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri+"/"+workerEnt.getId().toString())
+                .get(baseUri+"/"+rentEnt.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body("id", equalTo(workerEnt.getId().toString()))
-                .body("name", equalTo(workerEnt.getName()));
+                .body("id", equalTo(rentEnt.getId().toString()));
     }
 
-    @Test
-    void createWorkerTest() {
-        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
-        Mockito.when(workerService.save(Mockito.any(WorkerEnt.class))).thenReturn(workerEnt);
-        CreateWorkerDTO createWorkerDTO = RestModelFactory.getCreateWorkerDTO();
+//
+//    @Test
+//    void createRentTest() throws UserAlreadyExistsException, WorkerRentedException, UserInactiveException, ResourceNotFoundException {
+//        RentEnt rentEnt = RestModelFactory.getRentEnt();
+//        CreateRentDTO createRentDTO = RestModelFactory.getCreateRentDTO();
+//        Mockito.when(authentication.getDetails()).thenReturn("test");
+//        Mockito.when(userService.findByUsername(Mockito.any(String.class)))
+//                .thenReturn(List.of(RestModelFactory.getClientEnt()));
+//        Mockito.when(rentService.createRent(
+//                Mockito.any(),Mockito.any(),Mockito.any()
+//        )).thenReturn(rentEnt);
+//
+//        RestAssuredMockMvc
+//                .given()
+//                .contentType("application/json")
+//                .body(createRentDTO)
+//                .post(baseUri+"/user/workers/"+rentEnt.getWorker().getId().toString())
+//                .then()
+//                .statusCode(HttpStatus.OK.value())
+//                .contentType(ContentType.JSON)
+//                .body("id", equalTo(rentEnt.getId().toString()));
+//    }
 
-        RestAssuredMockMvc
-                .given()
-                .contentType("application/json")
-                .body(createWorkerDTO)
-                .post(baseUri)
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
-                .body("id", equalTo(workerEnt.getId().toString()))
-                .body("name", equalTo(workerEnt.getName()));
-    }
-
-    @Test
-    void updateWorkerTest() throws ResourceNotFoundException {
-        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
-        Mockito.when(workerService.updateWorker(Mockito.any(WorkerEnt.class))).thenReturn(workerEnt);
-
-        CreateWorkerDTO createWorkerDTO = new CreateWorkerDTO("test1");
-
-        WorkerDTO updatedWorker = RestAssuredMockMvc
-                .given()
-                .contentType("application/json")
-                .body(createWorkerDTO)
-                .when()
-                .post(baseUri+"/{id}", workerEnt.getId().toString()).
-                then()
-                .statusCode(HttpStatus.OK.value()).
-                extract()
-                .as(WorkerDTO.class);
-
-        Assertions.assertEquals(updatedWorker.getId(), workerEnt.getId());
-        Assertions.assertEquals(updatedWorker.getName(), workerEnt.getName());
-    }
-    @Test
-    void updateWorkerDoesNotExistTest() throws ResourceNotFoundException {
-        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
-        Mockito.when(workerService.updateWorker(Mockito.any(WorkerEnt.class))).thenThrow(ResourceNotFoundException.class);
-
-        CreateWorkerDTO createWorkerDTO = new CreateWorkerDTO("test1");
-
-        RestAssuredMockMvc
-                .given()
-                .contentType("application/json")
-                .body(createWorkerDTO)
-                .when()
-                .post(baseUri+"/{id}", workerEnt.getId().toString()).
-                then()
-                .statusCode(HttpStatus.NOT_FOUND.value());
-    }
-    @Test
-    void deleteWorkerDoesNotExistTest() throws WorkerRentedException, ResourceNotFoundException {
-        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
-        Mockito.doThrow(ResourceNotFoundException.class).when(workerService).delete(Mockito.any(UUID.class));
-
-        RestAssuredMockMvc
-                .given()
-                .contentType("application/json")
-                .when()
-                .delete(baseUri+"/{id}", workerEnt.getId().toString()).
-                then()
-                .statusCode(HttpStatus.NOT_FOUND.value());
-    }
-    @Test
-    void deleteWorkerIsRentedTest() throws WorkerRentedException, ResourceNotFoundException {
-        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
-        Mockito.doThrow(WorkerRentedException.class).when(workerService).delete(Mockito.any(UUID.class));
-
-        RestAssuredMockMvc
-                .given()
-                .contentType("application/json")
-                .when()
-                .delete(baseUri+"/{id}", workerEnt.getId().toString()).
-                then()
-                .statusCode(HttpStatus.CONFLICT.value());
-    }
-
-
+//    @Test
+//    void createUserAlreadyExistsTest() throws UserAlreadyExistsException {
+//        Mockito.when(userService.save(Mockito.any(UserEnt.class))).thenThrow(UserAlreadyExistsException.class);
+//        CreateUserDTO createUserDTO = RestModelFactory.getCreateUserDTO();
+//
+//        RestAssuredMockMvc
+//                .given()
+//                .contentType("application/json")
+//                .body(createUserDTO)
+//                .post(baseUri)
+//                .then()
+//                .statusCode(HttpStatus.CONFLICT.value())
+//                .contentType(ContentType.JSON)
+//                .body("login", equalTo(createUserDTO.getLogin()));
+//    }
 
 }
+

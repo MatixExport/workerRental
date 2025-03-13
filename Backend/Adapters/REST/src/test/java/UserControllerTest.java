@@ -1,33 +1,28 @@
-import Entities.WorkerEnt;
+import Entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 
 import static org.hamcrest.Matchers.equalTo;
 
 
-import exceptions.WorkerRentedException;
-import indie.outsource.worker.CreateWorkerDTO;
-import indie.outsource.worker.WorkerDTO;
+import exceptions.UserAlreadyExistsException;
+import indie.outsource.user.CreateUserDTO;
 import io.restassured.http.ContentType;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 import spring.controllers.UserController;
-import spring.controllers.WorkerController;
 import view.UserService;
-import view.WorkerService;
+
 import java.util.UUID;
 
 
@@ -35,7 +30,6 @@ import java.util.UUID;
 @WebMvcTest(UserController.class)
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RestTestConfiguration.class)
-@WithMockUser(username="admin",roles={"ADMIN"})
 class UserControllerTest {
     private String baseUri = "/users";
 
@@ -50,7 +44,51 @@ class UserControllerTest {
         RestAssuredMockMvc.standaloneSetup(userControllerr);
     }
 
+    @Test
+    void getUserTest() throws ResourceNotFoundException {
+        UserEnt userEnt = RestModelFactory.getClientEnt();
+        Mockito.when(userService.findById(Mockito.any(UUID.class))).thenReturn(userEnt);
 
+        RestAssuredMockMvc.given()
+                .when()
+                .get(baseUri+"/"+userEnt.getId().toString())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body("id", equalTo(userEnt.getId().toString()));
+    }
+    @Test
+    void createUserTest() throws UserAlreadyExistsException {
+        UserEnt userEnt = RestModelFactory.getClientEnt();
+        Mockito.when(userService.save(Mockito.any(UserEnt.class))).thenReturn(userEnt);
+        CreateUserDTO createUserDTO = RestModelFactory.getCreateUserDTO();
+
+        RestAssuredMockMvc
+                .given()
+                .contentType("application/json")
+                .body(createUserDTO)
+                .post(baseUri)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body("id", equalTo(userEnt.getId().toString()));
+    }
+
+    @Test
+    void createUserAlreadyExistsTest() throws UserAlreadyExistsException {
+        Mockito.when(userService.save(Mockito.any(UserEnt.class))).thenThrow(UserAlreadyExistsException.class);
+        CreateUserDTO createUserDTO = RestModelFactory.getCreateUserDTO();
+
+        RestAssuredMockMvc
+                .given()
+                .contentType("application/json")
+                .body(createUserDTO)
+                .post(baseUri)
+                .then()
+                .statusCode(HttpStatus.CONFLICT.value())
+                .contentType(ContentType.JSON)
+                .body("login", equalTo(createUserDTO.getLogin()));
+    }
 
 }
 
