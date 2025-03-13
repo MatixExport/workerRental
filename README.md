@@ -62,7 +62,7 @@
 Full-Stack Web application that follows a simple business scenario that allows users to reserve and manage resources(in this case workers)
 A worker renting project made to explore backend development in Spring boot and Quarkus and frontend development in Svelte.
 
-This project was created for "Basics of web applications" course on Technical University of Lodz.
+This project was created for "Fundamentals of Network Applications" course on Technical University of Lodz.
 ## Key Features
 ### Backend (Spring Boot)
 * User Management: Different user roles (Admin, Manager, Client) with specific functionalities.
