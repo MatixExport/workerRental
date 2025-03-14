@@ -19,36 +19,25 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.mockito.Mockito;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import spring.controllers.WorkerController;
-import spring.security.JWTFilter;
-import spring.security.SecurityConfig;
 import view.WorkerService;
 import java.util.UUID;
 
 
 
-@Import(SecurityConfig.class)
 @WebMvcTest(WorkerController.class)
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = SecurityConfig.class)
-@WebAppConfiguration
-@WithMockUser(username="admin",roles={"CLIENT"})
+@ContextConfiguration(classes = RestTestConfiguration.class)
 class WorkerControllerTest {
     private String baseUri = "/workers";
 
     @Mock
     private WorkerService workerService;
-
-//    @Autowired
-//    private JWTFilter jwtFilter;
 
     @Autowired
     private MockMvc mockMvc;
