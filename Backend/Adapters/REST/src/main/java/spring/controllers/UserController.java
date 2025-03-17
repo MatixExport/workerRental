@@ -4,6 +4,7 @@ package spring.controllers;
 import Entities.user.UserEnt;
 import indie.outsource.user.ChangePasswordDto;
 import indie.outsource.user.SignedCreateUserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import spring.dtoMappers.UserMapper;
 import exceptions.ResourceNotFoundException;
@@ -33,6 +34,8 @@ public class UserController {
     private final UserService userService;
     private final JWSService jwsService;
     private final AuthService authService;
+
+
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {

@@ -12,13 +12,13 @@ import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import mongoConnection.MongoConnection;
 import repositories.interfaces.MongoRentRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
 
 @Repository
 public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements MongoRentRepository {
