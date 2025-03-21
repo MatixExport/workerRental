@@ -1,12 +1,11 @@
 package aggregates;
 
 import Entities.user.UserEnt;
+import aggregates.mappers.UserMapper;
 import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;
 import infrastructure.UserRepository;
 import lombok.AllArgsConstructor;
-import aggregates.mappers.UserMapper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import repositories.interfaces.MongoUserRepository;
 
@@ -36,6 +35,11 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public UserEnt save(UserEnt user) throws UserAlreadyExistsException {
         return userMapper.toDomainModel(userRepository.save(userMapper.toMongoModel(user)));
+    }
+
+    @Override
+    public UserEnt updateUser(UserEnt user) {
+        return userMapper.toDomainModel(userRepository.update(userMapper.toMongoModel(user)));
     }
 
     @Override

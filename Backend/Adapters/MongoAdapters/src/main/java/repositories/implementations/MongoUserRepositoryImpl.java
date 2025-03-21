@@ -8,11 +8,11 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
 import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;
+import mongoConnection.MongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import mongoConnection.MongoConnection;
 import repositories.interfaces.MongoUserRepository;
 
 import java.util.ArrayList;
@@ -80,6 +80,11 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
             }
             throw e;
         }
+    }
+
+    @Override
+    public UserMgd update(UserMgd user) {
+        return mongoSave(user);             //TODO: mongoUpdate????
     }
 
     @Override

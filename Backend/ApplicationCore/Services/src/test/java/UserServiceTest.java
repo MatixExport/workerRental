@@ -1,10 +1,8 @@
 import Entities.user.UserEnt;
-import exceptions.*;
-
+import exceptions.ResourceNotFoundException;
+import exceptions.UserAlreadyExistsException;
 import infrastructure.UserRepository;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,6 +12,8 @@ import services.UserService;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -58,7 +58,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findById(Mockito.any(UUID.class)))
                 .thenReturn(Optional.of(userEnt));
 
-        Mockito.when(userRepository.save(Mockito.any(UserEnt.class)))
+        Mockito.when(userRepository.updateUser(Mockito.any(UserEnt.class)))
                 .thenReturn(userEnt);
 
         assertDoesNotThrow(()->{

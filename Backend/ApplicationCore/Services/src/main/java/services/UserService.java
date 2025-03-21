@@ -1,15 +1,10 @@
 package services;
 
 import Entities.user.UserEnt;
-//import com.nimbusds.jose.JOSEException;
-
-
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
-//import indie.outsource.user.SignedCreateUserDTO;
 import infrastructure.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,7 +53,8 @@ public class UserService implements view.UserService {
         }
         return userRepository.save(user);
     }
-    public UserEnt updateUser(UserEnt user) throws ResourceNotFoundException, UserAlreadyExistsException {
+
+    public UserEnt updateUser(UserEnt user) throws ResourceNotFoundException {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -67,27 +63,27 @@ public class UserService implements view.UserService {
             throw new ResourceNotFoundException("User with id " + user.getId() + " not found");
         }
         user.setActive(getUser.get().isActive());
-        return userRepository.save(user);
+        return userRepository.updateUser(user);
     }
 
-    public UserEnt activateUser(UUID id) throws ResourceNotFoundException, UserAlreadyExistsException {
+    public UserEnt activateUser(UUID id) throws ResourceNotFoundException {
         if(userRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException("User with id " + id + " not found");
         }
 
         UserEnt user = userRepository.findById(id).get();
         user.setActive(true);
-        userRepository.save(user);
+        userRepository.updateUser(user);
         return user;
     }
 
-    public UserEnt deactivateUser(UUID id) throws ResourceNotFoundException, UserAlreadyExistsException {
+    public UserEnt deactivateUser(UUID id) throws ResourceNotFoundException {
         if(userRepository.findById(id).isEmpty()){
             throw new ResourceNotFoundException("User with id " + id + " not found");
         }
         UserEnt user = userRepository.findById(id).get();
         user.setActive(false);
-        userRepository.save(user);
+        userRepository.updateUser(user);
         return user;
     }
 

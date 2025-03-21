@@ -12,6 +12,8 @@ public interface MongoUserRepository {
     List<UserMgd> findAll();
     UserMgd findById(UUID id);
     UserMgd save(UserMgd user) throws UserAlreadyExistsException;
+
+    UserMgd update(UserMgd user);
     void delete(UserMgd user);
     void deleteById(UUID id);
     void deleteAll();
