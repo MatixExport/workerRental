@@ -40,7 +40,7 @@ public class UserServiceTest {
         assertEquals(userEnt.getLogin(), savedUser.getLogin());
     }
     @Test
-    public void createUserAlreadyExistsTest() throws UserAlreadyExistsException {
+    public void createUserAlreadyExistsTest() {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
         userEnt.setActive(true);
 
@@ -51,7 +51,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void activateUserTest() throws UserAlreadyExistsException {
+    public void activateUserTest() {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
         userEnt.setActive(false);
 

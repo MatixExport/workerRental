@@ -13,13 +13,9 @@ public class JWSService {
 
     private JWSUtil jwsUtil;
 
-    public SignedCreateUserDTO signUser(UserEnt user ) {
+    public SignedCreateUserDTO signUser(UserEnt user) throws JOSEException {
         SignedCreateUserDTO signedUserDTO = UserMapper.getSignedUserDTO(user);
-        try {
-            signedUserDTO.setSignature(jwsUtil.sign(signedUserDTO.getPayload()));
-        } catch (JOSEException e) {
-            throw new RuntimeException(e);
-        }
+        signedUserDTO.setSignature(jwsUtil.sign(signedUserDTO.getPayload()));
         return signedUserDTO;
     }
 
@@ -31,7 +27,6 @@ public class JWSService {
         } catch (Exception e) {
             return false;
         }
-        System.out.println("VERIFICATION OK");
         return true;
     }
 }

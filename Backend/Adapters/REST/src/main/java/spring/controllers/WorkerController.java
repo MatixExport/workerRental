@@ -2,7 +2,6 @@ package spring.controllers;
 
 
 import Entities.WorkerEnt;
-import spring.dtoMappers.WorkerMapper;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import indie.outsource.worker.CreateWorkerDTO;
@@ -13,12 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import spring.dtoMappers.WorkerMapper;
 import view.WorkerService;
 
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @AllArgsConstructor
 @RestController()
 public class WorkerController {

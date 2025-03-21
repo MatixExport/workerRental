@@ -1,7 +1,6 @@
 package spring.controllers;
 
 import Entities.user.UserEnt;
-import spring.dtoMappers.RentMapper;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;
@@ -17,13 +16,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import spring.dtoMappers.RentMapper;
 import view.RentService;
 import view.UserService;
 
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @AllArgsConstructor
 @RestController()
 public class RentController {

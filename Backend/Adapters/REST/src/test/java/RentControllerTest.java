@@ -1,19 +1,16 @@
 import Entities.RentEnt;
 import exceptions.ResourceNotFoundException;
-
-import static org.hamcrest.Matchers.equalTo;
-
-
+import helper.RestModelFactory;
+import helper.RestTestConfiguration;
 import io.restassured.http.ContentType;
-
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.mockito.Mockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -24,6 +21,8 @@ import view.RentService;
 import view.UserService;
 
 import java.util.UUID;
+
+import static org.hamcrest.Matchers.equalTo;
 
 
 //@WebMvcTest(RentController.class)
@@ -68,11 +67,11 @@ class RentControllerTest {
 //
 //    @Test
 //    void createRentTest() throws UserAlreadyExistsException, WorkerRentedException, UserInactiveException, ResourceNotFoundException {
-//        RentEnt rentEnt = RestModelFactory.getRentEnt();
-//        CreateRentDTO createRentDTO = RestModelFactory.getCreateRentDTO();
+//        RentEnt rentEnt = helper.RestModelFactory.getRentEnt();
+//        CreateRentDTO createRentDTO = helper.RestModelFactory.getCreateRentDTO();
 //        Mockito.when(authentication.getDetails()).thenReturn("test");
 //        Mockito.when(userService.findByUsername(Mockito.any(String.class)))
-//                .thenReturn(List.of(RestModelFactory.getClientEnt()));
+//                .thenReturn(List.of(helper.RestModelFactory.getClientEnt()));
 //        Mockito.when(rentService.createRent(
 //                Mockito.any(),Mockito.any(),Mockito.any()
 //        )).thenReturn(rentEnt);
@@ -91,7 +90,7 @@ class RentControllerTest {
 //    @Test
 //    void createUserAlreadyExistsTest() throws UserAlreadyExistsException {
 //        Mockito.when(userService.save(Mockito.any(UserEnt.class))).thenThrow(UserAlreadyExistsException.class);
-//        CreateUserDTO createUserDTO = RestModelFactory.getCreateUserDTO();
+//        CreateUserDTO createUserDTO = helper.RestModelFactory.getCreateUserDTO();
 //
 //        RestAssuredMockMvc
 //                .given()
