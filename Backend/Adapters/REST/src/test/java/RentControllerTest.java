@@ -13,10 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import spring.controllers.RentController;
+import spring.controllers.exceptionHandlers.GlobalExceptionHandler;
+import spring.controllers.user.UserReadController;
 import view.RentService;
 
 import java.time.LocalDateTime;
@@ -26,9 +30,8 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 
 
-
+@WebMvcTest(UserReadController.class)
 @ContextConfiguration(classes = RestTestConfiguration.class)
-@AutoConfigureMockMvc()
 class RentControllerTest {
     private final String baseUri = "/rents";
 
@@ -40,7 +43,8 @@ class RentControllerTest {
 
     @BeforeEach
     public void initialiseRestAssuredMockMvcStandalone() {
-        RestAssuredMockMvc.standaloneSetup(rentController);
+        StandaloneMockMvcBuilder builder = MockMvcBuilders.standaloneSetup(rentController).setControllerAdvice(new GlobalExceptionHandler());
+        RestAssuredMockMvc.standaloneSetup(builder);
     }
 
     @Test

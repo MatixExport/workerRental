@@ -1,5 +1,6 @@
 package spring.controllers.exceptionHandlers;
 
+import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WorkerRentedException.class)
     public ResponseEntity<String> handleWorkerRentedException(WorkerRentedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RentAlreadyEndedException.class)
+    public ResponseEntity<String> handleRentAlreadyEndedException(RentAlreadyEndedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }
