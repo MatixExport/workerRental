@@ -8,7 +8,6 @@ import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +24,8 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @GetMapping("/workers/{id}")
-    public ResponseEntity<WorkerDTO> getWorker(@PathVariable UUID id) {
-        try{
-            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.findById(id)));
-        }
-        catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<WorkerDTO> getWorker(@PathVariable UUID id) throws ResourceNotFoundException {
+        return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.findById(id)));
     }
 
     @GetMapping("/workers")
@@ -47,29 +41,16 @@ public class WorkerController {
 
     @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER)")
     @PostMapping("/workers/{id}")
-    public ResponseEntity<WorkerDTO> updateWorker(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) {
-        WorkerEnt worker = WorkerMapper.getWorker(createWorkerDTO);     //TODO use REST model ??
+    public ResponseEntity<WorkerDTO> updateWorker(@PathVariable UUID id, @RequestBody @Valid CreateWorkerDTO createWorkerDTO) throws ResourceNotFoundException {
+        WorkerEnt worker = WorkerMapper.getWorker(createWorkerDTO);
         worker.setId(id);
-        try{
-            return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.updateWorker(worker)));
-        }
-        catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(WorkerMapper.getWorkerDto(workerService.updateWorker(worker)));
     }
 
     @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER)")
     @DeleteMapping("/workers/{id}")
-    public ResponseEntity<String> deleteWorker(@PathVariable @Valid UUID id) {
-        try{
-            workerService.delete(id);
-        }
-        catch(ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        catch (WorkerRentedException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    public ResponseEntity<String> deleteWorker(@PathVariable @Valid UUID id) throws ResourceNotFoundException, WorkerRentedException {
+        workerService.delete(id);
         return ResponseEntity.ok().build();
     }
 

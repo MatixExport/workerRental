@@ -10,55 +10,44 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import spring.controllers.WorkerController;
+import spring.controllers.exceptionHandlers.GlobalExceptionHandler;
 import view.WorkerService;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 
 
-
 @WebMvcTest(WorkerController.class)
-@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RestTestConfiguration.class)
 class WorkerControllerTest {
-    private String baseUri = "/workers";
+    private final String baseUri = "/workers";
 
     @Mock
     private WorkerService workerService;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @InjectMocks
     private WorkerController workerController;
 
 
     @BeforeEach
-    public void setupSpringSecurity() {
-        SecurityMockMvcConfigurers.springSecurity();
-    }
-
-    @BeforeEach
     public void initialiseRestAssuredMockMvcStandalone() {
-        RestAssuredMockMvc.standaloneSetup(workerController);
+        StandaloneMockMvcBuilder builder = MockMvcBuilders.standaloneSetup(workerController).setControllerAdvice(GlobalExceptionHandler.class);
+        RestAssuredMockMvc.standaloneSetup(builder);
     }
 
     @Test
     void getWorkerTest() throws ResourceNotFoundException {
-
         WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
         Mockito.when(workerService.findById(Mockito.any(UUID.class))).thenReturn(workerEnt);
 
@@ -70,6 +59,21 @@ class WorkerControllerTest {
                 .contentType(ContentType.JSON)
                 .body("id", equalTo(workerEnt.getId().toString()))
                 .body("name", equalTo(workerEnt.getName()));
+    }
+
+    @Test
+    void getWorkersTest() {
+        WorkerEnt workerEnt = RestModelFactory.getWorkerEnt();
+        WorkerEnt workerEnt2 = RestModelFactory.getWorkerEnt();
+        Mockito.when(workerService.findAll()).thenReturn(List.of(workerEnt, workerEnt2));
+
+        RestAssuredMockMvc.given()
+                .when()
+                .get(baseUri)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body("id", equalTo(List.of(workerEnt.getId().toString(), workerEnt2.getId().toString())));
     }
 
     @Test
@@ -152,6 +156,19 @@ class WorkerControllerTest {
                 .delete(baseUri+"/{id}", workerEnt.getId().toString()).
                 then()
                 .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    void deleteWorkerTest() throws WorkerRentedException, ResourceNotFoundException {
+        Mockito.doNothing().when(workerService).delete(Mockito.any(UUID.class));
+
+        RestAssuredMockMvc
+                .given()
+                .contentType("application/json")
+                .when()
+                .delete(baseUri + "/{id}", UUID.randomUUID().toString()).
+                then()
+                .statusCode(HttpStatus.OK.value());
     }
 
 
