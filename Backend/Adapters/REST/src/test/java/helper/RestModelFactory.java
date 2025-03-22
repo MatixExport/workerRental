@@ -12,6 +12,7 @@ import indie.outsource.user.ChangePasswordDto;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.worker.CreateWorkerDTO;
 import org.instancio.Instancio;
+import org.instancio.Select;
 
 public class RestModelFactory {
     public static WorkerEnt getWorkerEnt(){
@@ -55,6 +56,9 @@ public class RestModelFactory {
     }
     public static CreateRentDTO getCreateRentDTO(){
         return Instancio.of(CreateRentDTO.class)
-                .create();
+                .generate(
+                        Select.field(CreateRentDTO::getStartDate),
+                        generators -> generators.temporal().localDateTime().future()
+                ).create();
     }
 }
