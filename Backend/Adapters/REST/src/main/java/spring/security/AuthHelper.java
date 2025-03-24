@@ -19,18 +19,10 @@ public class AuthHelper {
     private String SECRET_KEY;
     private static final long EXPIRATION_TIME = 1000*60*30; // ms*s*min
 
-    public String generateJWT(UserEnt user) {       // TODO use REST model
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getLogin())
-                .issuer("Worker Rental")
-                .expirationTime(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .claim("groups", user.getGroups())
-                .build();
-
-
+    private String signClaimSet(JWTClaimsSet claimSet) {
         SignedJWT signedJWT = new SignedJWT(
                 new JWSHeader(JWSAlgorithm.HS256),
-                jwtClaimsSet
+                claimSet
         );
 
         try{
@@ -42,6 +34,28 @@ public class AuthHelper {
         }
 
         return signedJWT.serialize();
+    }
+
+    public String generateJWT(UserEnt user,long expirationTime) {
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(user.getLogin())
+                .issuer("Worker Rental")
+                .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
+                .claim("groups", user.getGroups())
+                .build();
+
+        return signClaimSet(jwtClaimsSet);
+    }
+
+    public String generateJWT(UserEnt user) {       // TODO use REST model
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(user.getLogin())
+                .issuer("Worker Rental")
+                .expirationTime(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .claim("groups", user.getGroups())
+                .build();
+
+        return signClaimSet(jwtClaimsSet);
     }
 
     public boolean verifyJWT(String jwt) {

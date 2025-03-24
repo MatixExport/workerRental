@@ -13,7 +13,7 @@ import exceptions.WorkerRentedException;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;
-import mongoConnection.DefaultMongoConnection;
+import mongoConnection.CredentialsMongoConnection;
 import repositories.interfaces.MongoRentRepository;
 
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ import java.util.*;
 
 @Repository
 public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements MongoRentRepository {
-    public MongoRentRepositoryImpl(DefaultMongoConnection mongoConnection) {
+    public MongoRentRepositoryImpl(CredentialsMongoConnection mongoConnection) {
         super(mongoConnection, RentMgd.class);
     }
 

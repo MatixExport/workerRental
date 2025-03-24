@@ -5,10 +5,11 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import documents.WorkerMgd;
 import exceptions.WorkerRentedException;
+import mongoConnection.MongoConnection;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import mongoConnection.DefaultMongoConnection;
+import mongoConnection.CredentialsMongoConnection;
 import repositories.interfaces.MongoWorkerRepository;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> implements MongoWorkerRepository {
 
     @Autowired
-    public MongoWorkerRepositoryImpl(DefaultMongoConnection mongoConnection) {
+    public MongoWorkerRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, WorkerMgd.class);
     }
 

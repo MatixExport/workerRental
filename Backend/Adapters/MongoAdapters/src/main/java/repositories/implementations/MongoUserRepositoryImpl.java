@@ -13,7 +13,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import mongoConnection.DefaultMongoConnection;
+import mongoConnection.CredentialsMongoConnection;
 import repositories.interfaces.MongoUserRepository;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @Repository
 public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implements MongoUserRepository {
     @Autowired
-    public MongoUserRepositoryImpl(DefaultMongoConnection mongoConnection) {
+    public MongoUserRepositoryImpl(MongoConnection mongoConnection) {
         super(mongoConnection, UserMgd.class);
     }
 

@@ -11,7 +11,7 @@ import documents.AbstractEntityMgd;
 import mongoConnection.MongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import mongoConnection.DefaultMongoConnection;
+import mongoConnection.CredentialsMongoConnection;
 import mongoConnection.MongoSchema;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
     Class<T> entityClass;
 
 
-    public BaseMongoRepository(DefaultMongoConnection mongoConnection, Class<T> entityClass) {
+    public BaseMongoRepository(MongoConnection mongoConnection, Class<T> entityClass) {
         this.mongoConnection = mongoConnection;
         this.entityClass = entityClass;
         if(!mongoConnection.getMongoDatabase().listCollectionNames()
