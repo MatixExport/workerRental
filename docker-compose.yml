@@ -20,6 +20,18 @@ services:
         condition: service_healthy
 
 
+  mongodb_lite:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ADMIN
+      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
+      - MONGO_INITDB_DATABASE=workerRental
+    command: --config /etc/mongod.conf --port 27017
+
+
+
   frontend:
     build:
       context: .

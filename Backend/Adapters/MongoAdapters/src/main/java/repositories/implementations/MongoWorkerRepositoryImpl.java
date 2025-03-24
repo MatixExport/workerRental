@@ -8,7 +8,7 @@ import exceptions.WorkerRentedException;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import mongoConnection.MongoConnection;
+import mongoConnection.DefaultMongoConnection;
 import repositories.interfaces.MongoWorkerRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> implements MongoWorkerRepository {
 
     @Autowired
-    public MongoWorkerRepositoryImpl(MongoConnection mongoConnection) {
+    public MongoWorkerRepositoryImpl(DefaultMongoConnection mongoConnection) {
         super(mongoConnection, WorkerMgd.class);
     }
 

@@ -8,9 +8,10 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import documents.AbstractEntityMgd;
+import mongoConnection.MongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import mongoConnection.MongoConnection;
+import mongoConnection.DefaultMongoConnection;
 import mongoConnection.MongoSchema;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
     Class<T> entityClass;
 
 
-    public BaseMongoRepository(MongoConnection mongoConnection, Class<T> entityClass) {
+    public BaseMongoRepository(DefaultMongoConnection mongoConnection, Class<T> entityClass) {
         this.mongoConnection = mongoConnection;
         this.entityClass = entityClass;
         if(!mongoConnection.getMongoDatabase().listCollectionNames()
