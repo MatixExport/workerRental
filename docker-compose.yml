@@ -1,0 +1,143 @@
+version: '3.8'
+
+services:
+
+#  backend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-backend
+#    container_name: spring_back
+#    networks:
+#      - mongonet
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      mongo1:
+#        condition: service_healthy
+#      mongo2:
+#        condition: service_healthy
+#      mongo3:
+#        condition: service_healthy
+
+
+#  mongodb_lite:
+#    image: mongo:latest
+#    ports:
+#      - '27017:27017'
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=ADMIN
+#      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
+#      - MONGO_INITDB_DATABASE=workerRental
+#    command: --config /etc/mongod.conf --port 27017
+
+
+
+#  frontend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-frontend
+#    container_name: svelte_front
+#    ports:
+#      - "5173:5173"
+
+
+  mongo1:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongoDB
+    container_name: mongo1
+
+    hostname: mongo1
+    networks:
+      - mongonet
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ADMIN
+      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
+      - MONGO_INITDB_DATABASE=workerRental
+    command: --config /etc/mongod.conf --port 27017
+    healthcheck:
+      test: ["CMD","mongosh", "--port", "27017", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+  mongo2:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongoDB
+    container_name: mongo2
+    hostname: mongo2
+    networks:
+      - mongonet
+    ports:
+      - "27018:27018"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ADMIN
+      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
+      - MONGO_INITDB_DATABASE=workerRental
+    command: --config /etc/mongod.conf --port 27018
+    healthcheck:
+      test: ["CMD","mongosh", "--port", "27018", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+  mongo3:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongoDB
+    container_name: mongo3
+    hostname: mongo3
+    networks:
+      - mongonet
+    ports:
+      - "27019:27019"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ADMIN
+      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
+      - MONGO_INITDB_DATABASE=workerRental
+    command: --config /etc/mongod.conf --port 27019
+    healthcheck:
+      test: ["CMD","mongosh", "--port", "27019", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+
+
+
+  mongoinit:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongoDB
+    hostname: mongodbinit
+    container_name: mongodbinit
+    networks:
+      - mongonet
+    depends_on:
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
+
+    command: >
+      mongosh --host mongo1:27017 --username ADMIN --password ADMINPASSWORD --authenticationDatabase admin --eval
+      '
+      rs.initiate(
+        {
+          _id: "replica_set_single",
+          version: 1,
+          members: [
+            {_id:0, host : "mongo1:27017" },
+            {_id:1, host : "mongo2:27018" },
+            {_id:2, host : "mongo3:27019" }
+          ]
+        }
+      );
+      '
+
+networks:
+  mongonet: {}
+
+
