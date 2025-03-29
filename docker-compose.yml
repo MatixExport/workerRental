@@ -2,22 +2,22 @@ version: '3.8'
 
 services:
 
-#  backend:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-backend
-#    container_name: spring_back
-#    networks:
-#      - mongonet
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      mongo1:
-#        condition: service_healthy
-#      mongo2:
-#        condition: service_healthy
-#      mongo3:
-#        condition: service_healthy
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    container_name: spring_back
+    networks:
+      - mongonet
+    ports:
+      - "8080:8080"
+    depends_on:
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
 
 
 #  mongodb_lite:
@@ -32,13 +32,13 @@ services:
 
 
 
-#  frontend:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-frontend
-#    container_name: svelte_front
-#    ports:
-#      - "5173:5173"
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    container_name: svelte_front
+    ports:
+      - "5173:5173"
 
 
   mongo1:
