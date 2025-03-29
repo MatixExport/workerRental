@@ -41,6 +41,8 @@ public class SecurityConfig{
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorizeRequests) -> {
                     authorizeRequests.requestMatchers("/login", "/register").anonymous();
+                    authorizeRequests.requestMatchers("/ws").anonymous();
+                    authorizeRequests.requestMatchers("/ws/*").anonymous();
                     authorizeRequests.anyRequest().authenticated();
                 });
 
