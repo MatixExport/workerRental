@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import spring.security.JWTException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,5 +25,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RentAlreadyEndedException.class)
     public ResponseEntity<String> handleRentAlreadyEndedException(RentAlreadyEndedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(JWTException.class)
+    public ResponseEntity<String> handleJWTException(JWTException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }

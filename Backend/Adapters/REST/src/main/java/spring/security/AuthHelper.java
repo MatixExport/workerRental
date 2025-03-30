@@ -47,7 +47,7 @@ public class AuthHelper {
         return signClaimSet(jwtClaimsSet);
     }
 
-    public String generateJWT(UserEnt user) {       // TODO use REST model
+    public String generateJWT(UserEnt user) {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getLogin())
                 .issuer("Worker Rental")
@@ -67,7 +67,7 @@ public class AuthHelper {
             return signedJWT.verify(verifier) && !isTokenExpired(signedJWT);
         }
         catch (Exception e){
-            throw new RuntimeException("Error while verifying the token", e);
+            throw new JWTException("Error while verifying the token", e);
         }
     }
 
@@ -90,7 +90,7 @@ public class AuthHelper {
             return signedJWT.getJWTClaimsSet().getClaim(claim).toString();
         }
         catch (Exception e){
-            throw new RuntimeException("Error while parsing the token", e);
+            throw new JWTException("Error while parsing the token", e);
         }
     }
 
