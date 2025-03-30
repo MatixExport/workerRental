@@ -20,4 +20,14 @@ public abstract class UserEnt extends AbstractEntity {
         return null;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return super.equals(other);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

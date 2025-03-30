@@ -12,4 +12,14 @@ public class ClientEnt extends entities.user.UserEnt {
     public String getGroups(){
         return "CLIENT";
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return super.equals(other);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
