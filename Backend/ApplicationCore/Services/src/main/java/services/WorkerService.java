@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -19,8 +20,9 @@ public class WorkerService implements view.WorkerService{
     private RentRepository rentRepository;
 
     public WorkerEnt findById(UUID id) throws ResourceNotFoundException {
-        if(workerRepository.findById(id).isPresent()){
-            return workerRepository.findById(id).get();
+        Optional<WorkerEnt> workerSearch = workerRepository.findById(id);
+        if(workerSearch.isPresent()){
+            return workerSearch.get();
         }
         else
             throw new ResourceNotFoundException();

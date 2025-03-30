@@ -28,15 +28,16 @@ public class RentService implements view.RentService {
 
 
     public RentEnt findById(UUID id) throws ResourceNotFoundException {
-        if(rentRepository.findById(id).isPresent()){
-            return rentRepository.findById(id).get();
+        Optional<RentEnt> rentEnt = rentRepository.findById(id);
+        if(rentEnt.isPresent()){
+            return rentEnt.get();
         }
         else
             throw new ResourceNotFoundException("Rent not found");
     }
 
     public List<RentEnt> findAll() {
-        return (List<RentEnt>) rentRepository.findAll();
+        return rentRepository.findAll();
     }
 
     public RentEnt createRent(UUID clientId, UUID workerId, LocalDateTime startDate) throws ResourceNotFoundException, UserInactiveException, WorkerRentedException {
@@ -94,10 +95,11 @@ public class RentService implements view.RentService {
     }
 
     public RentEnt endRent(UUID rentId) throws ResourceNotFoundException, RentAlreadyEndedException {
-        if(rentRepository.findById(rentId).isEmpty()){
+        Optional<RentEnt> rentEnt = rentRepository.findById(rentId);
+        if(rentEnt.isEmpty()){
             throw new ResourceNotFoundException();
         }
-        RentEnt rent = rentRepository.findById(rentId).get();
+        RentEnt rent = rentEnt.get();
         if(rent.getEndDate() != null){
             throw new RentAlreadyEndedException();
         }
@@ -109,10 +111,11 @@ public class RentService implements view.RentService {
         }
     }
     public void deleteRent(UUID rentId) throws ResourceNotFoundException, RentAlreadyEndedException {
-        if(rentRepository.findById(rentId).isEmpty()){
+        Optional<RentEnt> rentEnt = rentRepository.findById(rentId);
+        if(rentEnt.isEmpty()){
             throw new ResourceNotFoundException();
         }
-        if(rentRepository.findById(rentId).get().getEndDate() != null){
+        if(rentEnt.get().getEndDate() != null){
             throw new RentAlreadyEndedException();
         }
         rentRepository.deleteById(rentId);
