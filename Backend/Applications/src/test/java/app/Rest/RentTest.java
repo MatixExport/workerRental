@@ -1,5 +1,6 @@
-package app;
+package app.Rest;
 
+import app.testcontainers.MongoTestContainer;
 import entities.RentEnt;
 import entities.WorkerEnt;
 import entities.user.UserEnt;
@@ -23,11 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import spring.security.AuthHelper;
 import view.RentService;
 import view.UserService;
@@ -37,17 +33,13 @@ import java.time.LocalDateTime;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Testcontainers
-class RentTest {
+class RentTest extends MongoTestContainer {
 
     @LocalServerPort
     private int port;
 
-
     private static final String BASE_URI = "https://localhost";
     private static final String BASE_RENT_URI = "/rents";
-
-
 
     @Autowired
     AuthHelper authHelper;
@@ -57,9 +49,6 @@ class RentTest {
             .sslConfig(new SSLConfig()
                     .allowAllHostnames()
                     .relaxedHTTPSValidation("TLSv1.2"));
-
-    @Container
-    private static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0.1");
 
     @Autowired
     private UserService userService;
@@ -86,27 +75,11 @@ class RentTest {
         rentRepository.deleteAll();
     }
 
-    @BeforeAll
-    static void beforeAll() {
-        mongoDBContainer.start();
-    }
-
     @BeforeEach
     void setupRestAssured() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
     }
-
-    @AfterAll
-    static void afterAll() {
-        mongoDBContainer.stop();
-    }
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
-
 
     @Test
     void createRentTest() throws UserAlreadyExistsException, ResourceNotFoundException {

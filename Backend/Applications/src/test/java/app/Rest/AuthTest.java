@@ -1,5 +1,6 @@
-package app;
+package app.Rest;
 
+import app.testcontainers.MongoTestContainer;
 import entities.user.UserEnt;
 import app.helper.RestModelFactory;
 import app.helper.RestRequests;
@@ -15,18 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import spring.security.AuthHelper;
 import view.UserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Testcontainers
-class AuthTest {
+class AuthTest extends MongoTestContainer {
 
     @LocalServerPort
     private int port;
@@ -45,9 +40,6 @@ class AuthTest {
                     .allowAllHostnames()
                     .relaxedHTTPSValidation("TLSv1.2"));
 
-    @Container
-    private static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0.1");
-
     @Autowired
     private UserService userService;
 
@@ -58,26 +50,11 @@ class AuthTest {
         userRepository.deleteAll();
     }
 
-    @BeforeAll
-    static void beforeAll() {
-        mongoDBContainer.start();
-    }
-
     @BeforeEach
     void setupRestAssured() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
         restRequests = new RestRequests(port, BASE_URI,rac);
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mongoDBContainer.stop();
-    }
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
     }
 
 
@@ -141,10 +118,5 @@ class AuthTest {
                 .extract().body().asString();
 
     }
-
-
-
-
-
 
 }
