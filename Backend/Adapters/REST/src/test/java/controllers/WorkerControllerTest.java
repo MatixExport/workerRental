@@ -1,3 +1,5 @@
+package controllers;
+
 import entities.WorkerEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
@@ -31,7 +33,7 @@ import static org.hamcrest.Matchers.equalTo;
 @WebMvcTest(WorkerController.class)
 @ContextConfiguration(classes = RestTestConfiguration.class)
 class WorkerControllerTest {
-    private final String baseUri = "/workers";
+    private static final String BASE_URI = "/workers";
 
     @Mock
     private WorkerService workerService;
@@ -41,7 +43,7 @@ class WorkerControllerTest {
 
 
     @BeforeEach
-    public void initialiseRestAssuredMockMvcStandalone() {
+    void initialiseRestAssuredMockMvcStandalone() {
         StandaloneMockMvcBuilder builder = MockMvcBuilders.standaloneSetup(workerController).setControllerAdvice(GlobalExceptionHandler.class);
         RestAssuredMockMvc.standaloneSetup(builder);
     }
@@ -53,7 +55,7 @@ class WorkerControllerTest {
 
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri+"/"+workerEnt.getId().toString())
+                .get(BASE_URI +"/"+workerEnt.getId().toString())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -69,7 +71,7 @@ class WorkerControllerTest {
 
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri)
+                .get(BASE_URI)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -86,7 +88,7 @@ class WorkerControllerTest {
                 .given()
                 .contentType("application/json")
                 .body(createWorkerDTO)
-                .post(baseUri)
+                .post(BASE_URI)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -106,7 +108,7 @@ class WorkerControllerTest {
                 .contentType("application/json")
                 .body(createWorkerDTO)
                 .when()
-                .post(baseUri+"/{id}", workerEnt.getId().toString()).
+                .post(BASE_URI +"/{id}", workerEnt.getId().toString()).
                 then()
                 .statusCode(HttpStatus.OK.value()).
                 extract()
@@ -127,7 +129,7 @@ class WorkerControllerTest {
                 .contentType("application/json")
                 .body(createWorkerDTO)
                 .when()
-                .post(baseUri+"/{id}", workerEnt.getId().toString()).
+                .post(BASE_URI +"/{id}", workerEnt.getId().toString()).
                 then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -140,7 +142,7 @@ class WorkerControllerTest {
                 .given()
                 .contentType("application/json")
                 .when()
-                .delete(baseUri+"/{id}", workerEnt.getId().toString()).
+                .delete(BASE_URI +"/{id}", workerEnt.getId().toString()).
                 then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -153,7 +155,7 @@ class WorkerControllerTest {
                 .given()
                 .contentType("application/json")
                 .when()
-                .delete(baseUri+"/{id}", workerEnt.getId().toString()).
+                .delete(BASE_URI +"/{id}", workerEnt.getId().toString()).
                 then()
                 .statusCode(HttpStatus.CONFLICT.value());
     }
@@ -166,7 +168,7 @@ class WorkerControllerTest {
                 .given()
                 .contentType("application/json")
                 .when()
-                .delete(baseUri + "/{id}", UUID.randomUUID().toString()).
+                .delete(BASE_URI + "/{id}", UUID.randomUUID().toString()).
                 then()
                 .statusCode(HttpStatus.OK.value());
     }

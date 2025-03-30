@@ -1,4 +1,4 @@
-package user;
+package controllers.user;
 
 import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @WebMvcTest(UserReadController.class)
 @ContextConfiguration(classes = helper.RestTestConfiguration.class)
-public class UserReadControllerTest {
+class UserReadControllerTest {
     private final String baseUri = "/users";
 
     @Mock
@@ -36,7 +36,7 @@ public class UserReadControllerTest {
     private UserReadController userReadController;
 
     @BeforeEach
-    public void initialiseRestAssuredMockMvcStandalone() {
+    void initialiseRestAssuredMockMvcStandalone() {
         StandaloneMockMvcBuilder builder = MockMvcBuilders.standaloneSetup(userReadController).setControllerAdvice(new GlobalExceptionHandler());
         RestAssuredMockMvc.standaloneSetup(builder);
     }

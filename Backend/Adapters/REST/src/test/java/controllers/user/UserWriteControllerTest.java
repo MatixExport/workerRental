@@ -1,4 +1,4 @@
-package user;
+package controllers.user;
 
 import entities.user.UserEnt;
 import exceptions.UserAlreadyExistsException;
@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @WebMvcTest(UserWriteController.class)
 @ContextConfiguration(classes = helper.RestTestConfiguration.class)
-public class UserWriteControllerTest {
+class UserWriteControllerTest {
     private final String baseUri = "/users";
 
     @Mock
@@ -34,7 +34,7 @@ public class UserWriteControllerTest {
     private UserWriteController userWriteController;
 
     @BeforeEach
-    public void initialiseRestAssuredMockMvcStandalone() {
+    void initialiseRestAssuredMockMvcStandalone() {
         StandaloneMockMvcBuilder builder = MockMvcBuilders.standaloneSetup(userWriteController).setControllerAdvice(new GlobalExceptionHandler());
         RestAssuredMockMvc.standaloneSetup(builder);
     }

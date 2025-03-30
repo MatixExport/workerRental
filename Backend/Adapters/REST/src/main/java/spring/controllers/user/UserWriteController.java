@@ -57,7 +57,7 @@ public class UserWriteController {
 
     @PostMapping("users/self/signed")
     public ResponseEntity<UserDTO> updateUserWithSign(@RequestBody @Valid ChangePasswordDto userDTO, @RequestHeader(HttpHeaders.IF_MATCH) String ifMatch) throws ResourceNotFoundException {
-        if (!jwsService.verifySignedCreateUser(userDTO, ifMatch)) {
+        if (Boolean.FALSE.equals(jwsService.verifySignedCreateUser(userDTO, ifMatch))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (!authService.verifyPassword(userDTO.getLogin(), userDTO.getOldPassword())) {
@@ -70,7 +70,7 @@ public class UserWriteController {
         return updateUser(user.getId(), userDTO);
     }
 
-    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) throws ResourceNotFoundException {
+    public ResponseEntity<UserDTO> updateUser(UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) throws ResourceNotFoundException {
         UserEnt user = UserMapper.getUser(createUserDTO);
         user.setId(id);
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.updateUser(user)));
@@ -79,7 +79,7 @@ public class UserWriteController {
     @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
     @PostMapping("/users/{id}/signed")
     public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid SignedCreateUserDTO createUserDTO, @RequestHeader(HttpHeaders.IF_MATCH) String ifMatch) throws ResourceNotFoundException {
-        if (!jwsService.verifySignedCreateUser(createUserDTO, ifMatch)) {
+        if (Boolean.FALSE.equals(jwsService.verifySignedCreateUser(createUserDTO, ifMatch))) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return updateUser(id, UserMapper.getCreateUserDTOFromSigned(createUserDTO));
