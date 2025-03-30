@@ -22,6 +22,19 @@ public class WorkerEndpoint {
     private static final String NAMESPACE_URI = "http://example.com/soap";
     private final WorkerService workerService;
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllWorkersRequest")
+    @ResponsePayload
+    public GetAllWorkersResponse getAllWorkers() {
+        GetAllWorkersResponse response = new GetAllWorkersResponse();
+        response.getWorkers().addAll(
+                workerService.findAll()
+                        .stream()
+                        .map(WorkerMapper::fromDomainModel)
+                        .toList()
+        );
+        return response;
+    }
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getWorkerRequest")
     @ResponsePayload
     public GetWorkerResponse getWorker(@RequestPayload GetWorkerRequest request) {
