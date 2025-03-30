@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class UserService implements view.UserService {
+public class DomainUserService implements view.UserService {
     private final UserRepository userRepository;
 
     public UserEnt findById(UUID id) throws ResourceNotFoundException {

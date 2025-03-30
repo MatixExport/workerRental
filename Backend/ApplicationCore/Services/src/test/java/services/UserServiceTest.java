@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     @InjectMocks
-    private UserService userService;
+    private DomainUserService userService;
 
     @Mock
     private  UserRepository userRepository;

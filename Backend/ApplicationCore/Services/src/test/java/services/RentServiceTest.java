@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RentServiceTest {
 
     @InjectMocks
-    private RentService rentService;
+    private DomainRentService rentService;
 
     @Mock
     private  RentRepository rentRepository;

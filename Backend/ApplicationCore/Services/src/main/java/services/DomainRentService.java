@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class RentService implements view.RentService {
+public class DomainRentService implements view.RentService {
     private final RentRepository rentRepository;
     private final UserRepository userRepository;
     private final WorkerRepository workerRepository;

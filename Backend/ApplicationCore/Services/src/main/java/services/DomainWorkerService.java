@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class WorkerService implements view.WorkerService{
+public class DomainWorkerService implements view.WorkerService{
 
     private WorkerRepository workerRepository;
     private RentRepository rentRepository;

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class WorkerServiceTest {
 
     @InjectMocks
-    private WorkerService workerService;
+    private DomainWorkerService workerService;
 
     @Mock
     private  WorkerRepository workerRepository;
