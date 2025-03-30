@@ -48,6 +48,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>indie.outsource</groupId>
+            <artifactId>SOAP</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>

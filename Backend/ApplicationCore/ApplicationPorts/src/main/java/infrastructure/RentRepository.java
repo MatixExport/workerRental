@@ -1,7 +1,7 @@
 package infrastructure;
 
 
-import Entities.RentEnt;
+import entities.RentEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;

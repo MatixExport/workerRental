@@ -1,6 +1,6 @@
 package view;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import org.springframework.stereotype.Service;

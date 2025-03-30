@@ -6,14 +6,14 @@ import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.CollationStrength;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexOptions;
+import documents.FieldsConsts;
 import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;
-import mongoConnection.MongoConnection;
+import connection.MongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import mongoConnection.CredentialsMongoConnection;
 import repositories.interfaces.MongoUserRepository;
 
 import java.util.ArrayList;
@@ -39,14 +39,14 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
                 );
         MongoCollection<UserMgd> collection = mongoConnection.getMongoDatabase().getCollection(UserMgd.class.getSimpleName(), UserMgd.class);
         collection.createIndex(
-            new Document("login",1),indexOptions
+            new Document(FieldsConsts.ACCOUNT_LOGIN,1),indexOptions
         );
-        collection.createIndex(new Document("login","text"));
+        collection.createIndex(new Document(FieldsConsts.ACCOUNT_LOGIN,"text"));
     }
 
     @Override
     public UserMgd findByLogin(String login) {
-        return getCollection().find(new Document("login", login)).first();
+        return getCollection().find(new Document(FieldsConsts.ACCOUNT_LOGIN, login)).first();
     }
 
 
@@ -55,7 +55,7 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
     @Override
     public List<UserMgd> findByLoginContainsIgnoreCase(String login) {
         String searchQuery = ".*" + login + ".*";
-        Bson regexFilter = Filters.regex("login",searchQuery , "i");
+        Bson regexFilter = Filters.regex(FieldsConsts.ACCOUNT_LOGIN,searchQuery , "i");
         return getCollection().find(regexFilter)
                 .into(new ArrayList<>());
     }
@@ -85,7 +85,7 @@ public class MongoUserRepositoryImpl extends BaseMongoRepository<UserMgd> implem
 
     @Override
     public UserMgd update(UserMgd user) {
-        return mongoSave(user);             //TODO: mongoUpdate????
+        return mongoSave(user);
     }
 
     @Override

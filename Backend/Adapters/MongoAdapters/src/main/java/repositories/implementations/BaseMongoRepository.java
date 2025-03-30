@@ -6,13 +6,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.UpdateResult;
-
 import documents.AbstractEntityMgd;
-import mongoConnection.MongoConnection;
+import documents.FieldsConsts;
+import connection.MongoConnection;
+import connection.MongoSchema;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import mongoConnection.CredentialsMongoConnection;
-import mongoConnection.MongoSchema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
 
 
     protected void createCollection() {
-        System.out.println("Creating " + entityClass.getSimpleName() + " collection");
         CreateCollectionOptions createCollectionOptions = new CreateCollectionOptions().validationOptions(
                 MongoSchema.getSchema(entityClass.getSimpleName())
         );
@@ -55,7 +53,7 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
 
 
     protected T mongoFindById(UUID id) {
-        return getCollection().find(new Document("_id", id)).first();
+        return getCollection().find(new Document(FieldsConsts.ENTITY_ID, id)).first();
     }
 
     protected T mongoSave(T t) {
@@ -63,7 +61,7 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
             t.setId(UUID.randomUUID());
         }
         ReplaceOptions options = new ReplaceOptions().upsert(true);
-        Bson filter = new Document("_id", t.getId());
+        Bson filter = new Document(FieldsConsts.ENTITY_ID, t.getId());
         UpdateResult result = getCollection().replaceOne(filter, t, options);
         if(!result.wasAcknowledged()){
             //Exception
@@ -74,12 +72,12 @@ public class BaseMongoRepository<T extends AbstractEntityMgd>{
     }
 
     protected void mongoDelete(T t) {
-        getCollection().deleteOne(new Document("_id",t.getId()));
+        getCollection().deleteOne(new Document(FieldsConsts.ENTITY_ID,t.getId()));
     }
 
 
     protected void mongoDeleteById(UUID t) {
-        getCollection().deleteOne(new Document("_id",t));
+        getCollection().deleteOne(new Document(FieldsConsts.ENTITY_ID,t));
     }
 
 

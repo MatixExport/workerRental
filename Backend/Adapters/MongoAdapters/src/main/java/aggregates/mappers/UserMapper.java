@@ -1,9 +1,9 @@
 package aggregates.mappers;
 
-import Entities.user.AdminEnt;
-import Entities.user.ClientEnt;
-import Entities.user.ManagerEnt;
-import Entities.user.UserEnt;
+import entities.user.AdminEnt;
+import entities.user.ClientEnt;
+import entities.user.ManagerEnt;
+import entities.user.UserEnt;
 import documents.users.AdminMgd;
 import documents.users.ClientMgd;
 import documents.users.ManagerMgd;

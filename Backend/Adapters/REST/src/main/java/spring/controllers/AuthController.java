@@ -1,20 +1,22 @@
 package spring.controllers;
 
 import exceptions.ResourceNotFoundException;
+import exceptions.UserAlreadyExistsException;
 import exceptions.UserInactiveException;
 import exceptions.WrongCredentialsException;
-import indie.outsource.user.LoginDTO;
-import org.springframework.http.MediaType;
-import spring.dtoMappers.UserMapper;
-import exceptions.UserAlreadyExistsException;
 import indie.outsource.user.CreateUserDTO;
+import indie.outsource.user.LoginDTO;
 import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import spring.dto.mappers.UserMapper;
 import spring.security.AuthService;
 import view.UserService;
 

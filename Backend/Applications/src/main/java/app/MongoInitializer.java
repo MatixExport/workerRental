@@ -1,17 +1,15 @@
 package app;
 
-import Entities.RentEnt;
-import Entities.WorkerEnt;
-import Entities.user.AdminEnt;
-import Entities.user.ClientEnt;
-import Entities.user.ManagerEnt;
-import Entities.user.UserEnt;
-
+import entities.RentEnt;
+import entities.WorkerEnt;
+import entities.user.AdminEnt;
+import entities.user.ClientEnt;
+import entities.user.ManagerEnt;
+import entities.user.UserEnt;
 import infrastructure.RentRepository;
 import infrastructure.UserRepository;
 import infrastructure.WorkerRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -39,16 +37,14 @@ public class MongoInitializer implements CommandLineRunner {
         userRepository.deleteAll();
 
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        String password = passwordEncoder.encode("ZAQ!2wsx");
-//        User Entities.user = new User("User","k1234567",true);
-        UserEnt client = new ClientEnt("Client",password,true);
-        UserEnt admin = new AdminEnt("Admin",password,true);
-        UserEnt manager = new ManagerEnt("Manager",password,true);
+        String mockPassword = passwordEncoder.encode("ZAQ!2wsx");
+        UserEnt client = new ClientEnt("Client",mockPassword,true);
+        UserEnt admin = new AdminEnt("Admin",mockPassword,true);
+        UserEnt manager = new ManagerEnt("Manager",mockPassword,true);
 
-//        Entities.user = userRepository.save(Entities.user);
         client =userRepository.save(client);
-        admin = userRepository.save(admin);
-        manager =userRepository.save(manager);
+        userRepository.save(admin);
+        userRepository.save(manager);
 
         WorkerEnt worker = new WorkerEnt("Worker1");
         WorkerEnt worker2 = new WorkerEnt("Worker2");
@@ -61,7 +57,7 @@ public class MongoInitializer implements CommandLineRunner {
 
         worker = workerRepository.save(worker);
         worker2 = workerRepository.save(worker2);
-        worker3 = workerRepository.save(worker3);
+        workerRepository.save(worker3);
 
         RentEnt rent = new RentEnt(LocalDateTime.now().plusMinutes(2),worker,client);
         RentEnt rent1 = new RentEnt(LocalDateTime.now().plusMinutes(1),worker2,client);

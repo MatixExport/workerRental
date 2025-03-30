@@ -3,13 +3,13 @@ package repositories.implementations;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import documents.FieldsConsts;
 import documents.WorkerMgd;
 import exceptions.WorkerRentedException;
-import mongoConnection.MongoConnection;
+import connection.MongoConnection;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import mongoConnection.CredentialsMongoConnection;
 import repositories.interfaces.MongoWorkerRepository;
 
 import java.util.List;
@@ -25,19 +25,13 @@ public class MongoWorkerRepositoryImpl extends BaseMongoRepository<WorkerMgd> im
     }
 
     @Override
-    protected void createCollection() {
-        super.createCollection();
-
-    }
-
-    @Override
     public List<WorkerMgd> findAll() {
         return mongoFindAll();
     }
 
     private void updateIsRented(UUID workerUUID, int value){
-        Bson filter = Filters.eq("_id", workerUUID);
-        Bson update = Updates.inc("isRented", value);
+        Bson filter = Filters.eq(FieldsConsts.ENTITY_ID, workerUUID);
+        Bson update = Updates.inc(FieldsConsts.WORKER_IS_RENTED, value);
         getCollection().updateOne(filter, update);
     }
 

@@ -1,6 +1,6 @@
 package spring.controllers.user;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import indie.outsource.user.ChangePasswordDto;
@@ -17,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import spring.dtoMappers.UserMapper;
+import spring.dto.mappers.UserMapper;
 import spring.security.AuthService;
 import spring.security.JWSService;
 import view.UserService;
@@ -55,9 +55,18 @@ public class UserWriteController {
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.deactivateUser(id)));
     }
 
-    @PostMapping("users/self/signed")
+    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
+    @PostMapping("/{id}/signed")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid SignedCreateUserDTO createUserDTO, @RequestHeader(HttpHeaders.IF_MATCH) String ifMatch) throws ResourceNotFoundException {
+        if (Boolean.FALSE.equals(jwsService.verifySignedCreateUser(createUserDTO, ifMatch))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return updateUser(id, UserMapper.getCreateUserDTOFromSigned(createUserDTO));
+    }
+
+    @PostMapping("/self/signed")
     public ResponseEntity<UserDTO> updateUserWithSign(@RequestBody @Valid ChangePasswordDto userDTO, @RequestHeader(HttpHeaders.IF_MATCH) String ifMatch) throws ResourceNotFoundException {
-        if (!jwsService.verifySignedCreateUser(userDTO, ifMatch)) {
+        if (Boolean.FALSE.equals(jwsService.verifySignedCreateUser(userDTO, ifMatch))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (!authService.verifyPassword(userDTO.getLogin(), userDTO.getOldPassword())) {
@@ -70,18 +79,10 @@ public class UserWriteController {
         return updateUser(user.getId(), userDTO);
     }
 
-    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) throws ResourceNotFoundException {
+    public ResponseEntity<UserDTO> updateUser(UUID id, @RequestBody @Valid CreateUserDTO createUserDTO) throws ResourceNotFoundException {
         UserEnt user = UserMapper.getUser(createUserDTO);
         user.setId(id);
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.updateUser(user)));
     }
 
-    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
-    @PostMapping("/users/{id}/signed")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody @Valid SignedCreateUserDTO createUserDTO, @RequestHeader(HttpHeaders.IF_MATCH) String ifMatch) throws ResourceNotFoundException {
-        if (!jwsService.verifySignedCreateUser(createUserDTO, ifMatch)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return updateUser(id, UserMapper.getCreateUserDTOFromSigned(createUserDTO));
-    }
 }

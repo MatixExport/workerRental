@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import spring.dtoMappers.UserMapper;
+import spring.dto.mappers.UserMapper;
 import spring.security.JWSService;
 import view.UserService;
 
@@ -64,14 +64,14 @@ public class UserReadController {
         return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());
     }
 
-    @GetMapping("/users/self")
+    @GetMapping("/self")
     public ResponseEntity<UserDTO> getSelfUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getDetails();
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.findByUsername(userDetails.getUsername()).getFirst()));
     }
 
-    @GetMapping("/users/self/signed")
+    @GetMapping("/self/signed")
     public ResponseEntity<SignedCreateUserDTO> getSignedSelfUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getDetails();

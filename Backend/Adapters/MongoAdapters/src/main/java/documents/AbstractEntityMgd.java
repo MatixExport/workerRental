@@ -16,12 +16,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public abstract class AbstractEntityMgd {
     @BsonId
-    @BsonProperty("_id")
+    @BsonProperty(FieldsConsts.ENTITY_ID)
     private UUID id;
 
     @BsonCreator
-    public AbstractEntityMgd(
-         @BsonProperty("_id") UUID id
+    protected AbstractEntityMgd(
+         @BsonProperty(FieldsConsts.ENTITY_ID) UUID id
     ) {
         this.id = id;
     }

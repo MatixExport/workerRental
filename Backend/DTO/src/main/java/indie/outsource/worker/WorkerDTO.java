@@ -14,5 +14,4 @@ import java.util.UUID;
 public class WorkerDTO {
     private String name;
     private UUID id;
-
 }

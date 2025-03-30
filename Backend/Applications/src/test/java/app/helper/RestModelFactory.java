@@ -1,11 +1,11 @@
 package app.helper;
 
-import Entities.RentEnt;
-import Entities.WorkerEnt;
-import Entities.user.AdminEnt;
-import Entities.user.ClientEnt;
-import Entities.user.ManagerEnt;
-import Entities.user.UserEnt;
+import entities.RentEnt;
+import entities.WorkerEnt;
+import entities.user.AdminEnt;
+import entities.user.ClientEnt;
+import entities.user.ManagerEnt;
+import entities.user.UserEnt;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.FinishRentDTO;
 import indie.outsource.user.ChangePasswordDto;
@@ -14,7 +14,6 @@ import indie.outsource.worker.CreateWorkerDTO;
 import org.instancio.Instancio;
 import org.instancio.Select;
 
-//TODO: Use as dependency from REST test module
 public class RestModelFactory {
     public static WorkerEnt getWorkerEnt(){
         return Instancio.of(WorkerEnt.class)

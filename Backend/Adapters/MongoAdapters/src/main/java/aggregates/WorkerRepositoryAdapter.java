@@ -1,12 +1,11 @@
 package aggregates;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
+import aggregates.mappers.WorkerMapper;
 import documents.WorkerMgd;
 import exceptions.WorkerRentedException;
 import infrastructure.WorkerRepository;
 import lombok.AllArgsConstructor;
-import aggregates.mappers.WorkerMapper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import repositories.interfaces.MongoWorkerRepository;
 

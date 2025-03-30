@@ -1,6 +1,6 @@
 package view;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import org.springframework.stereotype.Service;

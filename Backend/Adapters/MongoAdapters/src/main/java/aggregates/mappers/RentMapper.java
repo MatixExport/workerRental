@@ -1,6 +1,6 @@
 package aggregates.mappers;
 
-import Entities.RentEnt;
+import entities.RentEnt;
 import documents.RentMgd;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

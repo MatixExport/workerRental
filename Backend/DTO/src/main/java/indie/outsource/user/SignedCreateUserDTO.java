@@ -1,13 +1,8 @@
 package indie.outsource.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-
-import java.util.UUID;
 
 @Getter
 @Setter

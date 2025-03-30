@@ -1,6 +1,6 @@
 package infrastructure;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.UserAlreadyExistsException;
 import org.springframework.stereotype.Repository;
 

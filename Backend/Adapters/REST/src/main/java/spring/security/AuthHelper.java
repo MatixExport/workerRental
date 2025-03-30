@@ -1,6 +1,6 @@
 package spring.security;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -17,7 +17,7 @@ public class AuthHelper {
 
     @Value("${secret.key.jwt}")
     private String SECRET_KEY;
-    private static final long EXPIRATION_TIME = 1000*60*30; // ms*s*min
+    private static final long EXPIRATION_TIME = (long)1000*60*30; // ms*s*min
 
     private String signClaimSet(JWTClaimsSet claimSet) {
         SignedJWT signedJWT = new SignedJWT(
@@ -47,7 +47,7 @@ public class AuthHelper {
         return signClaimSet(jwtClaimsSet);
     }
 
-    public String generateJWT(UserEnt user) {       // TODO use REST model
+    public String generateJWT(UserEnt user) {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getLogin())
                 .issuer("Worker Rental")
@@ -67,7 +67,7 @@ public class AuthHelper {
             return signedJWT.verify(verifier) && !isTokenExpired(signedJWT);
         }
         catch (Exception e){
-            throw new RuntimeException("Error while verifying the token", e);
+            throw new JWTException("Error while verifying the token", e);
         }
     }
 
@@ -90,7 +90,7 @@ public class AuthHelper {
             return signedJWT.getJWTClaimsSet().getClaim(claim).toString();
         }
         catch (Exception e){
-            throw new RuntimeException("Error while parsing the token", e);
+            throw new JWTException("Error while parsing the token", e);
         }
     }
 

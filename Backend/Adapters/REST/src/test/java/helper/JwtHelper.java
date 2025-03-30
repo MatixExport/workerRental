@@ -1,6 +1,6 @@
 package helper;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import spring.security.AuthHelper;
 
 public class JwtHelper {

@@ -1,7 +1,8 @@
 package spring.security;
 
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

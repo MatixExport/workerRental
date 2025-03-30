@@ -12,6 +12,7 @@
     <artifactId>Adapters</artifactId>
     <modules>
         <module>REST</module>
+        <module>SOAP</module>
     </modules>
 
     <properties>
