@@ -6,6 +6,11 @@ import com.example.soap.Worker;
 import java.util.UUID;
 
 public class WorkerMapper {
+
+    private WorkerMapper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static Worker fromDomainModel(WorkerEnt workerEnt) {
         Worker worker = new Worker();
         worker.setName(workerEnt.getName());

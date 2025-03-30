@@ -2,7 +2,7 @@ package spring.security;
 
 public final class Roles {
     private Roles() {
-        throw new RuntimeException("Utility class");
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
     public static final String ADMIN = "ADMIN";

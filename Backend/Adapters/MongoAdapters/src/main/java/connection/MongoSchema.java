@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MongoSchema {
+
+
+    private MongoSchema() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     private static final Map<String, ValidationOptions> schemaMap = new HashMap<>() {{
         put(UserMgd.class.getSimpleName(), new ValidationOptions().validator(
                 Document.parse("""

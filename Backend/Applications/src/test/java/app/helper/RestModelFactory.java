@@ -14,7 +14,6 @@ import indie.outsource.worker.CreateWorkerDTO;
 import org.instancio.Instancio;
 import org.instancio.Select;
 
-//TODO: Use as dependency from REST test module
 public class RestModelFactory {
     public static WorkerEnt getWorkerEnt(){
         return Instancio.of(WorkerEnt.class)

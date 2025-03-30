@@ -32,21 +32,21 @@ class AuthTest {
     private int port;
 
 
-    private static final String baseUri = "https://localhost";
+    private static final String BASE_URI = "https://localhost";
     private static RestRequests restRequests;
 
 
     @Autowired
     AuthHelper authHelper;
 
-    private static RestAssuredConfig rac = RestAssured
+    private static final RestAssuredConfig rac = RestAssured
             .config()
             .sslConfig(new SSLConfig()
                     .allowAllHostnames()
                     .relaxedHTTPSValidation("TLSv1.2"));
 
     @Container
-    private final static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0.1");
+    private static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0.1");
 
     @Autowired
     private UserService userService;
@@ -54,7 +54,7 @@ class AuthTest {
     @Autowired private UserRepository userRepository;
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         userRepository.deleteAll();
     }
 
@@ -65,9 +65,9 @@ class AuthTest {
 
     @BeforeEach
     void setupRestAssured() {
-        RestAssured.baseURI = baseUri;
+        RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
-        restRequests = new RestRequests(port,baseUri,rac);
+        restRequests = new RestRequests(port, BASE_URI,rac);
     }
 
     @AfterAll
@@ -102,7 +102,7 @@ class AuthTest {
                 .extract().body().asString();
     }
     @Test
-    void noJwtAuthTest() throws UserAlreadyExistsException {
+    void noJwtAuthTest() {
         RestAssured.given()
                 .config(rac)
                 .contentType(ContentType.JSON)
@@ -112,7 +112,7 @@ class AuthTest {
     }
 
     @Test
-    void invalidJwtAuthTest() throws UserAlreadyExistsException {
+    void invalidJwtAuthTest() {
         RestAssured.given()
                 .config(rac)
                 .contentType(ContentType.JSON)

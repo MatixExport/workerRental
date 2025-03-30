@@ -1,3 +1,5 @@
+package controllers;
+
 import entities.RentEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
@@ -33,7 +35,7 @@ import static org.hamcrest.Matchers.equalTo;
 @WebMvcTest(UserReadController.class)
 @ContextConfiguration(classes = RestTestConfiguration.class)
 class RentControllerTest {
-    private final String baseUri = "/rents";
+    private static final String BASE_URI = "/rents";
 
     @Mock
     private RentService rentService;
@@ -42,7 +44,7 @@ class RentControllerTest {
     private RentController rentController;
 
     @BeforeEach
-    public void initialiseRestAssuredMockMvcStandalone() {
+    void initialiseRestAssuredMockMvcStandalone() {
         StandaloneMockMvcBuilder builder = MockMvcBuilders.standaloneSetup(rentController).setControllerAdvice(new GlobalExceptionHandler());
         RestAssuredMockMvc.standaloneSetup(builder);
     }
@@ -54,7 +56,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri+"/"+rentEnt.getId())
+                .get(BASE_URI +"/"+rentEnt.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -66,7 +68,7 @@ class RentControllerTest {
         Mockito.when(rentService.findById(Mockito.any(UUID.class))).thenThrow(new ResourceNotFoundException());
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri + "/" + UUID.randomUUID())
+                .get(BASE_URI + "/" + UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -79,7 +81,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri)
+                .get(BASE_URI)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -92,7 +94,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc.given()
                 .when()
-                .get(baseUri)
+                .get(BASE_URI)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -111,7 +113,7 @@ class RentControllerTest {
                 .given()
                 .contentType("application/json")
                 .body(createRentDTO)
-                .post(baseUri + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
+                .post(BASE_URI + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -129,7 +131,7 @@ class RentControllerTest {
                 .given()
                 .contentType("application/json")
                 .body(createRentDTO)
-                .post(baseUri + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
+                .post(BASE_URI + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -145,7 +147,7 @@ class RentControllerTest {
                 .given()
                 .contentType("application/json")
                 .body(createRentDTO)
-                .post(baseUri + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
+                .post(BASE_URI + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.CONFLICT.value());
     }
@@ -161,7 +163,7 @@ class RentControllerTest {
                 .given()
                 .contentType("application/json")
                 .body(createRentDTO)
-                .post(baseUri + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
+                .post(BASE_URI + "/users/{clientId}/workers/{workerId}", UUID.randomUUID(), UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.FORBIDDEN.value());
     }
@@ -172,7 +174,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .delete(baseUri + "/{id}/delete", UUID.randomUUID())
+                .delete(BASE_URI + "/{id}/delete", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.OK.value());
     }
@@ -183,7 +185,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .delete(baseUri + "/{id}/delete", UUID.randomUUID())
+                .delete(BASE_URI + "/{id}/delete", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -194,7 +196,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .delete(baseUri + "/{id}/delete", UUID.randomUUID())
+                .delete(BASE_URI + "/{id}/delete", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.CONFLICT.value());
     }
@@ -208,7 +210,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/ended/users/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/ended/users/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("id", equalTo(List.of(rentEnt.getId().toString(), rentEnt2.getId().toString())));
@@ -220,7 +222,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/ended/users/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/ended/users/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -234,7 +236,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/current/users/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/current/users/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("id", equalTo(List.of(rentEnt.getId().toString(), rentEnt2.getId().toString())));
@@ -246,7 +248,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/current/users/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/current/users/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -261,7 +263,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/ended/workers/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/ended/workers/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("id", equalTo(List.of(rentEnt.getId().toString(), rentEnt2.getId().toString())));
@@ -273,7 +275,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/ended/workers/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/ended/workers/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -287,7 +289,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/current/workers/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/current/workers/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("id", equalTo(List.of(rentEnt.getId().toString(), rentEnt2.getId().toString())));
@@ -299,7 +301,7 @@ class RentControllerTest {
 
         RestAssuredMockMvc
                 .given()
-                .get(baseUri + "/current/workers/{id}", UUID.randomUUID())
+                .get(BASE_URI + "/current/workers/{id}", UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }

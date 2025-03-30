@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @AllArgsConstructor
 @Service
@@ -43,7 +44,6 @@ public class DomainRentService implements view.RentService {
     public RentEnt createRent(UUID clientId, UUID workerId, LocalDateTime startDate) throws ResourceNotFoundException, UserInactiveException, WorkerRentedException {
         Optional<UserEnt> user = userRepository.findById(clientId);
         if(user.isEmpty()){
-            System.out.println("User not found");
             throw new ResourceNotFoundException("User not found");
         }
         if(! user.get().isActive()){
@@ -51,7 +51,6 @@ public class DomainRentService implements view.RentService {
         }
         Optional<WorkerEnt> worker = workerRepository.findById(workerId);
         if(worker.isEmpty()){
-            System.out.println("Worker not found");
             throw new ResourceNotFoundException("Worker not found");
         }
         if(rentRepository.existsByWorker_IdAndEndDateIsNull(workerId)){

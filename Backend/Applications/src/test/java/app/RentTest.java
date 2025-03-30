@@ -4,7 +4,6 @@ import entities.RentEnt;
 import entities.WorkerEnt;
 import entities.user.UserEnt;
 import app.helper.RestModelFactory;
-import app.helper.RestRequests;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import exceptions.UserInactiveException;
@@ -45,10 +44,9 @@ class RentTest {
     private int port;
 
 
-    private static final String baseUri = "https://localhost";
-    private static final String baseRentUri = "/rents";
+    private static final String BASE_URI = "https://localhost";
+    private static final String BASE_RENT_URI = "/rents";
 
-    private static RestRequests restRequests;
 
 
     @Autowired
@@ -61,7 +59,7 @@ class RentTest {
                     .relaxedHTTPSValidation("TLSv1.2"));
 
     @Container
-    private final static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0.1");
+    private static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0.1");
 
     @Autowired
     private UserService userService;
@@ -82,7 +80,7 @@ class RentTest {
     private RentRepository rentRepository;
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         userRepository.deleteAll();
         workerRepository.deleteAll();
         rentRepository.deleteAll();
@@ -95,9 +93,8 @@ class RentTest {
 
     @BeforeEach
     void setupRestAssured() {
-        RestAssured.baseURI = baseUri;
+        RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
-        restRequests = new RestRequests(port,baseUri,rac);
     }
 
     @AfterAll
@@ -128,7 +125,7 @@ class RentTest {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + jwtToken)
                 .body(dto)
-                .post(baseRentUri+"/user/workers/"+worker.getId())
+                .post(BASE_RENT_URI +"/user/workers/"+worker.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract().body().as(RentDTO.class);
@@ -155,13 +152,13 @@ class RentTest {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + jwtToken)
                 .body(dto)
-                .post(baseRentUri+"/user/workers/"+worker.getId())
+                .post(BASE_RENT_URI +"/user/workers/"+worker.getId())
                 .then()
                 .statusCode(HttpStatus.CONFLICT.value());
     }
 
     @Test
-    void createRentInactiveUserTest() throws UserAlreadyExistsException, WorkerRentedException, UserInactiveException, ResourceNotFoundException {
+    void createRentInactiveUserTest() throws UserAlreadyExistsException, ResourceNotFoundException {
         UserEnt user = RestModelFactory.getClientEnt();
         userService.save(user);
         userService.deactivateUser(user.getId());
@@ -176,7 +173,7 @@ class RentTest {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + jwtToken)
                 .body(dto)
-                .post(baseRentUri+"/user/workers/"+worker.getId())
+                .post(BASE_RENT_URI +"/user/workers/"+worker.getId())
                 .then()
                 .statusCode(HttpStatus.FORBIDDEN.value());
     }
@@ -195,7 +192,7 @@ class RentTest {
                 .config(rac)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + jwtToken)
-                .delete(baseRentUri+"/"+rentEnt.getId()+"/delete")
+                .delete(BASE_RENT_URI +"/"+rentEnt.getId()+"/delete")
                 .then()
                 .statusCode(HttpStatus.OK.value());
 
