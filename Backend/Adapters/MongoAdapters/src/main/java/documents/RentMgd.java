@@ -14,26 +14,38 @@ import java.util.UUID;
 @Getter
 public class RentMgd extends AbstractEntityMgd {
 
-    @BsonProperty("startDate")
+    @BsonProperty(FieldsConsts.RENT_START_DATE)
     LocalDateTime startDate;
-    @BsonProperty("endDate")
+    @BsonProperty(FieldsConsts.RENT_END_DATE)
     LocalDateTime endDate;
-    @BsonProperty("worker")
+    @BsonProperty(FieldsConsts.RENT_WORKER)
     WorkerMgd worker;
-    @BsonProperty(value = "user",useDiscriminator = true)
+    @BsonProperty(value = FieldsConsts.RENT_USER,useDiscriminator = true)
     UserMgd user;
 
     @BsonCreator
     public RentMgd(
-            @BsonProperty("_id") UUID id,
-            @BsonProperty("startDate") LocalDateTime startDate,
-            @BsonProperty("endDate") LocalDateTime endDate,
-            @BsonProperty("worker") WorkerMgd worker,
-            @BsonProperty("user") UserMgd user) {
+            @BsonProperty(FieldsConsts.ENTITY_ID) UUID id,
+            @BsonProperty(FieldsConsts.RENT_START_DATE) LocalDateTime startDate,
+            @BsonProperty(FieldsConsts.RENT_END_DATE) LocalDateTime endDate,
+            @BsonProperty(FieldsConsts.RENT_WORKER) WorkerMgd worker,
+            @BsonProperty(FieldsConsts.RENT_USER) UserMgd user) {
         super(id);
         this.startDate = startDate;
         this.endDate = endDate;
         this.worker = worker;
         this.user = user;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return super.equals(other);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
 }

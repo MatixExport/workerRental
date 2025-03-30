@@ -4,7 +4,6 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
