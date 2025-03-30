@@ -1,6 +1,6 @@
 package services;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import infrastructure.RentRepository;

@@ -10,7 +10,7 @@ import documents.WorkerMgd;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
-import mongoConnection.CredentialsMongoConnection;
+import connection.CredentialsMongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
 package view;
 
 
-import Entities.RentEnt;
+import entities.RentEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;

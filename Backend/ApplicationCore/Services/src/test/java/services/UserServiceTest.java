@@ -1,4 +1,6 @@
-import Entities.user.UserEnt;
+package services;
+
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import infrastructure.UserRepository;
@@ -8,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import services.UserService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
@@ -26,7 +27,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void createUserTest() throws UserAlreadyExistsException {
+    void createUserTest() throws UserAlreadyExistsException {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
         userEnt.setActive(true);
 
@@ -40,7 +41,7 @@ public class UserServiceTest {
         assertEquals(userEnt.getLogin(), savedUser.getLogin());
     }
     @Test
-    public void createUserAlreadyExistsTest() {
+    void createUserAlreadyExistsTest() {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
         userEnt.setActive(true);
 
@@ -51,7 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void activateUserTest() {
+    void activateUserTest() {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
         userEnt.setActive(false);
 
@@ -67,7 +68,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void activateUserDoesNotExistTest() {
+    void activateUserDoesNotExistTest() {
         Mockito.when(userRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> userService.activateUser(UUID.randomUUID()));
     }

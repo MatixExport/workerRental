@@ -1,7 +1,7 @@
 package spring.controllers;
 
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import indie.outsource.worker.CreateWorkerDTO;
@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import spring.dtoMappers.WorkerMapper;
+import spring.dto.mappers.WorkerMapper;
 import view.WorkerService;
 
 import java.util.List;

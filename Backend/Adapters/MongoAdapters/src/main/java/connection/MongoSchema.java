@@ -1,4 +1,4 @@
-package mongoConnection;
+package connection;
 
 import com.mongodb.client.model.ValidationOptions;
 import documents.RentMgd;

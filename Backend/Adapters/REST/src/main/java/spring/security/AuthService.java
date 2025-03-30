@@ -1,6 +1,6 @@
 package spring.security;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;
 import exceptions.WrongCredentialsException;

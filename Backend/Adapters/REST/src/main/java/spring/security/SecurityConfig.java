@@ -39,7 +39,7 @@ public class SecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(_ ->{ return corsConfigurationSource();}))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests((authorizeRequests) -> {
+                .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests.requestMatchers("/login", "/register").anonymous();
                     authorizeRequests.requestMatchers("/ws").anonymous();
                     authorizeRequests.requestMatchers("/ws/*").anonymous();

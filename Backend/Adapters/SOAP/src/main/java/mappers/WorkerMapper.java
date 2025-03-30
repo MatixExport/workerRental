@@ -1,6 +1,6 @@
 package mappers;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import com.example.soap.Worker;
 
 import java.util.UUID;

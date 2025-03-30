@@ -9,7 +9,7 @@ import com.mongodb.client.model.IndexOptions;
 import documents.FieldsConsts;
 import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;
-import mongoConnection.MongoConnection;
+import connection.MongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;

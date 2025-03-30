@@ -1,6 +1,6 @@
 package endpoints;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import com.example.soap.*;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;

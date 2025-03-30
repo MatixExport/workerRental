@@ -1,9 +1,9 @@
-package Entities.user;
+package entities.user;
 
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class AdminEnt extends Entities.user.UserEnt {
+public class AdminEnt extends entities.user.UserEnt {
     public AdminEnt(String login, String password, boolean active) {
         super(login, password, active);
     }

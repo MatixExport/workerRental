@@ -1,6 +1,6 @@
 package user;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import helper.RestModelFactory;
 import io.restassured.http.ContentType;
@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
-import spring.controllers.exceptionHandlers.GlobalExceptionHandler;
+import spring.controllers.exception.handlers.GlobalExceptionHandler;
 import spring.controllers.user.UserReadController;
 import view.UserService;
 

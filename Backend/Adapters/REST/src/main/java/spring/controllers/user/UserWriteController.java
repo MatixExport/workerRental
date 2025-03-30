@@ -1,6 +1,6 @@
 package spring.controllers.user;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import indie.outsource.user.ChangePasswordDto;
@@ -17,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import spring.dtoMappers.UserMapper;
+import spring.dto.mappers.UserMapper;
 import spring.security.AuthService;
 import spring.security.JWSService;
 import view.UserService;

@@ -1,7 +1,7 @@
-package spring.dtoMappers;
+package spring.dto.mappers;
 
 
-import Entities.RentEnt;
+import entities.RentEnt;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.RentDTO;
 

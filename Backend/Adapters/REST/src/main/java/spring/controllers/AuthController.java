@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import spring.dtoMappers.UserMapper;
+import spring.dto.mappers.UserMapper;
 import spring.security.AuthService;
 import view.UserService;
 

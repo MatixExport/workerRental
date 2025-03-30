@@ -1,6 +1,6 @@
-package spring.dtoMappers;
+package spring.dto.mappers;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import indie.outsource.worker.CreateWorkerDTO;
 import indie.outsource.worker.WorkerDTO;
 

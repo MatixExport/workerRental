@@ -1,4 +1,4 @@
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
 import helper.RestModelFactory;
@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import spring.controllers.WorkerController;
-import spring.controllers.exceptionHandlers.GlobalExceptionHandler;
+import spring.controllers.exception.handlers.GlobalExceptionHandler;
 import view.WorkerService;
 
 import java.util.List;

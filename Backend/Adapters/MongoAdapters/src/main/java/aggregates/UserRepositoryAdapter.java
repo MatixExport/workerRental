@@ -1,6 +1,6 @@
 package aggregates;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import aggregates.mappers.UserMapper;
 import documents.users.UserMgd;
 import exceptions.UserAlreadyExistsException;

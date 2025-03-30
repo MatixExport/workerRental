@@ -1,11 +1,11 @@
 package spring.security;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import com.nimbusds.jose.JOSEException;
 import indie.outsource.user.SignedCreateUserDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import spring.dtoMappers.UserMapper;
+import spring.dto.mappers.UserMapper;
 
 @Component
 @AllArgsConstructor

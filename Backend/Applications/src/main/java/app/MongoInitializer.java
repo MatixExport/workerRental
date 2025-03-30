@@ -1,11 +1,11 @@
 package app;
 
-import Entities.RentEnt;
-import Entities.WorkerEnt;
-import Entities.user.AdminEnt;
-import Entities.user.ClientEnt;
-import Entities.user.ManagerEnt;
-import Entities.user.UserEnt;
+import entities.RentEnt;
+import entities.WorkerEnt;
+import entities.user.AdminEnt;
+import entities.user.ClientEnt;
+import entities.user.ManagerEnt;
+import entities.user.UserEnt;
 import infrastructure.RentRepository;
 import infrastructure.UserRepository;
 import infrastructure.WorkerRepository;

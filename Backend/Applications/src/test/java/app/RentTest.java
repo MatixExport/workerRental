@@ -1,8 +1,8 @@
 package app;
 
-import Entities.RentEnt;
-import Entities.WorkerEnt;
-import Entities.user.UserEnt;
+import entities.RentEnt;
+import entities.WorkerEnt;
+import entities.user.UserEnt;
 import app.helper.RestModelFactory;
 import app.helper.RestRequests;
 import exceptions.ResourceNotFoundException;

@@ -1,4 +1,4 @@
-import Entities.RentEnt;
+import entities.RentEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;
@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import spring.controllers.RentController;
-import spring.controllers.exceptionHandlers.GlobalExceptionHandler;
+import spring.controllers.exception.handlers.GlobalExceptionHandler;
 import spring.controllers.user.UserReadController;
 import view.RentService;
 

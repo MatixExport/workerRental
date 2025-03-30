@@ -1,6 +1,6 @@
 package services;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import infrastructure.UserRepository;

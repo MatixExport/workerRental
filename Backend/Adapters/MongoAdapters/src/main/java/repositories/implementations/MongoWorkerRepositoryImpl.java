@@ -6,7 +6,7 @@ import com.mongodb.client.model.Updates;
 import documents.FieldsConsts;
 import documents.WorkerMgd;
 import exceptions.WorkerRentedException;
-import mongoConnection.MongoConnection;
+import connection.MongoConnection;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

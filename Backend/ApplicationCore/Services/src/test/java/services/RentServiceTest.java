@@ -1,6 +1,8 @@
-import Entities.RentEnt;
-import Entities.WorkerEnt;
-import Entities.user.UserEnt;
+package services;
+
+import entities.RentEnt;
+import entities.WorkerEnt;
+import entities.user.UserEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;
@@ -15,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import services.RentService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

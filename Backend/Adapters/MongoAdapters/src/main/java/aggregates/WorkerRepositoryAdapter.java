@@ -1,6 +1,6 @@
 package aggregates;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import aggregates.mappers.WorkerMapper;
 import documents.WorkerMgd;
 import exceptions.WorkerRentedException;

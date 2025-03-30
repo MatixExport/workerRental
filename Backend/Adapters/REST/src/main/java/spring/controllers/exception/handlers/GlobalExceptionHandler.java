@@ -1,4 +1,4 @@
-package spring.controllers.exceptionHandlers;
+package spring.controllers.exception.handlers;
 
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;

@@ -8,8 +8,8 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.UpdateResult;
 import documents.AbstractEntityMgd;
 import documents.FieldsConsts;
-import mongoConnection.MongoConnection;
-import mongoConnection.MongoSchema;
+import connection.MongoConnection;
+import connection.MongoSchema;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

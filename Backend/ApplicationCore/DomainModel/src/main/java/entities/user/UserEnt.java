@@ -1,6 +1,6 @@
-package Entities.user;
+package entities.user;
 
-import Entities.AbstractEntity;
+import entities.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

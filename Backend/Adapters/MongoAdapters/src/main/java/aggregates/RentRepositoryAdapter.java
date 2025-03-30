@@ -1,6 +1,6 @@
 package aggregates;
 
-import Entities.RentEnt;
+import entities.RentEnt;
 import aggregates.mappers.RentMapper;
 import documents.RentMgd;
 import exceptions.RentAlreadyEndedException;

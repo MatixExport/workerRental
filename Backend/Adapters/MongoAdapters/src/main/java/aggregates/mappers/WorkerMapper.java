@@ -1,6 +1,6 @@
 package aggregates.mappers;
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import documents.WorkerMgd;
 import org.springframework.stereotype.Component;
 

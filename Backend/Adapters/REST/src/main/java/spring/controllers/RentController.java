@@ -1,6 +1,6 @@
 package spring.controllers;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;
@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import spring.dtoMappers.RentMapper;
+import spring.dto.mappers.RentMapper;
 import view.RentService;
 import view.UserService;
 

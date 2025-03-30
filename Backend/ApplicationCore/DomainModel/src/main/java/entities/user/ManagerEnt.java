@@ -1,4 +1,4 @@
-package Entities.user;
+package entities.user;
 
 import lombok.NoArgsConstructor;
 

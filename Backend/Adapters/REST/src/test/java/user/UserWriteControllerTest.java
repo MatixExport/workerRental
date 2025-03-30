@@ -1,6 +1,6 @@
 package user;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import exceptions.UserAlreadyExistsException;
 import helper.RestModelFactory;
 import indie.outsource.user.CreateUserDTO;
@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
-import spring.controllers.exceptionHandlers.GlobalExceptionHandler;
+import spring.controllers.exception.handlers.GlobalExceptionHandler;
 import spring.controllers.user.UserWriteController;
 import view.UserService;
 

@@ -1,7 +1,7 @@
 package infrastructure;
 
 
-import Entities.WorkerEnt;
+import entities.WorkerEnt;
 import exceptions.WorkerRentedException;
 import org.springframework.stereotype.Repository;
 

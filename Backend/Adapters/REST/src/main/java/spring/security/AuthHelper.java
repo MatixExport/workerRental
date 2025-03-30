@@ -1,6 +1,6 @@
 package spring.security;
 
-import Entities.user.UserEnt;
+import entities.user.UserEnt;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;

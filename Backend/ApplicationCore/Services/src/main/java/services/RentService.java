@@ -1,9 +1,9 @@
 package services;
 
 
-import Entities.RentEnt;
-import Entities.WorkerEnt;
-import Entities.user.UserEnt;
+import entities.RentEnt;
+import entities.WorkerEnt;
+import entities.user.UserEnt;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserInactiveException;

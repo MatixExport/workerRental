@@ -1,15 +1,20 @@
-package spring.dtoMappers;
+package spring.dto.mappers;
 
-import Entities.user.AdminEnt;
-import Entities.user.ClientEnt;
-import Entities.user.ManagerEnt;
-import Entities.user.UserEnt;
+import entities.user.AdminEnt;
+import entities.user.ClientEnt;
+import entities.user.ManagerEnt;
+import entities.user.UserEnt;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.SignedCreateUserDTO;
 import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
 
 public final class UserMapper {
+
+    private UserMapper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static UserDTO getUserDTO(UserEnt user){
         return new UserDTO(user.getLogin(), user.isActive(), user.getId(), USERTYPE.getByClassname(user.getClass().getSimpleName()));
     }
