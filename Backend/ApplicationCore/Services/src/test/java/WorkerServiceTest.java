@@ -1,10 +1,7 @@
 import Entities.WorkerEnt;
-import exceptions.*;
-
+import exceptions.ResourceNotFoundException;
 import infrastructure.WorkerRepository;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,6 +11,9 @@ import services.WorkerService;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class WorkerServiceTest {
@@ -26,7 +26,7 @@ public class WorkerServiceTest {
 
 
     @Test
-    public void updateWorkerDoesNotExistTest(){
+    void updateWorkerDoesNotExistTest(){
         WorkerEnt workerEnt = DomainModelFactory.getWorkerEnt();
         Mockito.when(workerRepository.findById(Mockito.any(UUID.class)))
                 .thenReturn(Optional.empty());
@@ -35,7 +35,7 @@ public class WorkerServiceTest {
     }
 
     @Test
-    public void createWorkerTest() {
+    void createWorkerTest() {
         WorkerEnt workerEnt = DomainModelFactory.getWorkerEnt();
 
         Mockito.when(workerRepository.save(Mockito.any(WorkerEnt.class)))
@@ -55,7 +55,7 @@ public class WorkerServiceTest {
     }
 
     @Test
-    void findWorkerDoesNotExistTest() throws ResourceNotFoundException {
+    void findWorkerDoesNotExistTest() {
         WorkerEnt workerEnt = DomainModelFactory.getWorkerEnt();
         Mockito.when(workerRepository.findById(Mockito.any(UUID.class)))
                 .thenReturn(Optional.empty());

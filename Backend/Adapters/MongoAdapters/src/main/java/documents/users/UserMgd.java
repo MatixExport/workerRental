@@ -1,7 +1,6 @@
 package documents.users;
 
 import documents.AbstractEntityMgd;
-
 import documents.FieldsConsts;
 import lombok.Getter;
 import lombok.Setter;

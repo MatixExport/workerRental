@@ -6,12 +6,10 @@ import Entities.user.AdminEnt;
 import Entities.user.ClientEnt;
 import Entities.user.ManagerEnt;
 import Entities.user.UserEnt;
-
 import infrastructure.RentRepository;
 import infrastructure.UserRepository;
 import infrastructure.WorkerRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

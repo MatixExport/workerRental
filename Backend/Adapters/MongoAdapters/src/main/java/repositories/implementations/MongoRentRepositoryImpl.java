@@ -4,21 +4,23 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-
 import documents.FieldsConsts;
 import documents.RentMgd;
 import documents.WorkerMgd;
 import exceptions.RentAlreadyEndedException;
 import exceptions.ResourceNotFoundException;
 import exceptions.WorkerRentedException;
+import mongoConnection.CredentialsMongoConnection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;
-import mongoConnection.CredentialsMongoConnection;
 import repositories.interfaces.MongoRentRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implements MongoRentRepository {

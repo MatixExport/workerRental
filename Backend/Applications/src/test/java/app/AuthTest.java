@@ -4,16 +4,11 @@ import Entities.user.UserEnt;
 import app.helper.RestModelFactory;
 import app.helper.RestRequests;
 import exceptions.UserAlreadyExistsException;
-import indie.outsource.user.LoginDTO;
 import infrastructure.UserRepository;
-import infrastructure.WorkerRepository;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import mongoConnection.DefaultMongoConnection;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,11 +20,8 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import spring.dtoMappers.UserMapper;
 import spring.security.AuthHelper;
 import view.UserService;
-
-import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -41,8 +33,6 @@ class AuthTest {
 
 
     private static final String baseUri = "https://localhost";
-    private static final String baseUserUri = "/users";
-
     private static RestRequests restRequests;
 
 

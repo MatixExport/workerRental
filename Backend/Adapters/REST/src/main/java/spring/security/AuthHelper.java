@@ -17,7 +17,7 @@ public class AuthHelper {
 
     @Value("${secret.key.jwt}")
     private String SECRET_KEY;
-    private static final long EXPIRATION_TIME = 1000*60*30; // ms*s*min
+    private static final long EXPIRATION_TIME = (long)1000*60*30; // ms*s*min
 
     private String signClaimSet(JWTClaimsSet claimSet) {
         SignedJWT signedJWT = new SignedJWT(

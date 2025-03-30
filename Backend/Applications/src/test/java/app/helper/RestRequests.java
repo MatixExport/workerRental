@@ -1,6 +1,5 @@
 package app.helper;
 
-import Entities.user.UserEnt;
 import indie.outsource.user.LoginDTO;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
