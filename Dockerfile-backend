@@ -1,6 +1,6 @@
 FROM maven:3.9.9-amazoncorretto-23 AS build
 
-COPY Backend /app
+COPY RentMicroService /app
 
 WORKDIR /app
 
