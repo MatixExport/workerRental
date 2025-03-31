@@ -1,8 +1,6 @@
 package app.helper;
 
 import entities.user.AdminEnt;
-import entities.user.ClientEnt;
-import entities.user.ManagerEnt;
 import entities.user.UserEnt;
 import indie.outsource.user.ChangePasswordDto;
 import indie.outsource.user.CreateUserDTO;
@@ -14,14 +12,11 @@ public class RestModelFactory {
         return Instancio.of(AdminEnt.class)
                 .create();
     }
-    public static UserEnt getClientEnt(){
-        return Instancio.of(ClientEnt.class)
+    public static UserEnt getUserEnt(){
+        return Instancio.of(UserEnt.class)
                 .create();
     }
-    public static UserEnt getManagerEnt(){
-        return Instancio.of(ManagerEnt.class)
-                .create();
-    }
+
 
     public static CreateUserDTO getCreateUserDTO(){
         return Instancio.of(CreateUserDTO.class)

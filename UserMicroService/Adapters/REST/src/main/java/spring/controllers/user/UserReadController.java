@@ -36,7 +36,7 @@ public class UserReadController {
         return ResponseEntity.ok(userService.findAll().stream().map(UserMapper::getUserDTO).toList());
     }
 
-    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER)")
+    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) throws ResourceNotFoundException {
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.findById(id)));
@@ -52,13 +52,13 @@ public class UserReadController {
         }
     }
 
-    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER)")
+    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
     @GetMapping("/login/{login}")
     public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String login) throws ResourceNotFoundException {
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.findByUsernameExact(login)));
     }
 
-    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER)")
+    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
     @GetMapping("/loginContains/{login}")
     public ResponseEntity<List<UserDTO>> getUserByLoginContains(@PathVariable String login) {
         return ResponseEntity.ok(userService.findByUsername(login).stream().map(UserMapper::getUserDTO).toList());

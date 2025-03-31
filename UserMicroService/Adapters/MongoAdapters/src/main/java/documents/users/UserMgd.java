@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @BsonDiscriminator()
-public abstract class UserMgd extends AbstractEntityMgd {
+public class UserMgd extends AbstractEntityMgd {
 
     @BsonProperty(FieldsConsts.ACCOUNT_LOGIN)
     private String login;
@@ -23,7 +23,7 @@ public abstract class UserMgd extends AbstractEntityMgd {
     private boolean active;
 
     @BsonCreator
-    protected UserMgd(
+    public UserMgd(
             @BsonProperty(FieldsConsts.ENTITY_ID) UUID id,
             @BsonProperty(FieldsConsts.ACCOUNT_LOGIN) String login,
             @BsonProperty(FieldsConsts.ACCOUNT_PASSWORD) String password,

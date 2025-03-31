@@ -9,8 +9,6 @@ public class FieldsConsts {
 
     //collection names
     public static final String COLLECTION_ACCOUNT = "user";
-    public static final String COLLECTION_WORKER = "worker";
-    public static final String COLLECTION_RENT = "rent";
 
 
     // AbstractEntity Fields
@@ -21,15 +19,6 @@ public class FieldsConsts {
     public static final String ACCOUNT_PASSWORD = "password";
     public static final String ACCOUNT_ACTIVE = "active";
 
-    //Worker Fields
-    public static final String WORKER_NAME = "name";
-    public static final String WORKER_IS_RENTED = "isRented";
-
-    //Rent Fields
-    public static final String RENT_START_DATE = "startDate";
-    public static final String RENT_END_DATE = "endDate";
-    public static final String RENT_WORKER = "worker";
-    public static final String RENT_USER = "user";
 
 
 }
