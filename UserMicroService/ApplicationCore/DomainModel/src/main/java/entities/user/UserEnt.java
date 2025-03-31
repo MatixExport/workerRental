@@ -17,7 +17,7 @@ public class UserEnt extends AbstractEntity {
     private boolean active;
 
     public String getGroups(){
-        return null;
+        return "USER";
     }
 
     @Override
