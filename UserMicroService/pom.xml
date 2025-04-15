@@ -27,7 +27,6 @@
 		<module>ApplicationCore</module>
 		<module>DTO</module>
 		<module>Adapters</module>
-		<module>Adapters/MongoAdapters</module>
 		<module>Applications</module>
 	</modules>
 
