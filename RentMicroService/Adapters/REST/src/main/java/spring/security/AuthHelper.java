@@ -17,46 +17,7 @@ public class AuthHelper {
 
     @Value("${secret.key.jwt}")
     private String SECRET_KEY;
-    private static final long EXPIRATION_TIME = (long)1000*60*30; // ms*s*min
 
-    private String signClaimSet(JWTClaimsSet claimSet) {
-        SignedJWT signedJWT = new SignedJWT(
-                new JWSHeader(JWSAlgorithm.HS256),
-                claimSet
-        );
-
-        try{
-            JWSSigner signer = new MACSigner(SECRET_KEY);
-            signedJWT.sign(signer);
-        }
-        catch (JOSEException e){
-            throw new RuntimeException("Error while signing the token", e);
-        }
-
-        return signedJWT.serialize();
-    }
-
-    public String generateJWT(UserEnt user,long expirationTime) {
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getLogin())
-                .issuer("Worker Rental")
-                .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
-                .claim("groups", user.getGroups())
-                .build();
-
-        return signClaimSet(jwtClaimsSet);
-    }
-
-    public String generateJWT(UserEnt user) {
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getLogin())
-                .issuer("Worker Rental")
-                .expirationTime(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .claim("groups", user.getGroups())
-                .build();
-
-        return signClaimSet(jwtClaimsSet);
-    }
 
     public boolean verifyJWT(String jwt) {
         try{

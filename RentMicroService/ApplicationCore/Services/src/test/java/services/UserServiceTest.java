@@ -29,7 +29,6 @@ class UserServiceTest {
     @Test
     void createUserTest() throws UserAlreadyExistsException {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
-        userEnt.setActive(true);
 
         Mockito.when(userRepository.findByLogin(Mockito.anyString()))
                 .thenReturn(Optional.empty());
@@ -43,41 +42,11 @@ class UserServiceTest {
     @Test
     void createUserAlreadyExistsTest() {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
-        userEnt.setActive(true);
 
         Mockito.when(userRepository.findByLogin(Mockito.anyString()))
                 .thenReturn(Optional.of(userEnt));
 
         assertThrows(UserAlreadyExistsException.class, () -> userService.save(userEnt));
     }
-
-    @Test
-    void activateUserTest() {
-        UserEnt userEnt = DomainModelFactory.getAdminEnt();
-        userEnt.setActive(false);
-
-        Mockito.when(userRepository.findById(Mockito.any(UUID.class)))
-                .thenReturn(Optional.of(userEnt));
-
-        Mockito.when(userRepository.updateUser(Mockito.any(UserEnt.class)))
-                .thenReturn(userEnt);
-
-        assertDoesNotThrow(()->{
-            userService.activateUser(userEnt.getId());
-        });
-    }
-
-    @Test
-    void activateUserDoesNotExistTest() {
-        Mockito.when(userRepository.findById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> userService.activateUser(UUID.randomUUID()));
-    }
-
-
-
-
-
-
-
 }
 

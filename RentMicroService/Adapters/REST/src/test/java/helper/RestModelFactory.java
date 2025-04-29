@@ -2,13 +2,9 @@ package helper;
 
 import entities.RentEnt;
 import entities.WorkerEnt;
-import entities.user.AdminEnt;
-import entities.user.ClientEnt;
-import entities.user.ManagerEnt;
 import entities.user.UserEnt;
 import indie.outsource.rent.CreateRentDTO;
 import indie.outsource.rent.FinishRentDTO;
-import indie.outsource.user.ChangePasswordDto;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.worker.CreateWorkerDTO;
 import org.instancio.Instancio;
@@ -27,15 +23,15 @@ public class RestModelFactory {
         return rent;
     }
     public static UserEnt getAdminEnt(){
-        return Instancio.of(AdminEnt.class)
+        return Instancio.of(UserEnt.class)
                 .create();
     }
     public static UserEnt getClientEnt(){
-        return Instancio.of(ClientEnt.class)
+        return Instancio.of(UserEnt.class)
                 .create();
     }
     public static UserEnt getManagerEnt(){
-        return Instancio.of(ManagerEnt.class)
+        return Instancio.of(UserEnt.class)
                 .create();
     }
     public static CreateWorkerDTO getCreateWorkerDTO(){
@@ -44,10 +40,6 @@ public class RestModelFactory {
     }
     public static CreateUserDTO getCreateUserDTO(){
         return Instancio.of(CreateUserDTO.class)
-                .create();
-    }
-    public static ChangePasswordDto getChangePasswordDTO(){
-        return Instancio.of(ChangePasswordDto.class)
                 .create();
     }
     public static FinishRentDTO getFinishRentDTO(){

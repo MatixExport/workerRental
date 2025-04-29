@@ -22,18 +22,13 @@ public class MongoSchema {
                 {
                   $jsonSchema:{
                       "bsonType": "object",
-                      "required": ["login","password"],
+                      "required": ["login"],
                       "properties":{
                           "login":{
                               "bsonType": "string",
                               "minLength": 3,
                               "maxLength": 30
-                          },
-                         "password": {
-                              "bsonType": "string",
-                              "minLength": 3,
-                              "maxLength": 300
-                         },
+                          }
                       }
                   }
                 }

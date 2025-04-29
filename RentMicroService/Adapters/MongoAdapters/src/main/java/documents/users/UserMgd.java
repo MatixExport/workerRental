@@ -13,25 +13,17 @@ import java.util.UUID;
 @Getter
 @Setter
 @BsonDiscriminator()
-public abstract class UserMgd extends AbstractEntityMgd {
+public class UserMgd extends AbstractEntityMgd {
 
     @BsonProperty(FieldsConsts.ACCOUNT_LOGIN)
     private String login;
-    @BsonProperty(FieldsConsts.ACCOUNT_PASSWORD)
-    private String password;
-    @BsonProperty(FieldsConsts.ACCOUNT_ACTIVE)
-    private boolean active;
 
     @BsonCreator
-    protected UserMgd(
+    public UserMgd(
             @BsonProperty(FieldsConsts.ENTITY_ID) UUID id,
-            @BsonProperty(FieldsConsts.ACCOUNT_LOGIN) String login,
-            @BsonProperty(FieldsConsts.ACCOUNT_PASSWORD) String password,
-            @BsonProperty(FieldsConsts.ACCOUNT_ACTIVE) boolean active) {
+            @BsonProperty(FieldsConsts.ACCOUNT_LOGIN) String login) {
         super(id);
         this.login = login;
-        this.password = password;
-        this.active = active;
     }
 
     @Override
@@ -43,13 +35,5 @@ public abstract class UserMgd extends AbstractEntityMgd {
     public int hashCode() {
         return super.hashCode();
     }
-
-
-
-
-    public void removePassword() {
-        this.password = null;
-    }
-
 
 }

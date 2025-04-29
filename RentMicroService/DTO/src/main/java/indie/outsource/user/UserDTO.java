@@ -12,10 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-
     private String login;
-    private boolean active;
     private UUID id;
-
-    USERTYPE type;
 }

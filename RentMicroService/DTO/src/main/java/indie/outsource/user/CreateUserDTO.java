@@ -13,15 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateUserDTO {
-
     @NotBlank
     @Size(min = 3, max = 30)
     private String login;
 
-    @NotBlank
-    @Size(min = 3, max = 30)
-    private String password;
-
-    @NotNull
-    USERTYPE type;
 }

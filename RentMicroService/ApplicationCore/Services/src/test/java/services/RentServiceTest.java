@@ -46,7 +46,6 @@ class RentServiceTest {
     @Test
     void createRentTest() throws ResourceNotFoundException, WorkerRentedException, RentAlreadyEndedException, UserInactiveException {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
-        userEnt.setActive(true);
         Mockito.when(userRepository.findById(Mockito.any(UUID.class)))
                 .thenReturn(Optional.of(userEnt));
 
@@ -83,7 +82,6 @@ class RentServiceTest {
     @Test
     void createRentWorkerAlreadyRentedTest() {
         UserEnt userEnt = DomainModelFactory.getAdminEnt();
-        userEnt.setActive(true);
         Mockito.when(userRepository.findById(Mockito.any(UUID.class)))
                 .thenReturn(Optional.of(userEnt));
 

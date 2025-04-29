@@ -103,7 +103,6 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
     }
 
     private RentMgd insert(RentMgd rent) throws WorkerRentedException {
-        rent.getUser().removePassword();
         try{
             inSession(mongoConnection.getMongoClient(),()->{
                 updateIsRented(rent.getWorker(), 1);
@@ -119,13 +118,11 @@ public class MongoRentRepositoryImpl extends BaseMongoRepository<RentMgd> implem
         if(rent.getEndDate() != null){
             return finish(rent);
         }
-        rent.getUser().removePassword();
         getCollection().replaceOne(new Document(FieldsConsts.ENTITY_ID, rent.getId()),rent);
         return rent;
     }
 
     private RentMgd finish(RentMgd rent){
-        rent.getUser().removePassword();
         inSession(mongoConnection.getMongoClient(),()->{
             updateIsRented(rent.getWorker(), -1);
             getCollection().replaceOne(new Document(FieldsConsts.ENTITY_ID, rent.getId()),rent);

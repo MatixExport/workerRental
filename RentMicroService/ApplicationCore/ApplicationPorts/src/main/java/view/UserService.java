@@ -21,12 +21,6 @@ public interface UserService {
 
     UserEnt save(UserEnt user) throws UserAlreadyExistsException;
 
-    UserEnt updateUser(UserEnt user) throws ResourceNotFoundException;
-
-    UserEnt activateUser(UUID id) throws ResourceNotFoundException;
-
-    UserEnt deactivateUser(UUID id) throws ResourceNotFoundException;
-
 
 
 }

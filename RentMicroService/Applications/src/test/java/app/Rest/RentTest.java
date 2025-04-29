@@ -24,7 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import spring.security.AuthHelper;
 import view.RentService;
 import view.UserService;
 import view.WorkerService;
@@ -42,7 +41,7 @@ class RentTest extends MongoTestContainer {
     private static final String BASE_RENT_URI = "/rents";
 
     @Autowired
-    AuthHelper authHelper;
+    TestAuthHelper authHelper;
 
     private static RestAssuredConfig rac = RestAssured
             .config()
@@ -84,9 +83,8 @@ class RentTest extends MongoTestContainer {
     @Test
     void createRentTest() throws UserAlreadyExistsException, ResourceNotFoundException {
         UserEnt user = RestModelFactory.getClientEnt();
-        user.setActive(true);
         userService.save(user);
-        String jwtToken = authHelper.generateJWT(user);
+        String jwtToken = authHelper.generateJWT(user, 2000, "CLIENT");
         WorkerEnt worker = workerService.save(RestModelFactory.getWorkerEnt());
 
 
@@ -112,8 +110,7 @@ class RentTest extends MongoTestContainer {
     void createRentWorkerAlreadyRentedTest() throws UserAlreadyExistsException, WorkerRentedException, UserInactiveException, ResourceNotFoundException {
         UserEnt user = RestModelFactory.getClientEnt();
         userService.save(user);
-        userService.activateUser(user.getId());
-        String jwtToken = authHelper.generateJWT(user);
+        String jwtToken = authHelper.generateJWT(user, 2000, "CLIENT");
         WorkerEnt worker = workerService.save(RestModelFactory.getWorkerEnt());
         rentService.createRent(user.getId(),worker.getId(), LocalDateTime.now());
 
@@ -130,33 +127,12 @@ class RentTest extends MongoTestContainer {
                 .statusCode(HttpStatus.CONFLICT.value());
     }
 
-    @Test
-    void createRentInactiveUserTest() throws UserAlreadyExistsException, ResourceNotFoundException {
-        UserEnt user = RestModelFactory.getClientEnt();
-        userService.save(user);
-        userService.deactivateUser(user.getId());
-        String jwtToken = authHelper.generateJWT(user);
-        WorkerEnt worker = workerService.save(RestModelFactory.getWorkerEnt());
-
-        CreateRentDTO dto = new CreateRentDTO();
-        dto.setStartDate(LocalDateTime.now().plusMinutes(10));
-
-        RestAssured.given()
-                .config(rac)
-                .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + jwtToken)
-                .body(dto)
-                .post(BASE_RENT_URI +"/user/workers/"+worker.getId())
-                .then()
-                .statusCode(HttpStatus.FORBIDDEN.value());
-    }
 
     @Test
     void deleteRentTest() throws UserAlreadyExistsException, WorkerRentedException, UserInactiveException, ResourceNotFoundException {
         UserEnt user = RestModelFactory.getAdminEnt();
         userService.save(user);
-        userService.activateUser(user.getId());
-        String jwtToken = authHelper.generateJWT(user);
+        String jwtToken = authHelper.generateJWT(user, 2000, "ADMIN");
         WorkerEnt worker = workerService.save(RestModelFactory.getWorkerEnt());
         RentEnt rentEnt =  rentService.createRent(user.getId(),worker.getId(), LocalDateTime.now().plusMinutes(10));
 

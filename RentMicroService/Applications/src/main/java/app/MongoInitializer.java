@@ -2,9 +2,6 @@ package app;
 
 import entities.RentEnt;
 import entities.WorkerEnt;
-import entities.user.AdminEnt;
-import entities.user.ClientEnt;
-import entities.user.ManagerEnt;
 import entities.user.UserEnt;
 import infrastructure.RentRepository;
 import infrastructure.UserRepository;
@@ -36,11 +33,9 @@ public class MongoInitializer implements CommandLineRunner {
         workerRepository.deleteAll();
         userRepository.deleteAll();
 
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        String mockPassword = passwordEncoder.encode("ZAQ!2wsx");
-        UserEnt client = new ClientEnt("Client",mockPassword,true);
-        UserEnt admin = new AdminEnt("Admin",mockPassword,true);
-        UserEnt manager = new ManagerEnt("Manager",mockPassword,true);
+        UserEnt client = new UserEnt("Client");
+        UserEnt admin = new UserEnt("Admin");
+        UserEnt manager = new UserEnt("Manager");
 
         client =userRepository.save(client);
         userRepository.save(admin);

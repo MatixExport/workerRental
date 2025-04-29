@@ -3,24 +3,24 @@ package app.Rest;
 import app.testcontainers.MongoTestContainer;
 import entities.user.UserEnt;
 import app.helper.RestModelFactory;
-import app.helper.RestRequests;
 import exceptions.UserAlreadyExistsException;
 import infrastructure.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
 import io.restassured.http.ContentType;
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import spring.security.AuthHelper;
 import view.UserService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+
 class AuthTest extends MongoTestContainer {
 
     @LocalServerPort
@@ -28,11 +28,9 @@ class AuthTest extends MongoTestContainer {
 
 
     private static final String BASE_URI = "https://localhost";
-    private static RestRequests restRequests;
-
-
     @Autowired
-    AuthHelper authHelper;
+    private TestAuthHelper authHelper;
+
 
     private static final RestAssuredConfig rac = RestAssured
             .config()
@@ -54,20 +52,15 @@ class AuthTest extends MongoTestContainer {
     void setupRestAssured() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
-        restRequests = new RestRequests(port, BASE_URI,rac);
     }
 
 
     @Test
     void jwtAuthTest() throws UserAlreadyExistsException {
         UserEnt user = RestModelFactory.getClientEnt();
-        String password = user.getPassword();
-        user.setActive(true);
         userService.save(user);
 
-        String jwtToken = restRequests.getValidJwtForUser(
-                user.getLogin(),password
-        );
+        String jwtToken = authHelper.generateJWT(user, 2000, "CLIENT");
 
         RestAssured.given()
                 .config(rac)
@@ -103,10 +96,9 @@ class AuthTest extends MongoTestContainer {
     @Test
     void expiredJwtAuthTest() throws UserAlreadyExistsException {
         UserEnt user = RestModelFactory.getClientEnt();
-        user.setActive(true);
         userService.save(user);
 
-        String jwtToken = authHelper.generateJWT(user,0);
+        String jwtToken = authHelper.generateJWT(user,0, "CLIENT");
 
         RestAssured.given()
                 .config(rac)

@@ -6,11 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class UserEnt extends AbstractEntity {
+public class UserEnt extends AbstractEntity {
+
+    public UserEnt(UUID id, String login) {
+        super(id);
+        this.login = login;
+    }
+
+    private String login;
 
     @Override
     public boolean equals(Object other) {
