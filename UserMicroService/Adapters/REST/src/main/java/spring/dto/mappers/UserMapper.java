@@ -1,6 +1,8 @@
 package spring.dto.mappers;
 
 import entities.user.AdminEnt;
+import entities.user.ClientEnt;
+import entities.user.ManagerEnt;
 import entities.user.UserEnt;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.SignedCreateUserDTO;
@@ -24,7 +26,13 @@ public final class UserMapper {
         return new CreateUserDTO(signedUserDTO.getLogin(),signedUserDTO.getPassword() , signedUserDTO.getType());
     }
     public static UserEnt getUser(CreateUserDTO createUserDTO){
-        UserEnt user = new UserEnt();
+        UserEnt user = new ClientEnt();
+        if(createUserDTO.getType() == USERTYPE.CLIENT){
+            user = new ClientEnt();
+        }
+        if(createUserDTO.getType() == USERTYPE.MANAGER){
+            user = new ManagerEnt();
+        }
         if(createUserDTO.getType() == USERTYPE.ADMIN){
             user = new AdminEnt();
         }

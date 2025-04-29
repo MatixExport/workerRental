@@ -41,7 +41,7 @@ class UserWriteControllerTest {
 
     @Test
     void createUserTest() throws UserAlreadyExistsException {
-        UserEnt userEnt = RestModelFactory.getUserEnt();
+        UserEnt userEnt = RestModelFactory.getClientEnt();
         Mockito.when(userService.save(Mockito.any(UserEnt.class))).thenReturn(userEnt);
         CreateUserDTO createUserDTO = RestModelFactory.getCreateUserDTO();
 

@@ -60,7 +60,7 @@ class AuthTest extends MongoTestContainer {
 
     @Test
     void jwtAuthTest() throws UserAlreadyExistsException {
-        UserEnt user = RestModelFactory.getUserEnt();
+        UserEnt user = RestModelFactory.getAdminEnt();
         String password = user.getPassword();
         user.setActive(true);
         userService.save(user);
@@ -102,7 +102,7 @@ class AuthTest extends MongoTestContainer {
 
     @Test
     void expiredJwtAuthTest() throws UserAlreadyExistsException {
-        UserEnt user = RestModelFactory.getUserEnt();
+        UserEnt user = RestModelFactory.getClientEnt();
         user.setActive(true);
         userService.save(user);
 

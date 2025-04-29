@@ -56,8 +56,8 @@ class UserReadControllerTest {
 
     @Test
     void getAllUsersTest() {
-        UserEnt userEnt = RestModelFactory.getUserEnt();
-        UserEnt userEnt2 = RestModelFactory.getUserEnt();
+        UserEnt userEnt = RestModelFactory.getClientEnt();
+        UserEnt userEnt2 = RestModelFactory.getClientEnt();
         Mockito.when(userService.findAll()).thenReturn(List.of(userEnt, userEnt2));
 
         RestAssuredMockMvc.given()
@@ -71,7 +71,7 @@ class UserReadControllerTest {
 
     @Test
     void getUserTest() throws ResourceNotFoundException {
-        UserEnt userEnt = RestModelFactory.getUserEnt();
+        UserEnt userEnt = RestModelFactory.getClientEnt();
         Mockito.when(userService.findById(Mockito.any(UUID.class))).thenReturn(userEnt);
 
         RestAssuredMockMvc.given()

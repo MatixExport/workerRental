@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEnt extends AbstractEntity {
+public abstract class UserEnt extends AbstractEntity {
 
     private String login;
     private String password;

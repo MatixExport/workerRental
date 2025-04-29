@@ -43,13 +43,13 @@ public class UserWriteController {
         }
     }
 
-    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
+    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER)")
     @PostMapping("/{id}/activate")
     public ResponseEntity<UserDTO> activateUser(@PathVariable UUID id) throws ResourceNotFoundException {
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.activateUser(id)));
     }
 
-    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN) ")
+    @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN, T(spring.security.Roles).MANAGER) ")
     @PostMapping("/{id}/deactivate")
     public ResponseEntity<UserDTO> deactivateUser(@PathVariable UUID id) throws ResourceNotFoundException {
         return ResponseEntity.ok(UserMapper.getUserDTO(userService.deactivateUser(id)));
