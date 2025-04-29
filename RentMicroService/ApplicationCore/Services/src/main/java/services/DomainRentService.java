@@ -46,9 +46,9 @@ public class DomainRentService implements view.RentService {
         if(user.isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
-        if(! user.get().isActive()){
-            throw new UserInactiveException();
-        }
+//        if(! user.get().isActive()){
+//            throw new UserInactiveException();
+//        }
         Optional<WorkerEnt> worker = workerRepository.findById(workerId);
         if(worker.isEmpty()){
             throw new ResourceNotFoundException("Worker not found");

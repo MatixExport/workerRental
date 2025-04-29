@@ -12,14 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class UserEnt extends AbstractEntity {
 
-    private String login;
-    private String password;
-    private boolean active;
-
-    public String getGroups(){
-        return null;
-    }
-
     @Override
     public boolean equals(Object other) {
         return super.equals(other);
