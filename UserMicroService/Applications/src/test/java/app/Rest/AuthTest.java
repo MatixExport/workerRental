@@ -127,6 +127,9 @@ class AuthTest extends MongoTestContainer {
     void testProducer(){
         UserEnt user = RestModelFactory.getClientEnt();
         userProducer.sendUser(user);
+        userProducer.sendUser(user);
+        userProducer.sendUser(user);
+        userProducer.sendUser(user);
     }
 
 }

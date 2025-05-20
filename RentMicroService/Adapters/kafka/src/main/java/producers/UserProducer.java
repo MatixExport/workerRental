@@ -11,7 +11,10 @@ public class UserProducer {
 
     private final StreamBridge streamBridge;
 
-    public void sendUser(UserEnt user) {
-        streamBridge.send("output", user);
+    public void sendUserError(UserEnt user) {
+        streamBridge.send("removeUser",user);
     }
+
+
+
 }
