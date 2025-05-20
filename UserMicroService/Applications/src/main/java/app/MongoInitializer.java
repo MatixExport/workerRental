@@ -1,8 +1,8 @@
 package app;
 
-import entities.user.AdminEnt;
-import entities.user.ClientEnt;
-import entities.user.ManagerEnt;
+//import entities.user.AdminEnt;
+//import entities.user.ClientEnt;
+//import entities.user.ManagerEnt;
 import entities.user.UserEnt;
 import infrastructure.UserRepository;
 import lombok.AllArgsConstructor;
@@ -28,12 +28,12 @@ public class MongoInitializer implements CommandLineRunner {
 
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         String mockPassword = passwordEncoder.encode("ZAQ!2wsx");
-        UserEnt client = new ClientEnt("Client",mockPassword,true);
-        UserEnt admin = new AdminEnt("Admin",mockPassword,true);
-        UserEnt manager = new ManagerEnt("Manager",mockPassword,true);
-
-        userRepository.save(client);
-        userRepository.save(admin);
-        userRepository.save(manager);
+//        UserEnt client = new ClientEnt("Client",mockPassword,true);
+//        UserEnt admin = new AdminEnt("Admin",mockPassword,true);
+//        UserEnt manager = new ManagerEnt("Manager",mockPassword,true);
+//
+//        userRepository.save(client);
+//        userRepository.save(admin);
+//        userRepository.save(manager);
     }
 }
