@@ -16,6 +16,7 @@ public class UserCreatedHandler {
         try{
             userService.save(user);
         }catch (Exception e){
+            System.out.println(e);
             userErrorProducer.sendUserError(user);
         }
     }
