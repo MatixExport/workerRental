@@ -20,17 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SecurityConfig{
 
-    @Bean
-    CorsConfiguration  corsConfigurationSource() {
-        var corsConfig = new CorsConfiguration();
-//        corsConfig.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:5174","http://localhost:5175"));
-        corsConfig.setAllowedOrigins(List.of("*"));
-        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        corsConfig.addAllowedHeader("*");
-        corsConfig.addExposedHeader(HttpHeaders.ETAG);
 
-        return corsConfig;
-    }
     private final JWTFilter jwtFilter;
 
     @Bean
@@ -41,7 +31,6 @@ public class SecurityConfig{
 //                        .anyRequest().requiresSecure()
 //                )
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(_ -> corsConfigurationSource()))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests.requestMatchers("/login", "/register").anonymous();
