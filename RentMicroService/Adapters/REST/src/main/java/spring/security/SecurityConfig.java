@@ -36,15 +36,16 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .requiresChannel(requiresChannel -> requiresChannel
-                        .requestMatchers("/ws/**").requiresInsecure()
-                        .anyRequest().requiresSecure()
-                )
+//                .requiresChannel(requiresChannel -> requiresChannel
+//                        .requestMatchers("/ws/**").requiresInsecure()
+//                        .anyRequest().requiresSecure()
+//                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(_ -> corsConfigurationSource()))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests.requestMatchers("/login", "/register").anonymous();
+                    authorizeRequests.requestMatchers("/actuator/**").permitAll();
                     authorizeRequests.requestMatchers("/ws").anonymous();
                     authorizeRequests.requestMatchers("/ws/*").anonymous();
                     authorizeRequests.anyRequest().authenticated();

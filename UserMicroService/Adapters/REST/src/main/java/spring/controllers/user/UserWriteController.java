@@ -7,6 +7,7 @@ import indie.outsource.user.ChangePasswordDto;
 import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.SignedCreateUserDTO;
 import indie.outsource.user.UserDTO;
+import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +34,7 @@ public class UserWriteController {
     private final AuthService authService;
 
 
+    @Timed("addUser")
     @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
     @PostMapping()
     public ResponseEntity<UserDTO> addUser(@RequestBody @Valid CreateUserDTO user) {
