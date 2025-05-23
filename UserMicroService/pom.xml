@@ -28,7 +28,6 @@
 		<module>DTO</module>
 		<module>Adapters</module>
 		<module>Applications</module>
-		<module>Adapters/Kafka</module>
 	</modules>
 
 	<dependencyManagement>

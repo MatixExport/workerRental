@@ -14,7 +14,8 @@
         <module>REST</module>
         <module>SOAP</module>
         <module>MongoAdapters</module>
-        <module>kafka</module>
+        <module>KafkaConsumer</module>
+        <module>KafkaProducer</module>
     </modules>
 
     <properties>
