@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
 
   frontend:
@@ -9,7 +11,7 @@ services:
       - mongonet
       - kafkanet
     environment:
-      - VITE_BASE_URL=https://gateway:8080
+      - VITE_BASE_URL=https://localhost:8080
     ports:
       - "5173:5173"
 
@@ -32,6 +34,7 @@ services:
     build: Gateway
     environment:
       - EUREKA_URI=http://eureka:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
     container_name: gateway
     ports:
       - "8080:8080"
@@ -40,6 +43,10 @@ services:
       - kafkanet
     depends_on:
       eureka:
+        condition: service_healthy
+      user_microservice:
+        condition: service_healthy
+      rent_microservice:
         condition: service_healthy
 
   config_server:
@@ -52,6 +59,7 @@ services:
       - kafkanet
     environment:
       - EUREKA_URI=http://eureka:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
     depends_on:
       eureka:
         condition: service_healthy
@@ -60,7 +68,7 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-      start_period: 10s
+      start_period: 20s
 
   rent_microservice:
     build: RentMicroService
@@ -71,8 +79,13 @@ services:
       - mongonet
       - kafkanet
     ports:
-      - "8080:8080"
-      - "80:80"
+      - "8081:8081"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     depends_on:
       mongo1:
         condition: service_healthy
@@ -96,8 +109,13 @@ services:
       - mongonet
       - kafkanet
     ports:
-      - "8181:8181"
-      - "81:81"
+      - "8082:8082"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     depends_on:
       usermongo1:
         condition: service_healthy
@@ -210,7 +228,6 @@ services:
       context: .
       dockerfile: Dockerfile-mongoDB
     container_name: mongo1
-
     hostname: mongo1
     networks:
       - mongonet
@@ -396,8 +413,6 @@ services:
       '
 
 volumes:
-  redis-stack-data:
-    driver: local
   kafka1_data:
     driver: local
   kafka2_data:
@@ -407,7 +422,6 @@ volumes:
 
 networks:
   mongonet: {}
-  redisnet: {}
   kafkanet:
     driver: bridge
     ipam:

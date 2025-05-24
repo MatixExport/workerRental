@@ -25,5 +25,6 @@ COPY --from=jre-build /customjre /opt/jre
 ENV JAVA_HOME=/opt/jre
 ENV PATH="$PATH:$JAVA_HOME/bin"
 COPY --from=build /app/target/*.jar app.jar
+RUN apk add --no-cache curl
 EXPOSE 8080
 CMD ["java", "-jar", "app.jar"]
