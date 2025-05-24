@@ -51,7 +51,8 @@ public class DomainUserService implements view.UserService {
             if(userRepository.findByLogin(user.getLogin()).isPresent()){
                 throw new UserAlreadyExistsException("User with login " + user.getLogin() + " already exists");
             }
-            return userRepository.save(user);
+            throw new UserAlreadyExistsException("User with login " + user.getLogin() + " already exists");
+//            return userRepository.save(user);
         }catch(Exception e){
             userEventPort.publishRemoveUserEvent(user);
             throw e;

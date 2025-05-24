@@ -3,9 +3,7 @@ version: '3.8'
 services:
 
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile-frontend
+    build: Frontend
     container_name: svelte_front
     networks:
       - mongonet
@@ -32,6 +30,7 @@ services:
 
   gateway:
     build: Gateway
+    restart: unless-stopped
     environment:
       - EUREKA_URI=http://eureka:8761/eureka
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
@@ -73,6 +72,7 @@ services:
   rent_microservice:
     build: RentMicroService
     container_name: RentMicroservice
+    restart: unless-stopped
     environment:
       - EUREKA_URI=http://eureka:8761/eureka
     networks:
@@ -103,6 +103,7 @@ services:
   user_microservice:
     build: UserMicroService
     container_name: UserMicroservice
+    restart: unless-stopped
     environment:
       - EUREKA_URI=http://eureka:8761/eureka
     networks:

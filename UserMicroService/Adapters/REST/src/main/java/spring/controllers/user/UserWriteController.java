@@ -34,7 +34,7 @@ public class UserWriteController {
     private final AuthService authService;
 
 
-    @Timed("addUser")
+    @Timed(value = "myservice.process", description = "Time taken to process")
     @PreAuthorize("hasAnyRole(T(spring.security.Roles).ADMIN)")
     @PostMapping()
     public ResponseEntity<UserDTO> addUser(@RequestBody @Valid CreateUserDTO user) {

@@ -9,6 +9,8 @@ import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.LoginDTO;
 import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,8 @@ public class AuthController {
         }
     }
 
+    @Timed(value = "register.post.time", description = "Time taken to register users")
+    @Counted(value = "register.post.count", description = "Number of times users were registered")
     @PostMapping("/register")
     public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
         user.setType(USERTYPE.CLIENT);
