@@ -26,7 +26,10 @@
 	<modules>
 		<module>ApplicationCore</module>
 		<module>DTO</module>
+		<module>Event</module>
 		<module>Adapters</module>
+		<module>Adapters/KafkaConsumer</module>
+		<module>Adapters/KafkaProducer</module>
 		<module>Applications</module>
 	</modules>
 

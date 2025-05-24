@@ -1,6 +1,5 @@
 package consumers;
 
-import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import indie.outsource.event.user.UserEvent;
 import lombok.AllArgsConstructor;

@@ -25,5 +25,4 @@ COPY --from=jre-build /customjre /opt/jre
 ENV JAVA_HOME=/opt/jre
 ENV PATH="$PATH:$JAVA_HOME/bin"
 COPY --from=build /app/Applications/target/*.jar app.jar
-EXPOSE 8181
 CMD ["java", "-jar", "app.jar"]

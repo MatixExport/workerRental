@@ -1,54 +1,114 @@
-version: '3.8'
-
 services:
 
-#  rent_microservice:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-RentMicroService
-#    container_name: RentMicroservice
-#    networks:
-#      - mongonet
-#    ports:
-#      - "8080:8080"
-#      - "80:80"
-#    depends_on:
-#      mongo1:
-#        condition: service_healthy
-#      mongo2:
-#        condition: service_healthy
-#      mongo3:
-#        condition: service_healthy
-#
-#
-#  user_microservice:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-UserMicroService
-#    container_name: UserMicroservice
-#    networks:
-#      - mongonet
-#    ports:
-#      - "8181:8181"
-#      - "81:81"
-#    depends_on:
-#      usermongo1:
-#        condition: service_healthy
-#      usermongo2:
-#        condition: service_healthy
-#      usermongo3:
-#        condition: service_healthy
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    container_name: svelte_front
+    networks:
+      - mongonet
+      - kafkanet
+    environment:
+      - VITE_BASE_URL=https://gateway:8080
+    ports:
+      - "5173:5173"
+
+  eureka:
+    build: Eureka
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - mongonet
+      - kafkanet
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  gateway:
+    build: Gateway
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - mongonet
+      - kafkanet
+    depends_on:
+      eureka:
+        condition: service_healthy
+
+  config_server:
+    build: ConfigServer
+    container_name: config_server
+    ports:
+      - "8888:8888"
+    networks:
+      - mongonet
+      - kafkanet
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  rent_microservice:
+    build: RentMicroService
+    container_name: RentMicroservice
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+    networks:
+      - mongonet
+      - kafkanet
+    ports:
+      - "8080:8080"
+      - "80:80"
+    depends_on:
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config_server:
+        condition: service_healthy
 
 
-#  mongodb_lite:
-#    image: mongo:latest
-#    ports:
-#      - '27017:27017'
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=ADMIN
-#      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
-#      - MONGO_INITDB_DATABASE=workerRental
-#    command: --config /etc/mongod.conf --port 27017
+
+  user_microservice:
+    build: UserMicroService
+    container_name: UserMicroservice
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+    networks:
+      - mongonet
+      - kafkanet
+    ports:
+      - "8181:8181"
+      - "81:81"
+    depends_on:
+      usermongo1:
+        condition: service_healthy
+      usermongo2:
+        condition: service_healthy
+      usermongo3:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config_server:
+        condition: service_healthy
 
 
   kafka1:
@@ -144,17 +204,6 @@ services:
       - kafka3_data:/bitnami/kafka
     networks:
       - kafkanet
-
-
-
-#  frontend:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-frontend
-#    container_name: svelte_front
-#    ports:
-#      - "5173:5173"
-
 
   mongo1:
     build:
@@ -313,8 +362,6 @@ services:
       interval: 10s
       timeout: 2s
       retries: 5
-
-
 
   usermongoinit:
     build:

@@ -26,6 +26,7 @@
 	<modules>
 		<module>ApplicationCore</module>
 		<module>DTO</module>
+		<module>Event</module>
 		<module>Adapters</module>
 		<module>Applications</module>
 	</modules>

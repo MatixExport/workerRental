@@ -1,5 +1,5 @@
 FROM maven:3.9.9-amazoncorretto-23 AS build
-COPY RentMicroService /app
+COPY . /app
 WORKDIR /app
 RUN mvn clean package -f /app/pom.xml -Dmaven.test.skip=true
 
