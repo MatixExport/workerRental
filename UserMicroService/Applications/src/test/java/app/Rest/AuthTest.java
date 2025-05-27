@@ -5,6 +5,7 @@ import entities.user.UserEnt;
 import app.helper.RestModelFactory;
 import app.helper.RestRequests;
 import exceptions.UserAlreadyExistsException;
+import producers.UserProducer;
 import infrastructure.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
@@ -42,6 +43,10 @@ class AuthTest extends MongoTestContainer {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserProducer userProducer;
+
 
     @Autowired private UserRepository userRepository;
 
@@ -117,6 +122,14 @@ class AuthTest extends MongoTestContainer {
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .extract().body().asString();
 
+    }
+    @Test
+    void testProducer(){
+        UserEnt user = RestModelFactory.getClientEnt();
+        userProducer.sendUser(user);
+        userProducer.sendUser(user);
+        userProducer.sendUser(user);
+        userProducer.sendUser(user);
     }
 
 }

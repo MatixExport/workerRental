@@ -1,5 +1,6 @@
 package spring.controllers;
 
+import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
 import exceptions.UserInactiveException;
@@ -8,6 +9,8 @@ import indie.outsource.user.CreateUserDTO;
 import indie.outsource.user.LoginDTO;
 import indie.outsource.user.USERTYPE;
 import indie.outsource.user.UserDTO;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,11 +43,16 @@ public class AuthController {
         }
     }
 
+    @Timed(value = "register.post.time", description = "Time taken to register users")
+    @Counted(value = "register.post.count", description = "Number of times users were registered")
     @PostMapping("/register")
     public ResponseEntity<UserDTO> addClient(@RequestBody @Valid CreateUserDTO user) {
         user.setType(USERTYPE.CLIENT);
         try{
-            return ResponseEntity.ok(UserMapper.getUserDTO(userService.save(UserMapper.getUser(user))));
+            UserEnt userEnt = userService.save(UserMapper.getUser(user));
+            UserDTO userDTO = UserMapper.getUserDTO(userEnt);
+
+            return ResponseEntity.ok(userDTO);
         }
         catch(UserAlreadyExistsException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(UserMapper.getUserDTO(UserMapper.getUser(user)));

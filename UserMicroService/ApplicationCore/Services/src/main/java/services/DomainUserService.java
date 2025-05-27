@@ -3,6 +3,7 @@ package services;
 import entities.user.UserEnt;
 import exceptions.ResourceNotFoundException;
 import exceptions.UserAlreadyExistsException;
+import infrastructure.UserEventPort;
 import infrastructure.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Service
 public class DomainUserService implements view.UserService {
     private final UserRepository userRepository;
+    private final UserEventPort userEventPort;
 
     public UserEnt findById(UUID id) throws ResourceNotFoundException {
         Optional<UserEnt> userEnt = userRepository.findById(id);
@@ -51,7 +53,9 @@ public class DomainUserService implements view.UserService {
         if(userRepository.findByLogin(user.getLogin()).isPresent()){
             throw new UserAlreadyExistsException("User with login " + user.getLogin() + " already exists");
         }
-        return userRepository.save(user);
+        UserEnt createdUser = userRepository.save(user);
+        userEventPort.publishCreateUserEvent(createdUser);
+        return createdUser;
     }
 
     public UserEnt updateUser(UserEnt user) throws ResourceNotFoundException {

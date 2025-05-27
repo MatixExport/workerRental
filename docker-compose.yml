@@ -2,16 +2,90 @@ version: '3.8'
 
 services:
 
-  rent_microservice:
-    build:
-      context: .
-      dockerfile: Dockerfile-RentMicroService
-    container_name: RentMicroservice
+  frontend:
+    build: Frontend
+    container_name: svelte_front
     networks:
       - mongonet
+      - kafkanet
+    environment:
+      - VITE_BASE_URL=https://localhost:8080
+    ports:
+      - "5173:5173"
+
+  eureka:
+    build: Eureka
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - mongonet
+      - kafkanet
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  gateway:
+    build: Gateway
+    restart: unless-stopped
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    container_name: gateway
     ports:
       - "8080:8080"
-      - "80:80"
+    networks:
+      - mongonet
+      - kafkanet
+    depends_on:
+      eureka:
+        condition: service_healthy
+      user_microservice:
+        condition: service_healthy
+      rent_microservice:
+        condition: service_healthy
+
+  config_server:
+    build: ConfigServer
+    container_name: config_server
+    ports:
+      - "8888:8888"
+    networks:
+      - mongonet
+      - kafkanet
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  rent_microservice:
+    build: RentMicroService
+    container_name: RentMicroservice
+    restart: unless-stopped
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+    networks:
+      - mongonet
+      - kafkanet
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     depends_on:
       mongo1:
         condition: service_healthy
@@ -19,18 +93,30 @@ services:
         condition: service_healthy
       mongo3:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config_server:
+        condition: service_healthy
+
 
 
   user_microservice:
-    build:
-      context: .
-      dockerfile: Dockerfile-UserMicroService
+    build: UserMicroService
     container_name: UserMicroservice
+    restart: unless-stopped
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
     networks:
       - mongonet
+      - kafkanet
     ports:
-      - "8181:8181"
-      - "81:81"
+      - "8082:8082"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     depends_on:
       usermongo1:
         condition: service_healthy
@@ -38,35 +124,111 @@ services:
         condition: service_healthy
       usermongo3:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config_server:
+        condition: service_healthy
 
 
-#  mongodb_lite:
-#    image: mongo:latest
-#    ports:
-#      - '27017:27017'
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=ADMIN
-#      - MONGO_INITDB_ROOT_PASSWORD=ADMINPASSWORD
-#      - MONGO_INITDB_DATABASE=workerRental
-#    command: --config /etc/mongod.conf --port 27017
-
-
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile-frontend
-    container_name: svelte_front
+  kafka1:
+    image: docker.io/bitnami/kafka:3.6
+    hostname: kafka1
+    container_name: kafka1
     ports:
-      - "5173:5173"
+      - target: 9192
+        published: 9192
+        protocol: tcp
+      - target: 9193
+        published: 9193
+        protocol: tcp
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_BROKER_RACK=RACK1
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9193,DOCKER_EXTERNAL://kafka1:9192,DOCKER_INTERNAL://kafka1:19192
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka1:9192,DOCKER_INTERNAL://kafka1:19192
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9193,2@kafka2:9293,3@kafka3:9393
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    #      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+    volumes:
+      - kafka1_data:/bitnami/kafka
+    networks:
+      - kafkanet
 
+
+  kafka2:
+    image: docker.io/bitnami/kafka:3.6
+    hostname: kafka2
+    container_name: kafka2
+    ports:
+      - target: 9292
+        published: 9292
+        protocol: tcp
+      - target: 9293
+        published: 9293
+        protocol: tcp
+    environment:
+      - KAFKA_CFG_NODE_ID=2
+      - KAFKA_CFG_BROKER_ID=2
+      - KAFKA_CFG_BROKER_RACK=RACK1
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9293,DOCKER_EXTERNAL://kafka2:9292,DOCKER_INTERNAL://kafka2:19292
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka2:9292,DOCKER_INTERNAL://kafka2:19292
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9193,2@kafka2:9293,3@kafka3:9393
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    #      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+    volumes:
+      - kafka2_data:/bitnami/kafka
+    networks:
+      - kafkanet
+
+  kafka3:
+    image: docker.io/bitnami/kafka:3.6
+    hostname: kafka3
+    container_name: kafka3
+    ports:
+      - target: 9392
+        published: 9392
+        protocol: tcp
+      - target: 9393
+        published: 9393
+        protocol: tcp
+    environment:
+      - KAFKA_CFG_NODE_ID=3
+      - KAFKA_CFG_BROKER_ID=3
+      - KAFKA_CFG_BROKER_RACK=RACK1
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9393,DOCKER_EXTERNAL://kafka3:9392,DOCKER_INTERNAL://kafka3:19392
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka3:9392,DOCKER_INTERNAL://kafka3:19392
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9193,2@kafka2:9293,3@kafka3:9393
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    #      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+    volumes:
+      - kafka3_data:/bitnami/kafka
+    networks:
+      - kafkanet
 
   mongo1:
     build:
       context: .
       dockerfile: Dockerfile-mongoDB
     container_name: mongo1
-
     hostname: mongo1
     networks:
       - mongonet
@@ -219,8 +381,6 @@ services:
       timeout: 2s
       retries: 5
 
-
-
   usermongoinit:
     build:
       context: .
@@ -253,7 +413,21 @@ services:
       );
       '
 
+volumes:
+  kafka1_data:
+    driver: local
+  kafka2_data:
+    driver: local
+  kafka3_data:
+    driver: local
+
 networks:
   mongonet: {}
+  kafkanet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
 
 
